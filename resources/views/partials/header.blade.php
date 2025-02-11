@@ -7,7 +7,7 @@
                 </a>
             </div>
             
-            <nav class="flex items-center gap-8 font-sans text-lg">
+            <nav class="flex items-center gap-8 font-styrene">
                 <div class="flex items-center gap-1 cursor-pointer">
                     <span>Healtisin</span>
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
