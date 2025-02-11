@@ -11,14 +11,14 @@
         
         <main class="pt-24 pb-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center">
+                <div class="flex items-center mb-32">
                     <div class="w-1/2 pr-8">
                         <h1 class="text-6xl font-serif mb-8">
                             Bertemu<br/>
                             Healtisin AI
                         </h1>
-                        <p class="text-xl mb-8 text-gray-600">
-                            Healtisin adalah AI untuk kesehatan kita semua. Ingin melakukan skrining kesehatan yang cepat dan mudah? Healtisin siap membantu.
+                        <p class="text-xl mb-8 font-serif text-gray-600">
+                            Healtisin, asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7. Dapatkan skrining kesehatan yang cepat dan akurat dengan teknologi AI mutakhir kami.
                         </p>
                         <div class="flex gap-4">
                             <button class="px-6 py-3 bg-[#24b0ba] text-white rounded-full hover:bg-[#73c7e3]">
@@ -30,24 +30,18 @@
                         </div>
                     </div>
                     
-                    <div class="w-1/2">
-                        <div class="bg-[#E07A5F] p-16 rounded-lg">
-                            <div class="bg-white aspect-square rounded-lg flex items-center justify-center">
-                                <svg viewBox="0 0 24 24" class="w-16 h-16" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                            </div>
-                        </div>
+                    <div class="w-1/2 flex justify-center items-center">
+                        <img src="{{ asset('images/animasi2.png') }}" alt="Animasi Healtisin" class="w-4/5 h-4/5 object-cover rounded-lg">
                     </div>
                 </div>
 
                 <!-- Capabilities Section -->
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-serif mb-4">Kemampuan Healtisin</h2>
-                    <p class="text-xl text-gray-600">Healtisin hadir dengan berbagai fitur untuk membantu kesehatan Anda</p>
+                    <p class="text-xl text-gray-600 mb-16">Healtisin hadir dengan berbagai fitur untuk membantu kesehatan Anda</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-32">
                     <!-- Capability 1 -->
                     <div class="text-center">
                         <div class="bg-[#F4F1DE] p-8 rounded-lg mb-4 flex items-center justify-center">
