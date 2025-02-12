@@ -40,7 +40,7 @@
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 mb-1">Nama yang ditampilkan</label>
                             <input type="text" value="{{ Auth::user()->name }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly>
-                            <button class="text-blue-500 text-sm mt-1">Ubah</button>
+                            <button onclick="showChangeNameModal()"  class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
 
                         <!-- Two Factor Auth -->

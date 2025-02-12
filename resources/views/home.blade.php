@@ -97,6 +97,9 @@
     <!-- Change Password Modal -->
     @include('partials.change-password-modal')
 
+    <!-- Change Name Modal -->
+    @include('partials.change-name-modal')
+
     <!-- JavaScript for modal functionality -->
     <script>
         function openSettingsModal() {
@@ -213,6 +216,13 @@
             document.getElementById('changePasswordModal').classList.add('hidden');
             document.getElementById('changePasswordModal').classList.remove('flex');
             openSettingsModal();
+        }
+
+        function showChangeNameModal() {
+            closeSettingsModal();
+            const modal = document.getElementById('changeNameModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
     </script>
 </body>

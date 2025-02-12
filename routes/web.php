@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,4 +50,6 @@ Route::prefix('auth')->group(function () {
     Route::get('/google', [SocialiteController::class, 'redirectToProvider'])->name('google.login');
     Route::get('/callback', [SocialiteController::class, 'handleProvideCallback'])->name('google.callback');
 });
+
+Route::post('/profile/name', [ProfileController::class, 'updateName'])->name('profile.name.update');
 
