@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 right-0 bg-white z-50 p-4">
+<header class="fixed top-0 left-0 right-0 bg-white z-50 p-4 transition-shadow duration-300" id="navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-18">
             <div class="flex-shrink-0">
@@ -18,10 +18,22 @@
                     <a href="/perusahaan" class="hover:text-[#24b0ba]">Perusahaan</a>
                     <a href="/karier" class="hover:text-[#24b0ba]">Karier</a>
                     <a href="/berita" class="hover:text-[#24b0ba]">Berita</a>
-                    <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                         Cobalah Healtisin
                     </a>
                 </nav>
         </div>
     </div>
 </header>
+
+<script>
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 0) {
+            navbar.classList.add('shadow-md');
+        } else {
+            navbar.classList.remove('shadow-md');
+        }
+    });
+</script>
