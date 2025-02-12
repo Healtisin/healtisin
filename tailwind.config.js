@@ -13,6 +13,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                styrene: ['__styreneA_403256', '__styreneA_Fallback_403256', 'sans-serif']
             },
         },
     },

@@ -6,8 +6,13 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8">
                 </a>
             </div>
+<<<<<<< HEAD
 
             <nav class="flex items-center gap-8 font-sans text-lg">
+=======
+            
+            <nav class="flex items-center gap-8 font-styrene">
+>>>>>>> e22aa6ea4ee23b332f6b6df0a4d67ad1684b8355
                 <div class="flex items-center gap-1 cursor-pointer">
                     <span>Healtisin</span>
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
