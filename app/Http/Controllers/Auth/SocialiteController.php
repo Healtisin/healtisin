@@ -5,69 +5,86 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\SocialAccount;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function redirectToProvider($provider)
+    public function redirectToProvider()
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
-    public function handleProvideCallback($provider)
+    public function handleProvideCallback()
     {
         try {
-
-            $user = Socialite::driver($provider)->stateless()->user();
+            $socialUser = Socialite::driver('google')
+                ->stateless()
+                ->user();
+                
+            \Log::info('Google User Data:', [
+                'id' => $socialUser->getId(),
+                'email' => $socialUser->getEmail(),
+                'name' => $socialUser->getName()
+            ]);
+            
         } catch (Exception $e) {
-            return redirect()->back();
+            \Log::error('Socialite Error: ' . $e->getMessage());
+            return redirect()->route('login')
+                ->with('error', 'Terjadi kesalahan saat login dengan Google: ' . $e->getMessage());
         }
-        // find or create user and send params user get from socialite and provider
-        $authUser = $this->findOrCreateUser($user, $provider);
 
-        // login user
-        Auth()->login($authUser, true);
-
-        // setelah login redirect ke dashboard
-        return redirect()->route('dashboard');
+        try {
+            $user = $this->findOrCreateUser($socialUser, 'google');
+            auth()->login($user, true);
+            
+            return redirect()->route('home');
+        } catch (Exception $e) {
+            \Log::error('User Creation Error: ' . $e->getMessage());
+            return redirect()->route('login')
+                ->with('error', 'Terjadi kesalahan saat membuat user: ' . $e->getMessage());
+        }
     }
 
-    public function findOrCreateUser($socialUser, $provider)
+    protected function findOrCreateUser($socialUser, $provider)
     {
-        // Get Social Account
         $socialAccount = SocialAccount::where('provider_id', $socialUser->getId())
             ->where('provider_name', $provider)
             ->first();
 
-        // Jika sudah ada
         if ($socialAccount) {
-            // return user
             return $socialAccount->user;
+        }
 
-            // Jika belum ada
-        } else {
+        $user = User::where('email', $socialUser->getEmail())->first();
 
-            // User berdasarkan email 
-            $user = User::where('email', $socialUser->getEmail())->first();
-
-            // Jika Tidak ada user
-            if (!$user) {
-                // Create user baru
-                $user = User::create([
-                    'name'  => $socialUser->getName(),
-                    'email' => $socialUser->getEmail()
-                ]);
+        if (!$user) {
+            // Generate username dari email
+            $username = Str::before($socialUser->getEmail(), '@');
+            $baseUsername = $username;
+            $counter = 1;
+            
+            // Pastikan username unik
+            while (User::where('username', $username)->exists()) {
+                $username = $baseUsername . $counter;
+                $counter++;
             }
 
-            // Buat Social Account baru
-            $user->socialAccounts()->create([
-                'provider_id'   => $socialUser->getId(),
-                'provider_name' => $provider
+            $user = User::create([
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'username' => $username,
+                'password' => Hash::make(Str::random(16))
             ]);
-
-            // return user
-            return $user;
         }
+
+        $user->socialAccounts()->create([
+            'provider_id' => $socialUser->getId(),
+            'provider_name' => $provider
+        ]);
+
+        return $user;
     }
 }

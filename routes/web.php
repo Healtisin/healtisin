@@ -29,12 +29,6 @@ Route::middleware('guest')->group(function () {
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-/**
- * socialite auth
- */
-Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider']);
-Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProvideCallback']);
-
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home');
@@ -45,4 +39,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/verify-password', [PasswordController::class, 'verifyPassword'])->name('password.verify');
+
+/**
+ * Socialite auth routes
+ */
+Route::prefix('auth')->group(function () {
+    Route::get('/google', [SocialiteController::class, 'redirectToProvider'])->name('google.login');
+    Route::get('/callback', [SocialiteController::class, 'handleProvideCallback'])->name('google.callback');
+});
 

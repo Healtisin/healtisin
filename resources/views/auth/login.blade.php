@@ -37,22 +37,40 @@
                     </div>
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center">
-                            <input type="checkbox" name="remember" class="text-[#ff5c7c]">
+                            <input type="checkbox" name="remember" class="text-[#24b0ba]">
                             <span class="ml-2 text-sm">Remember Me</span>
                         </div>
                         <a href="{{ route('password.request') }}" class="text-sm text-gray-600">Forgot Password</a>
                     </div>
-                    <button type="submit" class="w-full py-2 bg-[#ff5c7c] text-white rounded-md hover:bg-[#ff4367]">
+                    <button type="submit" class="w-full py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#1d8f98]">
                         Sign In
                     </button>
                 </form>
+                <div class="mt-4">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ route('google.login') }}" 
+                           class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <img src="https://www.google.com/favicon.ico" alt="Google" class="h-5 w-5 mr-2">
+                            Continue with Google
+                        </a>
+                    </div>
+                </div>
             </div>
             
             <!-- Welcome Section -->
-            <div class="w-1/2 bg-[#ff5c7c] p-8 text-white rounded-r-lg flex flex-col items-center justify-center">
+            <div class="w-1/2 bg-[#24b0ba] p-8 text-white rounded-r-lg flex flex-col items-center justify-center">
                 <h2 class="text-3xl font-semibold mb-4">Welcome to login</h2>
                 <p class="mb-6">Don't have an account?</p>
-                <a href="{{ route('register') }}" class="px-6 py-2 border-2 border-white rounded-full hover:bg-white hover:text-[#ff5c7c]">
+                <a href="{{ route('register') }}" class="px-6 py-2 border-2 border-white rounded-full hover:bg-white hover:text-[#24b0ba]">
                     Sign Up
                 </a>
             </div>
