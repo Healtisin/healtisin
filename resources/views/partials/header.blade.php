@@ -14,7 +14,7 @@
                         <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
-                <a href="/riset" class="hover:text-gray-600">Riset</a>
+                <!-- <a href="/riset" class="hover:text-gray-600">Riset</a> -->
                 <a href="/perusahaan" class="hover:text-gray-600">Perusahaan</a>
                 <a href="/karier" class="hover:text-gray-600">Karier</a>
                 <a href="/berita" class="hover:text-gray-600">Berita</a>
