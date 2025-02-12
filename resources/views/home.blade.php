@@ -5,81 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
+    
+    <style>
+        /* Scrollbar untuk Webkit (Chrome, Safari, Edge) */
+        #chatMessages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chatMessages::-webkit-scrollbar-track {
+            border-radius: 10px;           
+            background-color: #f8f8f8;     /* Warna background lebih terang/samar */
+            margin: 5px;                   
+        }
+
+        #chatMessages::-webkit-scrollbar-thumb {
+            border-radius: 10px;           
+            background: rgba(156, 163, 175, 0.5);  /* Warna thumb abu-abu transparan */
+            border: 2px solid transparent; 
+            background-clip: padding-box;  
+            min-height: 50px;             
+            transition: background .2s;    
+        }
+
+        #chatMessages::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.7);  /* Warna hover sedikit lebih gelap */
+            border: 2px solid transparent;
+        }
+
+        /* Scrollbar untuk Firefox */
+        #chatMessages {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+        }
+
+        #chatMessages:hover {
+            scrollbar-color: rgba(156, 163, 175, 0.7) transparent;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-80 bg-white border-r flex flex-col">
-            <!-- Logo -->
-            <div class="p-6 border-b">
-                <a href="/" class="flex items-center">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8">
-                </a>
-            </div>
-
-            <!-- Recent Chats -->
-            <div class="flex-1 overflow-y-auto p-4">
-                <h3 class="text-sm font-medium text-gray-500 mb-4">Riwayat Chat</h3>
-                <div class="space-y-2">
-                    <!-- Chat items -->
-                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-[#24b0ba] rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                                </svg>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">Konsultasi Sakit Kepala</p>
-                                <p class="text-sm text-gray-500 truncate">Apa yang bisa saya bantu?</p>
-                            </div>
-                            <span class="text-xs text-gray-400">1j</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Profile Section -->
-            <div class="p-4 border-t">
-                <button class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center">
-                        <span class="text-white font-medium">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                        </span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ Auth::user()->name }}</p>
-                        <p class="text-sm text-gray-500 truncate">{{ Auth::user()->email }}</p>
-                    </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="p-2 hover:bg-gray-200 rounded-full">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                        </button>
-                    </form>
-                </button>
-            </div>
-        </aside>
+        <!-- Include Sidebar -->
+        @include('partials.sidebar')
 
         <!-- Main Content -->
         <main class="flex-1">
-            <div class="max-w-3xl mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto px-4 py-8">
                 <!-- Chat Interface -->
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->
-                    <div class="flex-1 overflow-y-auto mb-4">
-                        <!-- Messages will be displayed here -->
+                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2" id="chatMessages">
+                        <!-- Pesan akan ditambahkan secara dinamis di sini -->
                     </div>
 
                     <!-- Chat Input -->
-                    <div class="relative">
+                    <div class="relative flex items-center gap-2">
                         <input type="text" 
-                               class="w-full px-4 py-3 pr-24 rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba]" 
+                               id="chatInput"
+                               class="w-full px-4 py-5 pr-24 rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba]" 
                                placeholder="Ketik pertanyaan Anda">
                         
-                        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             <button class="p-2 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -90,11 +76,131 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>
                             </button>
+                            <button class="p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors" onclick="sendMessage()">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Settings Modal -->
+    @include('partials.settings-modal')
+
+    <!-- Password Verification Modal -->
+    @include('partials.password-verification-modal')
+
+    <!-- JavaScript for modal functionality -->
+    <script>
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+            document.getElementById('settingsModal').classList.remove('flex');
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarTexts = document.querySelectorAll('.sidebar-text');
+        const logoImage = document.getElementById('logoImage');
+        const profileIcon = document.getElementById('profileIcon');
+
+        let isExpanded = true;
+
+        sidebarToggle.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            
+            if (isExpanded) {
+                sidebar.classList.remove('w-[90px]');
+                sidebar.classList.add('w-80');
+                toggleIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                `;
+                logoImage.src = "{{ asset('images/logo.png') }}";
+                sidebarTexts.forEach(text => text.classList.remove('hidden'));
+                profileIcon.style.transform = 'translateX(0)';
+            } else {
+                sidebar.classList.remove('w-80');
+                sidebar.classList.add('w-[90px]');
+                toggleIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                `;
+                logoImage.src = "{{ asset('images/animasi2.png') }}";
+                sidebarTexts.forEach(text => text.classList.add('hidden'));
+                profileIcon.style.transform = 'translateX(-3px)';
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messagesContainer = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Pesan user dengan perbaikan responsivitas
+                const userMessage = `
+                    <div class="flex justify-end gap-2 items-start mb-4">
+                        <div class="flex flex-col items-end max-w-[75%]">
+                            <div class="bg-[#24b0ba] text-white rounded-2xl rounded-tr-none px-4 py-2 inline-block">
+                                <p class="break-words whitespace-pre-wrap">${message}</p>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white font-medium">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', userMessage);
+                
+                // Simulasi respons sistem dengan perbaikan responsivitas
+                setTimeout(() => {
+                    const systemResponse = `
+                        <div class="flex justify-start gap-2 items-start mb-4">
+                            <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                </svg>
+                            </div>
+                            <div class="flex flex-col max-w-[75%]">
+                                <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
+                                    <p class="text-gray-800 break-words whitespace-pre-wrap">Terima kasih atas pertanyaan Anda. Saya akan membantu menjawab pertanyaan tentang "${message}"</p>
+                                    <p class="mt-2 text-gray-600">Mohon tunggu sebentar sementara saya memproses pertanyaan Anda...</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    messagesContainer.insertAdjacentHTML('beforeend', systemResponse);
+                    
+                    // Auto scroll ke pesan terbaru
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 500);
+                
+                // Bersihkan input
+                input.value = '';
+                
+                // Auto scroll ke pesan terbaru
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        // Tambahkan event listener untuk tombol Enter
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
+
+

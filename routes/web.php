@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\PasswordController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,4 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home');
     })->name('home');
+    
+    Route::get('/change-password', [App\Http\Controllers\PasswordController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/update-password', [App\Http\Controllers\PasswordController::class, 'updatePassword'])->name('password.update');
 });
+
+Route::post('/verify-password', [PasswordController::class, 'verifyPassword'])->name('password.verify');
+
