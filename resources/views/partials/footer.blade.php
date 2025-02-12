@@ -5,7 +5,7 @@
                 <div class="flex flex-col md:flex-row items-start justify-between mb-8">
                     <div class="mb-6 md:mb-0">
                         <div class="flex items-center mb-6">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8">
+                            <img src="{{ asset('images/logo-white.png') }}" alt="Logo" class="h-8">
                         </div>
                         <div class="flex items-center space-x-6 mb-6">
                             <a href="#" class="text-gray-400 hover:text-gray-300">
