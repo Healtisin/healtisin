@@ -35,3 +35,23 @@
         </div>
     </div>
 </div>
+
+<script>
+function closePasswordVerificationModal() {
+    const modal = document.getElementById('passwordVerificationModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function verifyPassword() {
+    // Contoh logika verifikasi minimal; pastikan implementasi logika verifikasi sesuai kebutuhan.
+    const input = document.getElementById('verification_password');
+    if (input.value === 'passwordAnda') {
+        alert("Password yang Anda masukkan benar!");
+        closePasswordVerificationModal();
+    } else {
+        document.getElementById('verification_error').classList.remove('hidden');
+    }
+}
+</script>
+

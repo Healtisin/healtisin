@@ -1,4 +1,4 @@
-<div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+<div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg w-[900px]">
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-4 border-b">
@@ -22,7 +22,6 @@
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 mb-1">Email</label>
                             <input type="email" value="{{ Auth::user()->email }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly>
-                            <button class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
 
                         <!-- Password -->
@@ -34,7 +33,7 @@
                                        class="w-full px-3 py-2 border rounded-md bg-gray-50" 
                                        readonly>
                             </div>
-                            <button class="text-blue-500 text-sm mt-1">Ubah</button>
+                            <button onclick="showChangePasswordModal()" class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
 
                         <!-- Display Name -->

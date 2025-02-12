@@ -94,6 +94,9 @@
     <!-- Password Verification Modal -->
     @include('partials.password-verification-modal')
 
+    <!-- Change Password Modal -->
+    @include('partials.change-password-modal')
+
     <!-- JavaScript for modal functionality -->
     <script>
         function openSettingsModal() {
@@ -199,8 +202,21 @@
                 sendMessage();
             }
         });
+
+        function showChangePasswordModal() {
+            closeSettingsModal();
+            document.getElementById('changePasswordModal').classList.remove('hidden');
+            document.getElementById('changePasswordModal').classList.add('flex');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('hidden');
+            document.getElementById('changePasswordModal').classList.remove('flex');
+            openSettingsModal();
+        }
     </script>
 </body>
 </html>
+
 
 

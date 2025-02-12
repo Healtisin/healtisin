@@ -34,8 +34,10 @@ Route::middleware('auth')->group(function () {
         return view('home');
     })->name('home');
     
-    Route::get('/change-password', [App\Http\Controllers\PasswordController::class, 'showChangePasswordForm'])->name('password.change');
-    Route::post('/update-password', [App\Http\Controllers\PasswordController::class, 'updatePassword'])->name('password.update');
+    Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])
+         ->name('password.change');
+    Route::post('/change-password', [PasswordController::class, 'updatePassword'])
+         ->name('password.change.update');
 });
 
 Route::post('/verify-password', [PasswordController::class, 'verifyPassword'])->name('password.verify');
