@@ -1,17 +1,17 @@
-<header class="fixed top-0 left-0 right-0 bg-white z-50">
+<header class="fixed top-0 left-0 right-0 bg-white z-50 p-4">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <div class="flex-shrink-0">
                 <a href="/" class="text-xl font-bold">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8">
                 </a>
             </div>
-            
+
             <nav class="flex items-center gap-8 font-sans text-lg">
                 <div class="flex items-center gap-1 cursor-pointer">
                     <span>Healtisin</span>
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
                 <a href="/riset" class="hover:text-gray-600">Riset</a>
