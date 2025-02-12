@@ -18,7 +18,7 @@
                     <a href="/perusahaan" class="hover:text-[#24b0ba]">Perusahaan</a>
                     <a href="/karier" class="hover:text-[#24b0ba]">Karier</a>
                     <a href="/berita" class="hover:text-[#24b0ba]">Berita</a>
-                    <a href="/try" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                         Cobalah Healtisin
                     </a>
                 </nav>

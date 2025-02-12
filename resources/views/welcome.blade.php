@@ -22,9 +22,9 @@
                             Healtisin, asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7. Dapatkan skrining kesehatan yang cepat dan akurat dengan teknologi AI mutakhir kami.
                         </p>
                         <div class="flex gap-4">
-                            <button class="px-6 py-3 bg-[#24b0ba] text-white rounded-full hover:bg-[#73c7e3]">
+                            <a href="{{ route('login') }}" class="px-6 py-3 bg-[#24b0ba] text-white rounded-full hover:bg-[#73c7e3]">
                                 Coba Gratis
-                            </button>
+                            </a>
                             <!-- <button class="px-6 py-3 border border-black rounded-full hover:bg-gray-50">
                                 Dapatkan akses API
                             </button> -->
