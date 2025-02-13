@@ -20,15 +20,18 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register']);
-    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
-        ->name('password.request');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
-        ->name('password.email');
-    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
-        ->name('password.reset');
-    Route::post('reset-password', [ResetPasswordController::class, 'reset'])
-        ->name('password.update');
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.forgot');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.otp.send');
+    Route::get('/password/otp', [ForgotPasswordController::class, 'showOtpForm'])->name('password.otp.form');
+    Route::post('/password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify.otp');
+    Route::get('reset-password/{email}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset.submit');
+    Route::post('/password/otp/resend', [ForgotPasswordController::class, 'resendOtp'])->name('password.otp.resend');
 });
+Route::get('/password/reset', function () {
+    return view('auth.passwords.email');
+})->name('password.request');
+
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
