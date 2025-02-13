@@ -61,6 +61,45 @@
 
                 <!-- Right Column -->
                 <div class="space-y-6 px-4">
+                    <!-- Profile Photo -->
+                    <div>
+                        <h4 class="text-lg font-medium mb-4">Foto Profil</h4>
+                        <div class="flex items-center gap-4">
+                            <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100">
+                                @if(Auth::user()->profile_photo)
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" 
+                                         alt="Profile photo" 
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-[#24b0ba] flex items-center justify-center">
+                                        <span class="text-2xl text-white font-medium">
+                                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                <form action="{{ route('profile.photo.update') }}" 
+                                      method="POST" 
+                                      enctype="multipart/form-data"
+                                      id="profilePhotoForm">
+                                    @csrf
+                                    <input type="file" 
+                                           name="photo" 
+                                           id="photoInput" 
+                                           accept="image/jpeg,image/jpg,image/png" 
+                                           class="hidden"
+                                           onchange="validateAndPreviewPhoto(this)">
+                                    <button type="button" 
+                                            onclick="document.getElementById('photoInput').click()" 
+                                            class="text-blue-500 hover:underline">
+                                        Ubah foto
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Language Settings -->
                     <div>
                         <h4 class="text-lg font-medium mb-4">Bahasa</h4>
@@ -90,3 +129,110 @@
         </div>
     </div>
 </div>
+
+<!-- Tambahkan setelah modal settings -->
+<div id="photoConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
+    <div class="bg-white rounded-lg w-[400px] p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-lg font-medium">Konfirmasi Perubahan Foto</h4>
+            <button onclick="closePhotoConfirmationModal()" class="p-1 hover:bg-gray-100 rounded-full">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mb-4">
+            <img id="previewImage" class="w-32 h-32 rounded-full mx-auto object-cover" src="" alt="Preview">
+        </div>
+
+        <p class="text-sm text-gray-600 mb-6">Apakah Anda yakin ingin mengubah foto profil?</p>
+
+        <div class="flex justify-end gap-2">
+            <button onclick="closePhotoConfirmationModal()" 
+                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">
+                Batal
+            </button>
+            <button onclick="submitPhotoChange()" 
+                    class="px-4 py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3]">
+                Ya, Ubah Foto
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function validateAndPreviewPhoto(input) {
+    const file = input.files[0];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    if (!allowedTypes.includes(file.type)) {
+        alert('Hanya file JPG, JPEG, dan PNG yang diperbolehkan');
+        input.value = '';
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert('Ukuran file maksimal 2MB');
+        input.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('previewImage').src = e.target.result;
+        showPhotoConfirmationModal();
+    }
+    reader.readAsDataURL(file);
+}
+
+function showPhotoConfirmationModal() {
+    document.getElementById('photoConfirmationModal').classList.remove('hidden');
+    document.getElementById('photoConfirmationModal').classList.add('flex');
+}
+
+function closePhotoConfirmationModal() {
+    document.getElementById('photoConfirmationModal').classList.add('hidden');
+    document.getElementById('photoConfirmationModal').classList.remove('flex');
+    document.getElementById('photoInput').value = '';
+}
+
+async function submitPhotoChange() {
+    const form = document.getElementById('profilePhotoForm');
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Terjadi kesalahan');
+        }
+        
+        // Tampilkan notifikasi sukses
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+        alertDiv.textContent = data.message;
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.remove();
+            window.location.reload();
+        }, 2000);
+        
+        closePhotoConfirmationModal();
+    } catch (error) {
+        alert(error.message);
+        closePhotoConfirmationModal();
+    }
+}
+</script>
+

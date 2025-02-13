@@ -38,10 +38,16 @@
     <!-- Profile Section -->
     <div class="p-4 border-t">
         <div class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors">
-            <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300" id="profileIcon">
-                <span class="text-white font-medium">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                </span>
+            <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                @if(Auth::user()->profile_photo)
+                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" 
+                         alt="Profile photo" 
+                         class="w-full h-full object-cover">
+                @else
+                    <span class="text-white font-medium">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                    </span>
+                @endif
             </div>
             <div class="flex-1 min-w-0 sidebar-text">
                 <p class="text-sm font-medium text-gray-900 truncate">{{ Auth::user()->name }}</p>

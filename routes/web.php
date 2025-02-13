@@ -56,3 +56,5 @@ Route::post('/profile/name', [ProfileController::class, 'updateName'])->name('pr
 
 Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
+Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+

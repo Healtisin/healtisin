@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <style>
         /* Scrollbar untuk Webkit (Chrome, Safari, Edge) */
@@ -43,6 +42,7 @@
             scrollbar-color: rgba(156, 163, 175, 0.7) transparent;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
@@ -103,6 +103,13 @@
 
     <!-- JavaScript for modal functionality -->
     <script>
+        const Auth = {
+            user: {
+                name: "{{ Auth::user()->name }}",
+                profile_photo: "{{ Auth::user()->profile_photo }}"
+            }
+        };
+
         function openSettingsModal() {
             document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
@@ -146,63 +153,76 @@
             }
         });
 
+        const loadingMessage = `
+            <div id="loadingMessage" class="flex justify-start gap-2 items-start mb-4">
+                <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col max-w-[75%]">
+                    <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                        <p class="text-gray-600">Sedang mengetik...</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const messagesContainer = document.getElementById('chatMessages');
             const message = input.value.trim();
             
             if (message) {
-                // Tampilkan pesan user
+                // Clear input
+                input.value = '';
+                
+                // Add user message
                 const userMessage = `
                     <div class="flex justify-end gap-2 items-start mb-4">
                         <div class="flex flex-col items-end max-w-[75%]">
-                            <div class="bg-[#24b0ba] text-white rounded-2xl rounded-tr-none px-4 py-2 inline-block">
+                            <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
                                 <p class="break-words whitespace-pre-wrap">${message}</p>
                             </div>
                         </div>
-                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                            <span class="text-white font-medium">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </span>
+                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            ${Auth.user.profile_photo 
+                                ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile photo" class="w-full h-full object-cover">` 
+                                : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
+                            }
                         </div>
                     </div>
                 `;
                 messagesContainer.insertAdjacentHTML('beforeend', userMessage);
-
-                // Tampilkan indikator loading
-                const loadingMessage = `
-                    <div id="loadingMessage" class="flex justify-start gap-2 items-start mb-4">
-                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                        <div class="flex flex-col max-w-[75%]">
-                            <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
-                                <p class="text-gray-600">Sedang mengetik...</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                
+                // Add loading message
                 messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
-
+                
                 try {
                     const response = await fetch('/chat/send', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({ message })
                     });
 
+                    // Remove loading message
+                    const loadingElement = document.getElementById('loadingMessage');
+                    if (loadingElement) {
+                        loadingElement.remove();
+                    }
+
                     const data = await response.json();
                     
-                    // Hapus pesan loading
-                    document.getElementById('loadingMessage').remove();
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Terjadi kesalahan saat memproses pesan');
+                    }
 
-                    // Tampilkan respons AI
+                    // Add AI response
                     const aiResponse = `
                         <div class="flex justify-start gap-2 items-start mb-4">
                             <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
@@ -211,7 +231,7 @@
                                 </svg>
                             </div>
                             <div class="flex flex-col max-w-[75%]">
-                                <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
+                                <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
                                     <p class="text-gray-800 break-words whitespace-pre-wrap">${data.message}</p>
                                 </div>
                             </div>
@@ -220,7 +240,7 @@
                     messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
                 } catch (error) {
                     console.error('Error:', error);
-                    // Tampilkan pesan error
+                    // Show error message
                     const errorMessage = `
                         <div class="flex justify-start gap-2 items-start mb-4">
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -229,8 +249,8 @@
                                 </svg>
                             </div>
                             <div class="flex flex-col max-w-[75%]">
-                                <div class="bg-red-50 border border-red-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
-                                    <p class="text-red-600">Maaf, terjadi kesalahan saat memproses pesan Anda.</p>
+                                <div class="bg-white border border-red-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
+                                    <p class="text-red-600">${error.message}</p>
                                 </div>
                             </div>
                         </div>
@@ -238,8 +258,7 @@
                     messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
                 }
 
-                // Bersihkan input dan scroll ke bawah
-                input.value = '';
+                // Scroll to bottom
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         }
