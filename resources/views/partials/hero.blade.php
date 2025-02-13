@@ -5,7 +5,7 @@
             Healtisin AI
         </h1>
         <p class="text-xl mb-8 font-serif text-gray-600">
-            Healtisin, asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7. Dapatkan skrining
+            Healtisin, adalah asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7. Dapatkan skrining
             kesehatan yang cepat dan akurat dengan teknologi AI mutakhir kami.
         </p>
         <div class="flex gap-4">
