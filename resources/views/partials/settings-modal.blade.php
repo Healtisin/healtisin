@@ -21,7 +21,7 @@
                         <!-- Email -->
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 mb-1">Email</label>
-                            <input type="email" value="{{ Auth::user()->email }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly>
+                            <input type="email" value="{{ Auth::user()->email }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly data-no-translate>
                         </div>
 
                         <!-- Password -->
@@ -39,7 +39,7 @@
                         <!-- Display Name -->
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 mb-1">Nama yang ditampilkan</label>
-                            <input type="text" value="{{ Auth::user()->name }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly>
+                            <input type="text" value="{{ Auth::user()->name }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly data-no-translate>
                             <button onclick="showChangeNameModal()"  class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
 
@@ -101,11 +101,17 @@
                     </div>
 
                     <!-- Language Settings -->
-                    <div>
-                        <h4 class="text-lg font-medium mb-4">Bahasa</h4>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Indonesia</span>
-                            <button class="text-blue-500 text-sm">Ubah</button>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-600 mb-1">Bahasa</label>
+                        <div class="relative">
+                            <input type="text" 
+                                   value="{{ config('app.available_languages')[App::getLocale()]['native'] }}"
+                                   class="w-full px-3 py-2 border rounded-md bg-gray-50" 
+                                   readonly>
+                            <button onclick="showLanguageModal()" 
+                                    class="text-blue-500 text-sm mt-1 hover:underline">
+                                Ubah
+                            </button>
                         </div>
                     </div>
 
@@ -157,6 +163,37 @@
                     class="px-4 py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3]">
                 Ya, Ubah Foto
             </button>
+        </div>
+    </div>
+</div>
+
+<!-- Language Modal -->
+<div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
+    <div class="bg-white rounded-lg w-[400px]">
+        <div class="flex items-center justify-between p-4 border-b">
+            <h3 class="text-xl font-semibold">Ubah Bahasa</h3>
+            <button onclick="closeLanguageModal()" class="p-1 hover:bg-gray-100 rounded-full">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="p-6">
+            @foreach(config('app.available_languages') as $code => $lang)
+                <button onclick="changeLanguage('{{ $code }}')"
+                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 flex items-center justify-between mb-2">
+                    <div>
+                        <span class="text-sm">{{ $lang['native'] }}</span>
+                        <span class="text-xs text-gray-500">({{ $lang['name'] }})</span>
+                    </div>
+                    @if(App::getLocale() == $code)
+                        <svg class="w-5 h-5 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    @endif
+                </button>
+            @endforeach
         </div>
     </div>
 </div>
@@ -234,5 +271,40 @@ async function submitPhotoChange() {
         closePhotoConfirmationModal();
     }
 }
+
+function showLanguageModal() {
+    document.getElementById('languageModal').classList.remove('hidden');
+    document.getElementById('languageModal').classList.add('flex');
+}
+
+function closeLanguageModal() {
+    document.getElementById('languageModal').classList.add('hidden');
+    document.getElementById('languageModal').classList.remove('flex');
+}
+
+async function changeLanguage(lang) {
+    try {
+        const response = await fetch('/language/change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ language: lang })
+        });
+
+        if (!response.ok) {
+            throw new Error('Gagal mengubah bahasa');
+        }
+
+        window.location.reload();
+    } catch (error) {
+        console.error('Language change error:', error);
+        alert('Gagal mengubah bahasa: ' + error.message);
+    }
+}
 </script>
+
+
 

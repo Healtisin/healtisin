@@ -289,6 +289,7 @@
             modal.classList.add('flex');
         }
     </script>
+    <script src="{{ mix('js/translate.js') }}"></script>
 </body>
 </html>
 

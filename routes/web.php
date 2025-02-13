@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\LanguageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,4 +58,6 @@ Route::post('/profile/name', [ProfileController::class, 'updateName'])->name('pr
 Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+
+Route::post('/language/change', [LanguageController::class, 'change'])->name('language.change');
 
