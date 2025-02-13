@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <style>
         /* Scrollbar untuk Webkit (Chrome, Safari, Edge) */
@@ -145,13 +146,13 @@
             }
         });
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const messagesContainer = document.getElementById('chatMessages');
             const message = input.value.trim();
             
             if (message) {
-                // Pesan user dengan perbaikan responsivitas
+                // Tampilkan pesan user
                 const userMessage = `
                     <div class="flex justify-end gap-2 items-start mb-4">
                         <div class="flex flex-col items-end max-w-[75%]">
@@ -167,10 +168,42 @@
                     </div>
                 `;
                 messagesContainer.insertAdjacentHTML('beforeend', userMessage);
-                
-                // Simulasi respons sistem dengan perbaikan responsivitas
-                setTimeout(() => {
-                    const systemResponse = `
+
+                // Tampilkan indikator loading
+                const loadingMessage = `
+                    <div id="loadingMessage" class="flex justify-start gap-2 items-start mb-4">
+                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col max-w-[75%]">
+                            <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
+                                <p class="text-gray-600">Sedang mengetik...</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
+
+                try {
+                    const response = await fetch('/chat/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({ message })
+                    });
+
+                    const data = await response.json();
+                    
+                    // Hapus pesan loading
+                    document.getElementById('loadingMessage').remove();
+
+                    // Tampilkan respons AI
+                    const aiResponse = `
                         <div class="flex justify-start gap-2 items-start mb-4">
                             <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,22 +212,34 @@
                             </div>
                             <div class="flex flex-col max-w-[75%]">
                                 <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
-                                    <p class="text-gray-800 break-words whitespace-pre-wrap">Terima kasih atas pertanyaan Anda. Saya akan membantu menjawab pertanyaan tentang "${message}"</p>
-                                    <p class="mt-2 text-gray-600">Mohon tunggu sebentar sementara saya memproses pertanyaan Anda...</p>
+                                    <p class="text-gray-800 break-words whitespace-pre-wrap">${data.message}</p>
                                 </div>
                             </div>
                         </div>
                     `;
-                    messagesContainer.insertAdjacentHTML('beforeend', systemResponse);
-                    
-                    // Auto scroll ke pesan terbaru
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }, 500);
-                
-                // Bersihkan input
+                    messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Tampilkan pesan error
+                    const errorMessage = `
+                        <div class="flex justify-start gap-2 items-start mb-4">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col max-w-[75%]">
+                                <div class="bg-red-50 border border-red-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
+                                    <p class="text-red-600">Maaf, terjadi kesalahan saat memproses pesan Anda.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
+                }
+
+                // Bersihkan input dan scroll ke bawah
                 input.value = '';
-                
-                // Auto scroll ke pesan terbaru
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         }

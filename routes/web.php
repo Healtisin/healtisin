@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,4 +53,6 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::post('/profile/name', [ProfileController::class, 'updateName'])->name('profile.name.update');
+
+Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
