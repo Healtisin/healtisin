@@ -117,13 +117,51 @@
 
                     <!-- Account Upgrade -->
                     <div>
-                        <h4 class="text-lg font-medium mb-4">Tingkatkan akun Anda</h4>
-                        <p class="text-sm text-gray-600 mb-4">
-                            Tingkatkan ke Healtisin Pro untuk mendapatkan fitur premium lainnya.
-                        </p>
-                        <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                            Bandingkan paket langganan
-                        </button>
+                        <h4 class="text-lg font-medium mb-4">Status Akun</h4>
+                        @if(Auth::user()->subscription_status == 'free')
+                            <div class="space-y-4">
+                                <p class="text-sm text-gray-600">
+                                    Tingkatkan ke Healtisin Pro untuk mendapatkan fitur premium lainnya.
+                                </p>
+                                <a href="{{ route('pricing.pro') }}" 
+                                   class="inline-block px-4 py-2 bg-[#24b0ba] text-white rounded-md 
+                                          hover:bg-[#73c7e3] transition-colors duration-200">
+                                    Tingkatkan paket langganan
+                                </a>
+                            </div>
+                        @elseif(Auth::user()->subscription_status == 'pro')
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-medium text-[#24b0ba]">Pro Member</span>
+                                    <svg class="w-5 h-5 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-600">
+                                    Selamat! Anda telah menjadi bagian dari Healtisin Pro. Nikmati akses penuh ke semua fitur premium kami:
+                                </p>
+                                <ul class="text-sm text-gray-600 space-y-2">
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Konsultasi tanpa batas dengan dokter spesialis
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Akses prioritas 24/7
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Riwayat medis lengkap dan terorganisir
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

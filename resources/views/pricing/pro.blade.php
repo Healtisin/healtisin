@@ -9,14 +9,12 @@
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen flex flex-col">
-        <!-- Header -->
-        @include('partials.header')
 
         <!-- Main Content -->
         <main class="flex-1 pt-20">
             <div class="max-w-3xl mx-auto px-4 py-12">
                 <!-- Tombol Kembali -->
-                <a href="/"
+                <a href="{{ url()->previous() == url('/') ? '/' : '/home' }}"
                     class="fixed left-8 top-[90px] inline-flex items-center px-6 py-2.5 bg-white border border-gray-300 
                             rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200
                             text-gray-700 hover:text-[#24b0ba] hover:border-[#24b0ba]">
@@ -221,9 +219,18 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-[#24b0ba] text-white py-4 rounded-full hover:bg-[#73c7e3] transition-colors text-lg font-semibold">
-                    Lanjutkan ke Pembayaran
-                </button>
+                @auth
+                    <button type="submit" class="w-full bg-[#24b0ba] text-white py-4 rounded-full hover:bg-[#73c7e3] transition-colors text-lg font-semibold">
+                        Lanjutkan ke Pembayaran
+                    </button>
+                @else
+                    <div class="text-center py-8">
+                        <p class="text-gray-600 mb-4">Silakan login terlebih dahulu untuk melakukan pembayaran</p>
+                        <a href="{{ route('login') }}" class="inline-block px-6 py-2 bg-[#24b0ba] text-white rounded-full hover:bg-[#1d8f98]">
+                            Login
+                        </a>
+                    </div>
+                @endauth
 
                 <div class="text-center text-sm text-gray-600 mt-4">
                     <p>Dengan melanjutkan, Anda menyetujui <a href="#" class="text-[#24b0ba] hover:underline">Syarat dan Ketentuan</a> kami</p>
