@@ -84,9 +84,9 @@
             </ul>
 
             <div class="mt-auto">
-                <button class="w-full px-6 py-3 bg-[#24b0ba] text-white rounded-full hover:bg-[#73c7e3]">
+                <a href="{{ route('pricing.pro') }}" class="w-full px-6 py-3 bg-[#24b0ba] text-white rounded-full hover:bg-[#73c7e3] inline-block text-center">
                     Mulai Pro
-                </button>
+                </a>
             </div>
         </div>
     </div>

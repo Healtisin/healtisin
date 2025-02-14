@@ -10,6 +10,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -64,3 +65,11 @@ Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('
 
 Route::post('/language/change', [LanguageController::class, 'change'])->name('language.change');
 
+Route::get('/pricing/pro', function () {
+    return view('pricing.pro');
+})->name('pricing.pro');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/payments', [PaymentController::class, 'store'])->name('payment.store');
+    Route::post('/payments/{payment}/proof', [PaymentController::class, 'uploadProof'])->name('payment.proof');
+});
