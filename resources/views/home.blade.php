@@ -41,6 +41,68 @@
         #chatMessages:hover {
             scrollbar-color: rgba(156, 163, 175, 0.7) transparent;
         }
+
+        /* Styling scrollbar untuk Webkit browsers (Chrome, Safari, Edge) */
+        #chatInput::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #chatInput::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chatInput::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 4px;
+        }
+
+        #chatInput::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.7);
+        }
+
+        /* Styling scrollbar untuk Firefox */
+        #chatInput {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+        }
+
+        /* Styling untuk textarea */
+        #chatInput {
+            min-height: 56px;         /* Tinggi minimum untuk 1 baris (24px line-height + 32px padding) */
+            max-height: 128px;        /* Tinggi maksimum untuk 4 baris ((24px × 4) + 32px padding) */
+            padding: 16px 148px 16px 24px;
+            line-height: 24px;        
+            font-size: 16px;          
+            overflow-y: auto;
+            resize: none;
+            box-sizing: border-box;
+            display: block;
+            position: relative;
+        }
+
+        /* Efek fade untuk konten yang tersembunyi */
+        #chatInput.overflow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9) 70%);
+            pointer-events: none;
+        }
+
+        /* Menyembunyikan scrollbar untuk Chrome, Safari dan Opera */
+        #chatInput::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Menyembunyikan scrollbar untuk IE, Edge dan Firefox */
+        #chatInput {
+            -ms-overflow-style: none;  /* IE dan Edge */
+            scrollbar-width: none;     /* Firefox */
+            line-height: 20px;         /* Jarak antar baris */
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -61,12 +123,14 @@
 
                     <!-- Chat Input -->
                     <div class="relative flex items-center gap-2">
-                        <input type="text" 
-                               id="chatInput"
-                               class="w-full px-4 py-5 pr-24 rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba]" 
-                               placeholder="Ketik pertanyaan Anda">
+                        <textarea 
+                            id="chatInput"
+                            class="w-full px-6 py-3 pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none"
+                            placeholder="Ketik pertanyaan Anda"
+                            rows="1"
+                        ></textarea>
                         
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             <button class="p-2 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -263,10 +327,85 @@
             }
         }
 
-        // Tambahkan event listener untuk tombol Enter
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
+        const chatInput = document.getElementById('chatInput');
+
+        function getTextHeight(text, width, lineHeight) {
+            // Buat elemen temporary untuk mengukur tinggi teks
+            const temp = document.createElement('div');
+            temp.style.width = width + 'px';
+            temp.style.position = 'absolute';
+            temp.style.visibility = 'hidden';
+            temp.style.lineHeight = lineHeight + 'px';
+            temp.style.whiteSpace = 'pre-wrap';
+            temp.style.wordWrap = 'break-word';
+            temp.style.fontFamily = window.getComputedStyle(chatInput).fontFamily;
+            temp.style.fontSize = window.getComputedStyle(chatInput).fontSize;
+            temp.innerText = text;
+            document.body.appendChild(temp);
+            const height = temp.offsetHeight;
+            document.body.removeChild(temp);
+            return height;
+        }
+
+        function adjustTextareaHeight() {
+            const lineHeight = 24;
+            const padding = 32;
+            const maxLines = 4;
+            const maxHeight = (lineHeight * maxLines) + padding;
+            const textWidth = chatInput.clientWidth - 172; // Kurangi padding kanan dan kiri
+            
+            // Reset height
+            chatInput.style.height = 'auto';
+            
+            // Hitung tinggi teks saat ini
+            const currentText = chatInput.value;
+            const textHeight = getTextHeight(currentText, textWidth, lineHeight);
+            const totalHeight = textHeight + padding;
+            
+            // Jika melebihi batas maksimum
+            if (totalHeight > maxHeight) {
+                // Potong teks per karakter sampai tingginya sesuai
+                let text = currentText;
+                while (getTextHeight(text, textWidth, lineHeight) + padding > maxHeight && text.length > 0) {
+                    text = text.slice(0, -1);
+                }
+                chatInput.value = text;
+                chatInput.style.height = maxHeight + 'px';
+                chatInput.classList.add('overflow');
+            } else {
+                chatInput.style.height = Math.max(totalHeight, lineHeight + padding) + 'px';
+                chatInput.classList.remove('overflow');
+            }
+        }
+
+        // Event listener untuk input
+        chatInput.addEventListener('input', function(e) {
+            adjustTextareaHeight();
+        });
+
+        // Event listener untuk paste
+        chatInput.addEventListener('paste', function(e) {
+            // Tunda eksekusi untuk mendapatkan teks yang di-paste
+            setTimeout(() => {
+                adjustTextareaHeight();
+            }, 0);
+        });
+
+        // Event listener untuk keydown
+        chatInput.addEventListener('keydown', function(e) {
+            const lineHeight = 24;
+            const padding = 32;
+            const maxHeight = (lineHeight * 4) + padding;
+            const textWidth = this.clientWidth - 172;
+            
+            // Cek apakah penambahan enter akan melebihi batas
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const futureText = this.value.slice(0, this.selectionStart) + '\n' + this.value.slice(this.selectionEnd);
+                const futureHeight = getTextHeight(futureText, textWidth, lineHeight) + padding;
+                
+                if (futureHeight > maxHeight) {
+                    e.preventDefault();
+                }
             }
         });
 
