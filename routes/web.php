@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,11 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home');
     })->name('home');
-    
+
     Route::get('/change-password', [PasswordController::class, 'showChangePasswordForm'])
-         ->name('password.change');
+        ->name('password.change');
     Route::post('/change-password', [PasswordController::class, 'updatePassword'])
-         ->name('password.change.update');
+        ->name('password.change.update');
 });
 
 Route::post('/verify-password', [PasswordController::class, 'verifyPassword'])->name('password.verify');
@@ -72,4 +73,10 @@ Route::get('/pricing/pro', function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/payments', [PaymentController::class, 'store'])->name('payment.store');
     Route::post('/payments/{payment}/proof', [PaymentController::class, 'uploadProof'])->name('payment.proof');
+});
+
+//ADMIN
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
