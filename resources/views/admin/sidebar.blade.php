@@ -6,8 +6,30 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-4" style="max-height: calc(100vh - 96px);">
+        <ul class="space-y-2">
+            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+                    <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        🏦
+                    </span>
+                    <div class="flex-1 min-w-0 sidebar-text">
+                        <p class="text-sm font-medium text-gray-900 truncate">Dashboard</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
         <h3 class="text-sm font-medium text-gray-500 mb-4 sidebar-text">Navigation</h3>
         <ul class="space-y-2">
+            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="{{ route('admin.users') }}" class="flex items-center gap-3">
+                    <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        📊
+                    </span>
+                    <div class="flex-1 min-w-0 sidebar-text">
+                        <p class="text-sm font-medium text-gray-900 truncate">Pengguna</p>
+                    </div>
+                </a>
+            </li>
             <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
                 <a href="#" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
@@ -25,16 +47,6 @@
                     </span>
                     <div class="flex-1 min-w-0 sidebar-text">
                         <p class="text-sm font-medium text-gray-900 truncate">Input Berita</p>
-                    </div>
-                </a>
-            </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
-                <a href="#" class="flex items-center gap-3">
-                    <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
-                        📊
-                    </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-900 truncate">Pengguna</p>
                     </div>
                 </a>
             </li>
