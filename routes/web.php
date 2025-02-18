@@ -118,3 +118,7 @@ Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])-
 Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
 
 Route::get('/activate/{token}', [RegisterController::class, 'activate'])->name('activate');
+
+Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('/chat/history', [ChatController::class, 'storeHistory'])->name('chat.history.store');
+Route::get('/chat/histories', [ChatController::class, 'getHistories']);
