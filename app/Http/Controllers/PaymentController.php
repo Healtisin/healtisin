@@ -227,6 +227,17 @@ class PaymentController extends Controller
             'phone' => 'required|string|max:20'
         ]);
 
+        // Cek apakah sudah ada pembayaran yang belum selesai
+        $existingPayment = Payment::where('user_id', Auth::id())
+            ->where('status', 'unpaid')
+            ->where('expired_at', '>', now())
+            ->first();
+
+        if ($existingPayment) {
+            return redirect()->route('pricing.payment-confirmation', $existingPayment->id)
+                ->with('error', 'Anda memiliki pembayaran yang belum diselesaikan');
+        }
+
         $package = $this->getPackageDetails($request->package_id);
         
         $payment = Payment::create([
@@ -282,33 +293,6 @@ class PaymentController extends Controller
         }
         
         return response()->json(['status' => $payment->status]);
-    }
-
-    public function uploadPaymentProof(Request $request, Payment $payment)
-    {
-        $request->validate([
-            'proof' => 'required|image|max:2048' // maksimal 2MB
-        ]);
-
-        // Cek kepemilikan payment
-        if ($payment->user_id !== Auth::id()) {
-            return back()->with('error', 'Unauthorized action');
-        }
-
-        // Cek status pembayaran
-        if ($payment->status !== 'unpaid') {
-            return back()->with('error', 'Pembayaran sudah diproses');
-        }
-
-        // Upload bukti pembayaran
-        $path = $request->file('proof')->store('payment-proofs', 'public');
-        
-        $payment->update([
-            'payment_proof' => $path,
-            'status' => 'pending' // menunggu verifikasi admin
-        ]);
-
-        return back()->with('success', 'Bukti pembayaran berhasil diunggah. Tim kami akan segera memverifikasi pembayaran Anda.');
     }
 
     private function checkVAPayment($payment)

@@ -67,42 +67,6 @@
                     @endif
                 </div>
 
-                <!-- Tombol Upload Bukti -->
-                @if(in_array($payment->payment_method, ['bca', 'mandiri', 'bni']))
-                    <div class="mt-8">
-                        <form action="{{ route('pricing.upload-proof', $payment->id) }}" 
-                              method="POST" 
-                              enctype="multipart/form-data"
-                              class="space-y-4">
-                            @csrf
-                            <div class="bg-white rounded-xl shadow-lg p-8">
-                                <h3 class="text-xl font-semibold mb-6">Upload Bukti Pembayaran</h3>
-                                @if(session('success'))
-                                    <div class="p-4 mb-4 bg-green-50 text-green-600 rounded-lg">
-                                        {{ session('success') }}
-                                    </div>
-                                @endif
-                                @if(session('error'))
-                                    <div class="p-4 mb-4 bg-red-50 text-red-600 rounded-lg">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
-                                <input type="file" 
-                                       name="proof" 
-                                       accept="image/*" 
-                                       required
-                                       class="w-full p-2 border rounded-lg">
-                                <p class="text-sm text-gray-500 mt-2">Format: JPG, PNG, maksimal 2MB</p>
-                                <button type="submit" 
-                                        class="w-full mt-4 bg-[#24b0ba] text-white py-3 rounded-full 
-                                               hover:bg-[#73c7e3] transition-colors">
-                                    Upload Bukti Pembayaran
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                @endif
-
                 @if($payment->payment_method === 'paypal')
                     <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=IDR"></script>
                     <script>
