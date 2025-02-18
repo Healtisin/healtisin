@@ -2,16 +2,24 @@
 $currentRoute = Route::currentRouteName();
 $breadcrumbs = [
 'admin.dashboard' => ['Home', 'Dashboard'],
-'admin.users' => ['Home', 'Pengguna', 'Index'],
-'admin.payments' => ['Home', 'Pembayaran', ''],
-'admin.news' => ['Home', 'Admin', 'Input Berita'],
-'admin.expenses' => ['Home', 'Admin', 'Expenses Issued'],
+'admin.users' => ['Home', 'Pengguna'],
+'admin.users.create' => ['Home', 'Pengguna', 'Tambah Pengguna'],
+'admin.users.edit' => ['Home', 'Pengguna', 'Edit Pengguna'],
+'admin.transactions' => ['Home', 'Transaksi'],
+'admin.payments' => ['Home', 'Pembayaran'],
+'admin.pricing' => ['Home', 'Pricing'],
 ];
 
 $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
+
+$breadcrumbRoutes = [
+'Home' => 'admin.dashboard',
+'Pengguna' => 'admin.users',
+];
+
 @endphp
-<!-- Header dengan breadcrumbs dan ikon notifikasi serta profil -->
-<header class="flex justify-between items-center px-8 py-5  shadow-sm">
+
+<header class="flex justify-between items-center px-8 py-5 shadow-sm">
     <!-- Breadcrumbs -->
     <nav class="flex-1 text-gray-600" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-1 md:space-x-3">
@@ -33,7 +41,15 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                             clip-rule="evenodd" />
                     </svg>
-                    <a href="#" class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900">{{ $breadcrumb }}</a>
+                    @if(isset($breadcrumbRoutes[$breadcrumb]))
+                    <a href="{{ route($breadcrumbRoutes[$breadcrumb]) }}"
+                        class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900">
+                        {{ $breadcrumb }}
+                    </a>
+                    @else
+                    <span class="ml-1 text-sm font-medium text-gray-700">{{ $breadcrumb }}</span>
+                    @endif
+                    <!-- <a href="#" class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900">{{ $breadcrumb }}</a> -->
                 </div>
                 @endif
             </li>
@@ -41,28 +57,29 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
         </ol>
     </nav>
 
+    <!-- Notification and Profile Dropdown -->
     <div class="flex items-center space-x-6">
+        <!-- Notification Dropdown -->
         <div class="relative">
             <button class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                onclick="document.getElementById('notificationDropdown').classList.toggle('hidden')">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
+                onclick="toggleDropdown('notificationDropdown', 'profileDropdown')">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                    </path>
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
             </button>
-
             <div id="notificationDropdown"
                 class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                <!-- Notification Content -->
                 <div class="px-4 py-3 border-b border-gray-200">
                     <div class="flex justify-between items-center">
                         <h3 class="text-sm font-semibold text-gray-900">Notifications</h3>
                         <a href="#" class="text-sm text-blue-600 hover:text-blue-700">Mark all as read</a>
                     </div>
                 </div>
-
+                <!-- Notification Items -->
                 <div class="max-h-96 overflow-y-auto">
+                    <!-- Example Notification -->
                     <a href="#" class="block px-4 py-3 bg-blue-50 hover:bg-gray-100 border-b border-gray-200">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
@@ -82,52 +99,14 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
                             </div>
                         </div>
                     </a>
-
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-100 border-b border-gray-200">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm text-gray-900">Order #1233 Completed</p>
-                                <p class="text-sm text-gray-500">Order has been delivered successfully</p>
-                                <p class="text-xs text-gray-400 mt-1">1 hour ago</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-100">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm text-gray-900">System Update</p>
-                                <p class="text-sm text-gray-500">System maintenance will occur in 2 hours</p>
-                                <p class="text-xs text-gray-400 mt-1">3 hours ago</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                    <a href="#" class="block text-sm text-center font-medium text-blue-600 hover:text-blue-700">
-                        View all notifications
-                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Profile Dropdown -->
         <div class="relative">
             <button class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                onclick="toggleDropdown('profileDropdown', 'notificationDropdown')">
                 <img class="w-8 h-8 rounded-full" src="" alt="Profile">
             </button>
             <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
@@ -160,3 +139,36 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
         </div>
     </div>
 </header>
+
+<script>
+    function toggleDropdown(dropdownId, otherDropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        const otherDropdown = document.getElementById(otherDropdownId);
+
+        // Hide other dropdown if it's open
+        if (!otherDropdown.classList.contains('hidden')) {
+            otherDropdown.classList.add('hidden');
+        }
+
+        // Toggle current dropdown
+        dropdown.classList.toggle('hidden');
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const notificationButton = document.querySelector(
+            '[onclick="toggleDropdown(\'notificationDropdown\', \'profileDropdown\')"]');
+        const profileButton = document.querySelector(
+            '[onclick="toggleDropdown(\'profileDropdown\', \'notificationDropdown\')"]');
+
+        if (!notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+
+        if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+    });
+</script>
