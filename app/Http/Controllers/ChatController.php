@@ -156,5 +156,28 @@ class ChatController extends Controller
         
         return view('partials.chat-histories', compact('histories'));
     }
+
+    public function deleteChat($id)
+    {
+        try {
+            $chatHistory = ChatHistory::findOrFail($id);
+            
+            if ($chatHistory->user_id !== auth()->id()) {
+                throw new \Exception('Tidak memiliki akses ke chat ini');
+            }
+
+            $chatHistory->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Chat berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 404);
+        }
+    }
 }
 

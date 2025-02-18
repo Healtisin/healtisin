@@ -165,6 +165,9 @@
     <!-- Change Name Modal -->
     @include('partials.change-name-modal')
 
+    <!-- Delete Chat Modal -->
+    @include('partials.delete-chat-modal')
+
     <!-- JavaScript for modal functionality -->
     <script>
         const Auth = {
@@ -502,10 +505,61 @@
                 </div>
             `;
         }
+
+        let chatToDelete = null;
+
+        function showDeleteChatModal(chatId) {
+            event.stopPropagation();
+            chatToDelete = chatId;
+            const modal = document.getElementById('deleteChatModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDeleteChatModal() {
+            const modal = document.getElementById('deleteChatModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            chatToDelete = null;
+        }
+
+        async function confirmDeleteChat() {
+            if (!chatToDelete) return;
+            
+            try {
+                const response = await fetch(`/chat/delete/${chatToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal menghapus chat');
+                }
+
+                // Update sidebar
+                await updateSidebar();
+                
+                // Jika chat yang dihapus adalah chat yang sedang aktif
+                if (window.currentChatId === chatToDelete) {
+                    window.currentChatId = null;
+                    document.getElementById('chatMessages').innerHTML = '';
+                }
+
+                closeDeleteChatModal();
+            } catch (error) {
+                console.error('Error deleting chat:', error);
+                showErrorMessage('Gagal menghapus chat: ' + error.message);
+            }
+        }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
 </body>
 </html>
+
 
 
 
