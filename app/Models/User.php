@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return Hash::check($password, $this->password);
     }
+
+    public function chatHistories()
+    {
+        return $this->hasMany(ChatHistory::class)->orderBy('last_interaction', 'desc');
+    }
 }

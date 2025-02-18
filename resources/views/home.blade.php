@@ -243,21 +243,7 @@
                 input.value = '';
                 
                 // Add user message
-                const userMessage = `
-                    <div class="flex justify-end gap-2 items-start mb-4">
-                        <div class="flex flex-col items-end max-w-[75%]">
-                            <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
-                                <p class="break-words whitespace-pre-wrap">${message}</p>
-                            </div>
-                        </div>
-                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                            ${Auth.user.profile_photo 
-                                ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile photo" class="w-full h-full object-cover">` 
-                                : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
-                            }
-                        </div>
-                    </div>
-                `;
+                const userMessage = createUserMessageHtml(message);
                 messagesContainer.insertAdjacentHTML('beforeend', userMessage);
                 
                 // Add loading message
@@ -280,50 +266,98 @@
                         loadingElement.remove();
                     }
 
-                    const data = await response.json();
-                    
                     if (!response.ok) {
+                        const data = await response.json();
                         throw new Error(data.message || 'Terjadi kesalahan saat memproses pesan');
                     }
 
-                    // Add AI response
-                    const aiResponse = `
-                        <div class="flex justify-start gap-2 items-start mb-4">
-                            <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                                </svg>
-                            </div>
-                            <div class="flex flex-col max-w-[75%]">
-                                <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                                    <p class="text-gray-800 break-words whitespace-pre-wrap">${data.message}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    const data = await response.json();
+
+                    // Add AI response with timestamp
+                    const aiResponse = createAIMessageHtml(data.message);
                     messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+
+                    // Scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // Save to chat history if this is first message
+                    if (!window.currentChatId) {
+                        saveChatHistory(message, data.message);
+                    }
+
                 } catch (error) {
                     console.error('Error:', error);
-                    // Show error message
-                    const errorMessage = `
-                        <div class="flex justify-start gap-2 items-start mb-4">
-                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div class="flex flex-col max-w-[75%]">
-                                <div class="bg-white border border-red-200 rounded-2xl rounded-tl-none px-4 py-2 inline-block shadow-sm">
-                                    <p class="text-red-600">${error.message}</p>
-                                </div>
-                            </div>
+                    showErrorMessage(error.message);
+                }
+            }
+        }
+
+        // Helper function untuk menampilkan pesan error
+        function showErrorMessage(message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const errorMessage = `
+                <div class="flex justify-start gap-2 items-start mb-4">
+                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col max-w-[75%]">
+                        <div class="bg-white border border-red-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                            <p class="text-red-600">${message}</p>
                         </div>
-                    `;
-                    messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
+                    </div>
+                </div>
+            `;
+            messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Function untuk menyimpan chat history
+        async function saveChatHistory(userMessage, aiResponse) {
+            try {
+                const response = await fetch('/chat/history', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: userMessage.substring(0, 50),
+                        last_message: aiResponse,
+                        messages: [
+                            { role: 'user', content: userMessage },
+                            { role: 'assistant', content: aiResponse }
+                        ],
+                        last_interaction: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal menyimpan riwayat chat');
                 }
 
-                // Scroll to bottom
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                const data = await response.json();
+                window.currentChatId = data.id;
+                
+                // Update sidebar tanpa reload
+                updateSidebar();
+                
+            } catch (error) {
+                console.error('Error saving chat history:', error);
+                showErrorMessage('Gagal menyimpan riwayat chat: ' + error.message);
+            }
+        }
+
+        // Fungsi untuk update sidebar
+        async function updateSidebar() {
+            try {
+                const response = await fetch('/chat/histories');
+                const html = await response.text();
+                document.querySelector('.space-y-2').innerHTML = html;
+            } catch (error) {
+                console.error('Error updating sidebar:', error);
             }
         }
 
@@ -426,6 +460,47 @@
             const modal = document.getElementById('changeNameModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+        }
+
+        function createUserMessageHtml(message) {
+            return `
+                <div class="flex justify-end gap-2 items-start mb-4">
+                    <div class="flex flex-col items-end max-w-[75%]">
+                        <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
+                            <p class="break-words whitespace-pre-wrap">${message}</p>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        ${Auth.user.profile_photo 
+                            ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile" class="w-full h-full object-cover">` 
+                            : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function createAIMessageHtml(message) {
+            const timestamp = new Date().toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit'
+            });
+            
+            return `
+                <div class="flex justify-start gap-2 items-start mb-4">
+                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col max-w-[75%]">
+                        <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                            <p class="text-gray-800 break-words whitespace-pre-wrap">${message}</p>
+                            <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>

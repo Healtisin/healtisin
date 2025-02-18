@@ -17,21 +17,23 @@
     <div class="flex-1 overflow-y-auto p-4">
         <h3 class="text-sm font-medium text-gray-500 mb-4 sidebar-text">Riwayat Chat</h3>
         <div class="space-y-2">
-            <!-- Chat items -->
-            <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                        </svg>
+            @foreach(Auth::user()->chatHistories()->latest('last_interaction')->get() as $history)
+                <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors" 
+                        onclick="loadChat({{ $history->id }})">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0 sidebar-text">
+                            <p class="text-sm font-medium text-gray-900 truncate">{{ $history->title }}</p>
+                            <p class="text-sm text-gray-500 truncate">{{ Str::limit($history->last_message, 30) }}</p>
+                        </div>
+                        <span class="text-xs text-gray-400 sidebar-text">{{ $history->last_interaction->diffForHumans() }}</span>
                     </div>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-900 truncate">Konsultasi Sakit Kepala</p>
-                        <p class="text-sm text-gray-500 truncate">Apa yang bisa saya bantu?</p>
-                    </div>
-                    <span class="text-xs text-gray-400 sidebar-text">1j</span>
-                </div>
-            </button>
+                </button>
+            @endforeach
         </div>
     </div>
 
