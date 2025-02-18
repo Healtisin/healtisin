@@ -8,6 +8,12 @@ use Illuminate\View\View;
 
 class PricingController extends Controller
 {
+    public function index()
+    {
+        $payments = Payment::all();
+        return view('admin.pricing.index', compact('payments'));
+    }
+
     public function showProPage()
     {
         // Cek pembayaran yang sedang berlangsung

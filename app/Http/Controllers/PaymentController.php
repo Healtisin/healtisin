@@ -9,6 +9,11 @@ use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
+    public function index()
+    {
+        $payments = Payment::all();
+        return view('admin.payment.index', compact('payments'));
+    }
 
     public function store(Request $request)
     {
@@ -46,7 +51,7 @@ class PaymentController extends Controller
         ]);
 
         $path = $request->file('proof')->store('payment-proofs', 'public');
-        
+
         $payment->update([
             'payment_proof' => $path,
             'status' => 'pending' // menunggu verifikasi admin
@@ -199,7 +204,7 @@ class PaymentController extends Controller
 
     private function generatePaymentCode($method)
     {
-        switch($method) {
+        switch ($method) {
             case 'gopay':
                 return 'GOPAY' . strtoupper(Str::random(8));
             case 'ovo':
@@ -239,7 +244,7 @@ class PaymentController extends Controller
         }
 
         $package = $this->getPackageDetails($request->package_id);
-        
+
         $payment = Payment::create([
             'user_id' => Auth::id(),
             'amount' => $package['final_total'],
@@ -260,7 +265,7 @@ class PaymentController extends Controller
     public function paymentConfirmation($id)
     {
         $payment = Payment::findOrFail($id);
-        
+
         // Cek kepemilikan payment
         if ($payment->user_id !== Auth::id()) {
             return redirect()->route('home');
@@ -279,19 +284,19 @@ class PaymentController extends Controller
     public function checkPaymentStatus($id)
     {
         $payment = Payment::findOrFail($id);
-        
+
         // Jika metode pembayaran adalah bank, cek status VA
         if (in_array($payment->payment_method, ['bca', 'mandiri', 'bni'])) {
             $this->checkVAPayment($payment);
         }
-        
+
         if ($payment->status === 'paid') {
             return response()->json([
                 'status' => 'success',
                 'redirect' => route('home')
             ]);
         }
-        
+
         return response()->json(['status' => $payment->status]);
     }
 
@@ -299,7 +304,7 @@ class PaymentController extends Controller
     {
         // Di sini nantinya akan diintegrasikan dengan API payment gateway
         // Untuk sementara, kita simulasikan pengecekan status
-        
+
         if ($payment->status === 'unpaid' && $payment->expired_at > now()) {
             // Cek status pembayaran ke payment gateway
             // Jika pembayaran berhasil:
@@ -307,16 +312,16 @@ class PaymentController extends Controller
                 'status' => 'paid',
                 'paid_at' => now()
             ]);
-            
+
             // Update status user menjadi pro
             $payment->user->update([
                 'is_pro' => true,
                 'pro_until' => now()->addMonths($payment->duration)
             ]);
-            
+
             return true;
         }
-        
+
         return false;
     }
 
@@ -328,34 +333,33 @@ class PaymentController extends Controller
             'status' => 'paid',
             'paid_at' => now()
         ]);
-        
+
         $payment->user->update([
             'is_pro' => true,
             'pro_until' => now()->addMonths($payment->duration)
         ]);
-        
+
         return true;
     }
 
     public function processPayPal(Request $request, $orderId, $paymentId)
     {
         $payment = Payment::findOrFail($paymentId);
-        
+
         // Verifikasi pembayaran dengan API PayPal
         // Implementasi verifikasi order_id
-        
+
         $payment->update([
             'status' => 'paid',
             'paid_at' => now(),
             'payment_code' => $orderId
         ]);
-        
+
         $payment->user->update([
             'is_pro' => true,
             'pro_until' => now()->addMonths($payment->duration)
         ]);
-        
+
         return response()->json(['status' => 'success']);
     }
 }
-

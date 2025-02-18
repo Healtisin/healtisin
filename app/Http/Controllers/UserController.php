@@ -2,65 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\User; // Pastikan model User di-import
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    // Menampilkan daftar user
     public function index()
     {
-        $users = User::all(); // Ambil semua data user dari database
+        $users = User::all();
         return view('admin.users.index', compact('users'));
     }
 
-    // Menampilkan form untuk membuat user baru
     public function create()
     {
         return view('admin.users.create');
     }
 
-    // Menyimpan user baru ke database
     public function store(Request $request)
     {
         // Validasi input
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'mobile' => 'required|string|max:20',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users',
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        // Simpan data ke database
-        User::create($request->all());
+        // Generate password acak
+        $password = Str::random(8);
 
-        // Redirect ke halaman daftar user dengan pesan sukses
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User created successfully.');
+        // Tambahkan password ke data yang akan disimpan
+        $userData = array_merge($validated, [
+            'password' => Hash::make($password),
+        ]);
+
+        // Simpan user baru
+        $user = User::create($userData);
+
+        // Redirect dengan pesan sukses
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User created successfully.')
+            ->with('generated_password', $password); // Password untuk ditampilkan sekali
     }
 
-    // Menampilkan form untuk mengedit user
     public function edit(User $user)
     {
-        return view('admin.users.update', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
-    // Mengupdate data user di database
     public function update(Request $request, User $user)
     {
-        // Validasi input
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'mobile' => 'required|string|max:20',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        // Update data di database
-        $user->update($request->all());
+        $user->update($validated);
 
-        // Redirect ke halaman daftar user dengan pesan sukses
-        return redirect()->route('admin.users.index')
+        return redirect()
+            ->route('admin.users')
             ->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User deleted successfully.');
     }
 }

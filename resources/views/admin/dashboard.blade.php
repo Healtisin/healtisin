@@ -76,7 +76,7 @@
 </div>
 @endsection
 
-<script>
+<!-- <script>
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('profileDropdown');
@@ -91,4 +91,4 @@ document.addEventListener('click', function(event) {
         dropdown.classList.add('hidden');
     }
 });
-</script>
+</script> -->
