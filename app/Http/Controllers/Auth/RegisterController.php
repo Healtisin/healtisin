@@ -73,7 +73,7 @@ class RegisterController extends Controller
         $this->otpService->deleteOtp($request->email, 'email_verification');
 
         return redirect()->route('login')
-            ->with('success', 'Akun berhasil diaktivasi! Silakan login.');
+            ->with('success', 'Selamat! Akun Anda berhasil diaktivasi. Silakan login untuk melanjutkan.');
     }
 
     public function resendOtp(Request $request)

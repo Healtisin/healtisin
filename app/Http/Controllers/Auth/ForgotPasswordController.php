@@ -62,18 +62,14 @@ class ForgotPasswordController extends Controller
             'otp' => 'required|digits:6',
         ]);
 
-        $otpData = DB::table('password_resets')->where('email', $request->email)->first();
-
-        if (!$otpData || $otpData->token != $request->otp) {
+        if (!$this->otpService->verifyOtp($request->email, $request->otp, 'password_reset')) {
             return back()->with('error', 'Kode OTP salah atau sudah kadaluarsa.');
         }
 
-        // Cek apakah OTP masih berlaku (5 menit)
-        if (Carbon::parse($otpData->created_at)->addMinutes(5)->isPast()) {
-            return back()->with('error', 'Kode OTP sudah kadaluarsa.');
-        }
+        // Hapus OTP setelah verifikasi berhasil
+        $this->otpService->deleteOtp($request->email, 'password_reset');
 
-        // Redirect ke reset password dengan menyertakan email di URL
+        // Redirect ke halaman reset password
         return redirect()->route('password.reset', ['email' => $request->email]);
     }
 
@@ -96,9 +92,10 @@ class ForgotPasswordController extends Controller
         ]);
 
         // Hapus OTP setelah berhasil reset password
-        DB::table('password_resets')->where('email', $request->email)->delete();
+        $this->otpService->deleteOtp($request->email, 'password_reset');
 
-        return redirect()->route('login')->with('success', 'Password berhasil direset.');
+        return redirect()->route('login')
+            ->with('success', 'Password berhasil direset! Silakan login dengan password baru Anda.');
     }
 
     // Kirim ulang OTP
@@ -107,11 +104,12 @@ class ForgotPasswordController extends Controller
         $request->validate(['email' => 'required|email|exists:users,email']);
 
         try {
+            // Generate dan kirim OTP baru
             $otp = $this->otpService->createOtp($request->email, 'password_reset');
             $this->otpService->sendOtpEmail($request->email, $otp, 'password_reset');
 
             return back()->with([
-                'success' => 'OTP baru telah dikirim ke email Anda.',
+                'success' => 'Kode OTP baru telah dikirim ke email Anda.',
                 'email' => $request->email
             ]);
         } catch (\Exception $e) {
