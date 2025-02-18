@@ -23,13 +23,15 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register']);
-    Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.forgot');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.otp.send');
-    Route::get('/password/otp', [ForgotPasswordController::class, 'showOtpForm'])->name('password.otp.form');
-    Route::post('/password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify.otp');
+    Route::post('verify/otp', [RegisterController::class, 'verifyOtp'])->name('verify.otp');
+    Route::post('verify/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showEmailForm'])->name('password.request');
+    Route::post('forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.otp.send');
+    Route::get('forgot-password/verify-otp', [ForgotPasswordController::class, 'showOtpForm'])->name('password.otp.form');
+    Route::post('forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify.otp');
+    Route::post('forgot-password/resend-otp', [ForgotPasswordController::class, 'resendOtp'])->name('password.otp.resend');
     Route::get('reset-password/{email}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset.submit');
-    Route::post('/password/otp/resend', [ForgotPasswordController::class, 'resendOtp'])->name('password.otp.resend');
+    Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
 Route::get('/password/reset', function () {
     return view('auth.passwords.email');
@@ -103,3 +105,11 @@ Route::prefix('admin')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])
         ->name('admin.users.update');
 });
+
+Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])->name('profile.phone.update');
+
+Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.delete');
+
+Route::get('/activate/{token}', [RegisterController::class, 'activate'])->name('activate');
+
+

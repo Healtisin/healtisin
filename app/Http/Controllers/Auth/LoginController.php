@@ -21,6 +21,7 @@ class LoginController extends Controller
         $field = filter_var($input, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $credentials[$field] = $input;
         $credentials['password'] = $request->get('password');
+        $credentials['is_active'] = true;
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
@@ -28,7 +29,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'login' => 'Username/email atau password salah.',
+            'login' => 'Username/email atau password salah, atau akun belum diaktivasi.',
         ])->withInput($request->only('login', 'remember'));
     }
 

@@ -43,13 +43,11 @@
                             <button onclick="showChangeNameModal()"  class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
 
-                        <!-- Two Factor Auth -->
-                        <div class="mt-6">
-                            <h4 class="text-sm font-medium mb-2">Atur autentikasi dua faktor untuk akun pribadi Anda</h4>
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-600">Dinonaktifkan</span>
-                                <button class="text-blue-500 text-sm">Aktifkan</button>
-                            </div>
+                        <!-- Phone Number -->
+                        <div class="mb-4">
+                            <label class="block text-sm text-gray-600 mb-1">Nomor Telepon</label>
+                            <input type="tel" value="{{ Auth::user()->phone ?? '' }}" class="w-full px-3 py-2 border rounded-md bg-gray-50" readonly data-no-translate>
+                            <button onclick="showChangePhoneModal()" class="text-blue-500 text-sm mt-1">Ubah</button>
                         </div>
                     </div>
                 </div>
@@ -168,7 +166,7 @@
 
             <!-- Delete Account -->
             <div class="mt-8 pt-6 border-t px-4">
-                <button class="text-red-500 text-sm hover:underline">Hapus akun</button>
+                <button onclick="showDeleteAccountModal()" class="text-red-500 text-sm hover:underline">Hapus akun</button>
             </div>
         </div>
     </div>
@@ -235,6 +233,12 @@
         </div>
     </div>
 </div>
+
+<!-- Change Phone Modal -->
+@include('partials.change-phone-modal')
+
+<!-- Include Delete Account Modal -->
+@include('partials.delete-account-modal')
 
 <script>
 function validateAndPreviewPhoto(input) {

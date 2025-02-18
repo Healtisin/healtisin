@@ -61,4 +61,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'subscription.auth' => \App\Http\Middleware\CheckSubscriptionAuth::class,
     ];
+
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('users:delete-inactive')->daily();
+    }
 }

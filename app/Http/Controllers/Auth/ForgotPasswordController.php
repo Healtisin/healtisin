@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Services\OtpService;
 
 class ForgotPasswordController extends Controller
 {
+    protected $otpService;
+
+    public function __construct(OtpService $otpService)
+    {
+        $this->otpService = $otpService;
+    }
+
     // Menampilkan form input email
     public function showEmailForm()
     {
@@ -24,33 +32,17 @@ class ForgotPasswordController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email'
-        ], [
-            'email.exists' => 'Email tidak ditemukan dalam sistem kami.'
         ]);
-    
-        $otp = rand(100000, 999999);
-        $email = $request->email;
-    
+
         try {
-            Log::info("Menghasilkan OTP: $otp untuk email: $email");
-    
-            // Simpan OTP ke database
-            DB::table('password_resets')->updateOrInsert(
-                ['email' => $email],
-                ['token' => $otp, 'created_at' => now()]
-            );
-    
-            // Kirim OTP ke email
-            Mail::raw("Kode OTP Anda adalah: $otp", function ($message) use ($email) {
-                $message->to($email)->subject('Kode OTP Anda');
-            });
-    
+            $otp = $this->otpService->createOtp($request->email, 'password_reset');
+            $this->otpService->sendOtpEmail($request->email, $otp, 'password_reset');
+
             return redirect()->route('password.otp.form')->with([
                 'success' => 'Kode OTP telah dikirim ke email Anda.',
-                'email' => $email
+                'email' => $request->email
             ]);
         } catch (\Exception $e) {
-            Log::error("Gagal mengirim OTP: " . $e->getMessage());
             return back()->with('error', 'Gagal mengirim email. Silakan coba lagi.');
         }
     }
@@ -114,30 +106,17 @@ class ForgotPasswordController extends Controller
     {
         $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $otp = rand(100000, 999999);
-        $email = $request->email;
-
         try {
-            Log::info("Menghasilkan OTP baru: $otp untuk email: $email");
-
-            // Update OTP di database
-            DB::table('password_resets')->updateOrInsert(
-                ['email' => $email],
-                ['token' => $otp, 'created_at' => now()]
-            );
-
-            // Kirim ulang OTP ke email
-            Mail::raw("Kode OTP baru Anda adalah: $otp", function ($message) use ($email) {
-                $message->to($email)->subject('Kode OTP Anda');
-            });
+            $otp = $this->otpService->createOtp($request->email, 'password_reset');
+            $this->otpService->sendOtpEmail($request->email, $otp, 'password_reset');
 
             return back()->with([
                 'success' => 'OTP baru telah dikirim ke email Anda.',
-                'email' => $email // Pastikan email tetap disimpan di session
+                'email' => $request->email
             ]);
         } catch (\Exception $e) {
             Log::error("Gagal mengirim ulang OTP: " . $e->getMessage());
-            return back()->with('error', 'Gagal mengirim ulang OTP: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengirim ulang OTP. Silakan coba lagi.');
         }
     }
 }
