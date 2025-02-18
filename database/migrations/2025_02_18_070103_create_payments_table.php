@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->decimal('amount', 10, 2);
-            $table->integer('duration'); // dalam bulan
+            $table->integer('duration');
             $table->string('payment_method');
-            $table->enum('status', ['pending', 'success', 'failed'])->default('pending');
+            $table->enum('status', ['unpaid', 'paid', 'expired', 'failed'])->default('unpaid');
             $table->string('payment_proof')->nullable();
+            $table->string('customer_name');
+            $table->string('customer_email');
+            $table->string('customer_phone');
             $table->timestamp('expired_at')->nullable();
+            $table->string('payment_code')->nullable();
+            $table->string('qr_code')->nullable();
             $table->timestamps();
         });
     }

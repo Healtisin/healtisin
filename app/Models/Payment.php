@@ -11,9 +11,18 @@ class Payment extends Model
         'amount',
         'duration',
         'payment_method',
-        'status', // pending, success, failed
+        'status',
         'payment_proof',
-        'expired_at'
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+        'expired_at',
+        'payment_code',
+        'qr_code'
+    ];
+
+    protected $casts = [
+        'expired_at' => 'datetime'
     ];
 
     public function user()

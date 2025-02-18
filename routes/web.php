@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PricingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -67,13 +67,23 @@ Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('
 
 Route::post('/language/change', [LanguageController::class, 'change'])->name('language.change');
 
-Route::get('/pricing/pro', function () {
-    return view('pricing.pro');
-})->name('pricing.pro');
+Route::get('/pricing/pro', [PricingController::class, 'showProPage'])->name('pricing.pro');
+
+Route::get('/pricing/payment', [PaymentController::class, 'showPaymentPage'])->name('pricing.payment');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/payments', [PaymentController::class, 'store'])->name('payment.store');
     Route::post('/payments/{payment}/proof', [PaymentController::class, 'uploadProof'])->name('payment.proof');
+    Route::get('/pricing/select-package', [PaymentController::class, 'selectPackage'])
+        ->name('pricing.select-package');
+    Route::post('/pricing/payment-details', [PaymentController::class, 'paymentDetails'])
+        ->name('pricing.payment-details');
+    Route::post('/pricing/process-payment', [PaymentController::class, 'processPayment'])
+        ->name('pricing.process-payment');
+    Route::get('/pricing/payment-confirmation/{id}', [PaymentController::class, 'paymentConfirmation'])
+        ->name('pricing.payment-confirmation');
+    Route::post('/pricing/payment/{payment}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])
+        ->name('pricing.upload-proof');
 });
 
 //ADMIN
