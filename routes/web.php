@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -135,6 +136,11 @@ Route::get('/tentang-kami', function () {
     return view('about');
 })->name('about');
 
-Route::get('/contact-us', function () {
-    return view('partials.contact-us');
-})->name('contact-us');
+Route::get('/contact', function () {
+    return view('partials.contact');
+})->name('contact');
+
+Route::prefix('partials')->group(function () {
+    Route::get('/contact', [MessageController::class, 'create'])->name('partials.contact');
+    Route::post('/contact', [MessageController::class, 'store'])->name('partials.contact.store');
+});
