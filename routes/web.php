@@ -131,3 +131,7 @@ Route::get('/faq', function () {
 Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::get('/tentang-kami', function () {
+    return view('about');
+})->name('about');
+

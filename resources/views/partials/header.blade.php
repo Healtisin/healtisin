@@ -29,9 +29,9 @@
                     </div>
                     <div id="healtisin-dropdown"
                         class="absolute hidden mt-2 w-48 bg-white rounded-lg shadow-lg transition-opacity duration-300 ease-in-out opacity-0">
-                        <a href="/fitur1" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Tentang Kami</a>
-                        <a href="/fitur2" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Hubungi Kami</a>
-                        <a href="/fitur3" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Bantuan</a>
+                        <a href="{{ route('about') }}" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Tentang Kami</a>
+                        <a href="/hubungi-kami" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Hubungi Kami</a>
+                        <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Bantuan</a>
                     </div>
                 </div>
                 <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
