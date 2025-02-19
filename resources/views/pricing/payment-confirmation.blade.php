@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     @vite('resources/css/app.css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body class="bg-gray-50">
     <div class="min-h-screen flex flex-col">
         <header class="fixed w-full bg-white shadow-sm z-10">
@@ -57,68 +59,105 @@
                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <h3 class="text-xl font-semibold mb-6">Cara Pembayaran</h3>
                     @if($payment->payment_method === 'paypal')
-                        @include('pricing.partials.paypal-instructions')
+                    @include('pricing.partials.paypal-instructions')
                     @elseif($payment->payment_method === 'cc')
-                        @include('pricing.partials.credit-card-form')
+                    @include('pricing.partials.credit-card-form')
                     @elseif(in_array($payment->payment_method, ['bca', 'mandiri', 'bni']))
-                        @include('pricing.partials.va-instructions', ['bank' => $payment->payment_method])
+                    @include('pricing.partials.va-instructions', ['bank' => $payment->payment_method])
                     @else
-                        @include('pricing.partials.ewallet-instructions', ['method' => $payment->payment_method])
+                    @include('pricing.partials.ewallet-instructions', ['method' => $payment->payment_method])
                     @endif
                 </div>
 
                 @if($payment->payment_method === 'paypal')
-                    <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=IDR"></script>
-                    <script>
-                        paypal.Buttons({
-                            createOrder: function(data, actions) {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: {
-                                            value: '{{ number_format($payment->amount / 15000, 2) }}' // Konversi ke USD
-                                        },
-                                        description: 'Pro Subscription - {{ $payment->duration }} Month(s)'
-                                    }]
-                                });
-                            },
-                            onApprove: async function(data, actions) {
-                                const order = await actions.order.capture();
-                                
-                                // Update status pembayaran
-                                const response = await fetch(`/payment/process-paypal/${order.id}/{{ $payment->id }}`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    }
-                                });
+                <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=IDR"></script>
+                <script>
+                    paypal.Buttons({
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: '{{ number_format($payment->amount / 15000, 2) }}' // Konversi ke USD
+                                    },
+                                    description: 'Pro Subscription - {{ $payment->duration }} Month(s)'
+                                }]
+                            });
+                        },
+                        onApprove: async function(data, actions) {
+                            const order = await actions.order.capture();
 
-                                if (response.ok) {
-                                    window.location.href = '{{ route("home") }}';
+                            // Update status pembayaran
+                            const response = await fetch(`/payment/process-paypal/${order.id}/{{ $payment->id }}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 }
+                            });
+
+                            if (response.ok) {
+                                window.location.href = '{{ route("home") }}';
                             }
-                        }).render('#paypal-button-container');
-                    </script>
+                        }
+                    }).render('#paypal-button-container');
+                </script>
                 @endif
+            </div>
+            <!-- Debugging: Tampilkan Snap Token -->
+            <div class="hidden">
+                Snap Token: {{ $payment->snap_token }}
             </div>
         </main>
     </div>
+    <!-- Load Midtrans Snap JS -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const snapToken = "{{ $payment->snap_token }}";
+            console.log("Snap Token:", snapToken); // Cek apakah token tersedia
+
+            if (snapToken) {
+                snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        alert("Pembayaran berhasil!"); // Tambahkan alert di sini
+                        console.log("Success:", result); // Debugging
+                        window.location.href = "{{ route('home') }}";
+                    },
+                    onPending: function(result) {
+                        alert("Pembayaran tertunda! Mohon selesaikan pembayaran."); // Tambahkan alert di sini
+                        console.log("Pending:", result);
+                        window.location.href = "{{ route('home') }}";
+                    },
+                    onError: function(result) {
+                        alert("Pembayaran gagal! Silakan coba lagi."); // Tambahkan alert di sini
+                        console.log("Error:", result);
+                        window.location.href = "{{ route('home') }}";
+                    },
+                    onClose: function() {
+                        alert('Anda menutup pop-up pembayaran tanpa menyelesaikan transaksi.');
+                    }
+                });
+            } else {
+                alert('Snap Token tidak ditemukan. Silakan coba lagi.');
+            }
+        });
+    </script>
     <script>
         // Countdown Timer
         const expiredAt = new Date("{{ $payment->expired_at }}").getTime();
-        
+
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = expiredAt - now;
-            
+
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('countdown').innerHTML = 
+
+            document.getElementById('countdown').innerHTML =
                 `${hours}:${minutes}:${seconds}`;
-            
+
             if (distance < 0) {
                 clearInterval(countdown);
                 window.location.reload();
@@ -133,7 +172,7 @@
                 try {
                     const response = await fetch(`/payment/check-status/{{ $payment->id }}`);
                     const data = await response.json();
-                    
+
                     if (data.status === 'success') {
                         window.location.href = data.redirect;
                     }
@@ -162,7 +201,7 @@
                 expiry.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/\D/g, '');
                     if (value.length >= 2) {
-                        value = value.slice(0,2) + '/' + value.slice(2);
+                        value = value.slice(0, 2) + '/' + value.slice(2);
                     }
                     e.target.value = value;
                 });
@@ -170,7 +209,7 @@
                 // Format CVV
                 const cvv = document.getElementById('cvv');
                 cvv.addEventListener('input', function(e) {
-                    e.target.value = e.target.value.replace(/\D/g, '').slice(0,3);
+                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
                 });
 
                 // Handle form submission
@@ -182,4 +221,5 @@
         });
     </script>
 </body>
+
 </html>

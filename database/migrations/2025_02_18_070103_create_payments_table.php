@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('customer_phone');
             $table->timestamp('expired_at')->nullable();
             $table->string('payment_code')->nullable();
-            $table->string('qr_code')->nullable();
+            $table->string('snap_token')->nullable(); // Snap Token dari Midtrans
             $table->timestamps();
         });
     }

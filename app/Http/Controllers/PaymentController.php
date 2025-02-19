@@ -6,7 +6,10 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use Midtrans\Config;
+use Midtrans\Snap;
+use Midtrans\Notification;
+use Illuminate\Support\Facades\Log;
 class PaymentController extends Controller
 {
     public function index()
@@ -224,6 +227,7 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request)
     {
+        // Validasi input
         $request->validate([
             'package_id' => 'required|integer|in:1,3,6,12',
             'payment_method' => 'required|string',
@@ -231,20 +235,22 @@ class PaymentController extends Controller
             'email' => 'required|email',
             'phone' => 'required|string|max:20'
         ]);
-
+    
         // Cek apakah sudah ada pembayaran yang belum selesai
         $existingPayment = Payment::where('user_id', Auth::id())
             ->where('status', 'unpaid')
             ->where('expired_at', '>', now())
             ->first();
-
+    
         if ($existingPayment) {
             return redirect()->route('pricing.payment-confirmation', $existingPayment->id)
                 ->with('error', 'Anda memiliki pembayaran yang belum diselesaikan');
         }
-
+    
+        // Ambil detail paket
         $package = $this->getPackageDetails($request->package_id);
-
+    
+        // Buat pembayaran baru
         $payment = Payment::create([
             'user_id' => Auth::id(),
             'amount' => $package['final_total'],
@@ -256,30 +262,125 @@ class PaymentController extends Controller
             'customer_phone' => $request->phone,
             'expired_at' => now()->addHours(24),
             'payment_code' => $this->generatePaymentCode($request->payment_method),
-            'qr_code' => $request->payment_method == 'qris' ? $this->generateQRCode() : null
         ]);
+    
+    // Setup konfigurasi Midtrans
+    Config::$serverKey = config('services.midtrans.server_key');
+    Config::$isProduction = config('services.midtrans.is_production');
+    Config::$isSanitized = true;
+    Config::$is3ds = true;
 
-        return redirect()->route('pricing.payment-confirmation', $payment->id);
+    // Buat parameter transaksi Midtrans
+    $transactionDetails = [
+        'order_id' => $payment->id, // ID pembayaran
+        'gross_amount' => $payment->amount, // Jumlah pembayaran
+    ];
+
+    $customerDetails = [
+        'first_name' => $payment->customer_name,
+        'email' => $payment->customer_email,
+        'phone' => $payment->customer_phone,
+    ];
+
+    $params = [
+        'transaction_details' => $transactionDetails,
+        'customer_details' => $customerDetails,
+    ];
+
+    // Generate Snap Token
+    try {
+        $snapToken = Snap::getSnapToken($params);
+        Log::info('Snap Token berhasil di-generate:', ['snap_token' => $snapToken]); // Log Snap Token
+    } catch (\Exception $e) {
+        Log::error('Gagal generate Snap Token:', ['error' => $e->getMessage()]); // Log error
+        return redirect()->back()->with('error', 'Gagal memproses pembayaran. Silakan coba lagi.');
     }
 
-    public function paymentConfirmation($id)
-    {
-        $payment = Payment::findOrFail($id);
+    // Simpan Snap Token ke database
+    $payment->update(['snap_token' => $snapToken]);
 
-        // Cek kepemilikan payment
-        if ($payment->user_id !== Auth::id()) {
-            return redirect()->route('home');
-        }
+    // Redirect ke halaman konfirmasi pembayaran
+    return redirect()->route('pricing.payment-confirmation', $payment->id);
+}
 
-        // Cek status kadaluarsa
-        if ($payment->expired_at < now()) {
-            $payment->update(['status' => 'expired']);
-            return redirect()->route('pricing.pro')
-                ->with('error', 'Pembayaran telah kadaluarsa. Silakan melakukan pemesanan ulang.');
-        }
+public function paymentConfirmation($id)
+{
+    $payment = Payment::findOrFail($id);
 
-        return view('pricing.payment-confirmation', compact('payment'));
+    // Cek kepemilikan payment
+    if ($payment->user_id !== Auth::id()) {
+        return redirect()->route('home');
     }
+
+    // Cek status kadaluarsa
+    if ($payment->expired_at < now()) {
+        $payment->update(['status' => 'expired']);
+        return redirect()->route('pricing.pro')
+            ->with('error', 'Pembayaran telah kadaluarsa. Silakan melakukan pemesanan ulang.');
+    }
+
+    return view('pricing.payment-confirmation', compact('payment'));
+}
+public function handleNotification(Request $request)
+{
+    // Buat instance Notification dari Midtrans
+    $notification = new Notification();
+
+    // Ambil data notifikasi
+    $transactionStatus = $notification->transaction_status;
+    $orderId = $notification->order_id;
+    $fraudStatus = $notification->fraud_status;
+
+    // Cari pembayaran berdasarkan order_id
+    $payment = Payment::find($orderId);
+
+    if (!$payment) {
+        return response()->json(['status' => 'error', 'message' => 'Payment not found'], 404);
+    }
+
+    // Update status pembayaran berdasarkan notifikasi
+    if ($transactionStatus == 'capture') {
+        if ($fraudStatus == 'accept') {
+            $payment->status = 'paid';
+        }
+    } elseif ($transactionStatus == 'settlement') {
+        $payment->status = 'paid';
+    } elseif ($transactionStatus == 'pending') {
+        $payment->status = 'pending';
+    } elseif ($transactionStatus == 'deny' || $transactionStatus == 'expire' || $transactionStatus == 'cancel') {
+        $payment->status = 'failed';
+    }
+
+    // Simpan perubahan status
+    $payment->save();
+
+    // Berikan response ke Midtrans
+    return response()->json(['status' => 'success']);
+}
+
+/**
+ * Redirect ke home setelah pembayaran sukses.
+ */
+public function paymentSuccess()
+{
+    return redirect()->route('home')->with('success', 'Pembayaran berhasil diproses.');
+}
+
+/**
+ * Redirect ke home setelah pembayaran tertunda.
+ */
+public function paymentPending()
+{
+    return redirect()->route('home')->with('warning', 'Pembayaran Anda sedang diproses.');
+}
+
+/**
+ * Redirect ke home setelah pembayaran gagal.
+ */
+public function paymentError()
+{
+    return redirect()->route('home')->with('error', 'Pembayaran gagal diproses. Silakan coba lagi.');
+}
 
     public function checkPaymentStatus($id)
     {

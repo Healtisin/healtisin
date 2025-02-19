@@ -91,10 +91,14 @@ Route::middleware(['auth'])->group(function () {
         ->name('pricing.process-payment');
     Route::get('/pricing/payment-confirmation/{id}', [PaymentController::class, 'paymentConfirmation'])
         ->name('pricing.payment-confirmation');
+        Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
     Route::post('/pricing/payment/{payment}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])
         ->name('pricing.upload-proof');
 });
-
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment/pending', [PaymentController::class, 'paymentPending'])->name('payment.pending');
+Route::get('/payment/error', [PaymentController::class, 'paymentError'])->name('payment.error');
 //ADMIN
 Route::prefix('admin')->group(function () {
     // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');

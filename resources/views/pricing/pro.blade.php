@@ -47,7 +47,7 @@
                     @else
                         <div class="space-y-4">
                             <p class="text-gray-600">Silakan login terlebih dahulu untuk melanjutkan</p>
-                            <a href="{{ route('login', ['redirect' => 'pricing.select-package']) }}" 
+                            <a href="{{ route('login', ['redirect' => route('pricing.select-package')]) }}" 
                                class="inline-block px-8 py-3 bg-[#24b0ba] text-white rounded-full 
                                       hover:bg-[#73c7e3] text-lg font-semibold">
                                 Login untuk Melanjutkan

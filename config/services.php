@@ -51,5 +51,12 @@ return [
         'client_secret' => env('PAYPAL_CLIENT_SECRET'),
         'mode' => env('PAYPAL_MODE', 'sandbox') // atau 'live' untuk production
     ],
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+        'isSanitized' => env('MIDTRANS_IS_SANITIZED', true),
+        'is3ds' => env('MIDTRANS_IS_3DS', true),
+    ],
 
 ];

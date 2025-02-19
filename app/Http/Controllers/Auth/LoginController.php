@@ -25,8 +25,13 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('home');
+        
+            // Ambil redirect dari input form, jika kosong arahkan ke home
+            $redirectTo = $request->input('redirect', route('home'));
+        
+            return redirect($redirectTo);
         }
+        
 
         return back()->withErrors([
             'login' => 'Username/email atau password salah, atau akun belum diaktivasi.',

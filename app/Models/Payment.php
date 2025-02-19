@@ -18,7 +18,7 @@ class Payment extends Model
         'customer_phone',
         'expired_at',
         'payment_code',
-        'qr_code'
+        'snap_token'
     ];
 
     protected $casts = [

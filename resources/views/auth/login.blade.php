@@ -27,6 +27,7 @@
 
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="redirect" value="{{ request('redirect') }}">
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">USERNAME / EMAIL</label>
                         <input type="text" 
