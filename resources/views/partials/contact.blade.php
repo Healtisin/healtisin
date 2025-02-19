@@ -12,8 +12,8 @@
 <body class="bg-gray-50">
     @include('partials.header')
 
-    <main class="pt-24 pb-16">
-        <div class="relative h-[500px] overflow-hidden">
+    <main class="pt-19 pb-16">
+        <div class="pt-12 relative h-[500px] overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3]">
                 <div class="absolute inset-0 opacity-20">
                     <div class="floating-dots"></div>
@@ -34,7 +34,6 @@
             <div class="grid md:grid-cols-2 gap-16">
                 <div class="space-y-8">
                     <div class="reveal-on-scroll">
-                        <h2 class="text-3xl font-bold mb-4">Informasi Kontak</h2>
                         <div class="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
                             <div
                                 class="bg-[#24b0ba]/10 p-4 rounded-lg flex flex-col items-center text-center hover:shadow-lg transition-shadow">
@@ -90,7 +89,6 @@
                     </div>
 
                     <div class="reveal-on-scroll">
-                        <h2 class="text-3xl font-bold mb-4">Lokasi Kami</h2>
                         <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d894.3444645936045!2d110.33814651071343!3d-7.775908361247276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59d56d1052a5%3A0xd840db058e6e4e44!2sKontrakan%20The%20Raid!5e1!3m2!1sid!2sid!4v1739989828006!5m2!1sid!2sid"
@@ -105,7 +103,15 @@
                         doloremque soluta
                         facere maxime harum nam doloribus, numquam nesciunt eligendi id dignissimos pariatur recusandae
                         autem tempora ad aliquam nostrum?</p>
-                    <form id="contactForm" class="space-y-4">
+                    @if(session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+                        role="alert">
+                        <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                    @endif
+                    <form id="contactForm" action="{{ route('partials.contact.store') }}" method="POST"
+                        class="space-y-4">
+                        @csrf
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
                             <input type="text" id="name" name="name" required
@@ -123,7 +129,7 @@
                         </div>
                         <div>
                             <label for="message" class="block text-sm font-medium text-gray-700">Pesan</label>
-                            <textarea id="message" name="message" rows="4" required
+                            <textarea id="message" name="message" rows="6" required
                                 class="mt-1 block w-full px-3 py-2 text-base rounded-md border border-gray-300 shadow-md focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
                         </div>
                         <div>
@@ -141,101 +147,105 @@
     @include('partials.footer')
 
     <style>
-    .floating-dots {
-        background-image: radial-gradient(circle, white 1px, transparent 1px);
-        background-size: 30px 30px;
-        height: 100%;
-        animation: float 20s linear infinite;
-    }
-
-    .animate-fade-in {
-        opacity: 0;
-        animation: fadeIn 1s ease-out forwards;
-    }
-
-    .animate-slide-up {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: slideUp 1s ease-out 0.5s forwards;
-    }
-
-    .reveal-on-scroll {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s ease-out;
-    }
-
-    .reveal-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    @keyframes float {
-        from {
-            transform: translateY(0);
+        .floating-dots {
+            background-image: radial-gradient(circle, white 2px, transparent 0.5px);
+            background-size: 30px 30px;
+            height: 200%;
+            animation: float 20s linear infinite;
+            position: absolute;
+            width: 100%;
+            top: 0;
         }
 
-        to {
-            transform: translateY(-100%);
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
-    }
 
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out 0.5s forwards;
         }
-    }
 
-    @keyframes slideUp {
-        to {
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal-on-scroll.visible {
             opacity: 1;
             transform: translateY(0);
         }
-    }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const reveals = document.querySelectorAll('.reveal-on-scroll');
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal-on-scroll');
 
-        function reveal() {
-            reveals.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
+            function reveal() {
+                reveals.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
 
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add('visible');
-                }
-            });
-        }
-        window.addEventListener('scroll', reveal);
-        reveal();
-        const form = document.getElementById('contactForm');
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-
-            if (!name || !email || !subject || !message) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Harap isi semua field!',
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
                 });
-                return;
             }
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Pesan Anda telah berhasil dikirim.',
-            }).then(() => {
-                form.reset();
+            window.addEventListener('scroll', reveal);
+            reveal();
+            const form = document.getElementById('contactForm');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+
+                if (!name || !email || !subject || !message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Harap isi semua field!',
+                    });
+                    return;
+                }
+                this.submit();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Pesan Anda telah berhasil dikirim.',
+                }).then(() => {
+                    form.reset();
+                });
             });
         });
-    });
     </script>
 </body>
 
