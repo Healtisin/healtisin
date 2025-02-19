@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
-                <a href="/karier" class="hover:text-[#24b0ba]">FAQ</a>
+                <a href="{{ route('faq') }}" class="hover:text-[#24b0ba]">FAQ</a>
                 <a href="/berita" class="hover:text-[#24b0ba]">Berita</a>
                 <a href="{{ route('login') }}"
                     class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
@@ -64,8 +64,8 @@
                             class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Fitur 3</a>
                     </div>
                 </div>
-                <a href="/perusahaan" class="hover:text-[#24b0ba]">Perusahaan</a>
-                <a href="/karier" class="hover:text-[#24b0ba]">Karier</a>
+                <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
+                <a href="{{ route('faq') }}" class="hover:text-[#24b0ba]">FAQ</a>
                 <a href="/berita" class="hover:text-[#24b0ba]">Berita</a>
                 <a href="{{ route('login') }}"
                     class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">

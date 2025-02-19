@@ -122,3 +122,8 @@ Route::get('/activate/{token}', [RegisterController::class, 'activate'])->name('
 Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
 Route::post('/chat/history', [ChatController::class, 'storeHistory'])->name('chat.history.store');
 Route::get('/chat/histories', [ChatController::class, 'getHistories']);
+
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
