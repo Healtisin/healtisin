@@ -29,14 +29,13 @@
                     </div>
                     <div id="healtisin-dropdown"
                         class="absolute hidden mt-2 w-48 bg-white rounded-lg shadow-lg transition-opacity duration-300 ease-in-out opacity-0">
-                        <a href="/fitur1" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Fitur
-                            Fitur</a>
-                        <a href="/fitur2" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Fitur 2</a>
-                        <a href="/fitur3" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Fitur 3</a>
+                        <a href="/fitur1" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Tentang Kami</a>
+                        <a href="/fitur2" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Hubungi Kami</a>
+                        <a href="/fitur3" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Bantuan</a>
                     </div>
                 </div>
-                <a href="/perusahaan" class="hover:text-[#24b0ba]">Perusahaan</a>
-                <a href="/karier" class="hover:text-[#24b0ba]">Karier</a>
+                <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
+                <a href="/karier" class="hover:text-[#24b0ba]">FAQ</a>
                 <a href="/berita" class="hover:text-[#24b0ba]">Berita</a>
                 <a href="{{ route('login') }}"
                     class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
