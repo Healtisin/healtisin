@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hubungi Kami - Healtisin AI</title>
     @vite('resources/css/app.css')
-    <!-- SweetAlert2 CSS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -14,7 +13,6 @@
     @include('partials.header')
 
     <main class="pt-24 pb-16">
-        <!-- Hero Section dengan Animasi Paralaks -->
         <div class="relative h-[500px] overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3]">
                 <div class="absolute inset-0 opacity-20">
@@ -32,12 +30,9 @@
             </div>
         </div>
 
-        <!-- Kontak Section -->
         <div class="max-w-6xl mx-auto px-4 py-24">
             <div class="grid md:grid-cols-2 gap-16">
-                <!-- Kolom 1 -->
                 <div class="space-y-8">
-                    <!-- Row 1: Kotak-kotak informasi kontak -->
                     <div class="reveal-on-scroll">
                         <h2 class="text-3xl font-bold mb-4">Informasi Kontak</h2>
                         <div class="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
@@ -94,11 +89,9 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Maps -->
                     <div class="reveal-on-scroll">
                         <h2 class="text-3xl font-bold mb-4">Lokasi Kami</h2>
                         <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
-                            <!-- Tempatkan embed map di sini -->
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d894.3444645936045!2d110.33814651071343!3d-7.775908361247276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59d56d1052a5%3A0xd840db058e6e4e44!2sKontrakan%20The%20Raid!5e1!3m2!1sid!2sid!4v1739989828006!5m2!1sid!2sid"
                                 width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
@@ -106,7 +99,6 @@
                     </div>
                 </div>
 
-                <!-- Kolom 2: Form Kontak -->
                 <div class="reveal-on-scroll">
                     <h2 class="text-3xl font-bold">Kirim Pesan</h2>
                     <p class="my-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt mollitia enim
@@ -149,107 +141,101 @@
     @include('partials.footer')
 
     <style>
-        .floating-dots {
-            background-image: radial-gradient(circle, white 1px, transparent 1px);
-            background-size: 30px 30px;
-            height: 100%;
-            animation: float 20s linear infinite;
-        }
+    .floating-dots {
+        background-image: radial-gradient(circle, white 1px, transparent 1px);
+        background-size: 30px 30px;
+        height: 100%;
+        animation: float 20s linear infinite;
+    }
 
-        .animate-fade-in {
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
-        }
+    .animate-fade-in {
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+    }
 
-        .animate-slide-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 1s ease-out 0.5s forwards;
-        }
+    .animate-slide-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUp 1s ease-out 0.5s forwards;
+    }
 
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
+    .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease-out;
+    }
 
-        .reveal-on-scroll.visible {
-            opacity: 1;
+    .reveal-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @keyframes float {
+        from {
             transform: translateY(0);
         }
 
-        @keyframes float {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(-100%);
-            }
+        to {
+            transform: translateY(-100%);
         }
+    }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
         }
+    }
 
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+    @keyframes slideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const reveals = document.querySelectorAll('.reveal-on-scroll');
+    document.addEventListener('DOMContentLoaded', function() {
+        const reveals = document.querySelectorAll('.reveal-on-scroll');
 
-            function reveal() {
-                reveals.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
+        function reveal() {
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
 
-                    if (elementTop < windowHeight - 100) {
-                        element.classList.add('visible');
-                    }
-                });
-            }
-
-            window.addEventListener('scroll', reveal);
-            reveal(); // Initial check
-
-            const form = document.getElementById('contactForm');
-
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                // Validasi form
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-
-                if (!name || !email || !subject || !message) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Harap isi semua field!',
-                    });
-                    return;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('visible');
                 }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        reveal();
+        const form = document.getElementById('contactForm');
 
-                // Simulasi pengiriman form
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !email || !subject || !message) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Pesan Anda telah berhasil dikirim.',
-                }).then(() => {
-                    form.reset(); // Reset form setelah pengiriman
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Harap isi semua field!',
                 });
+                return;
+            }
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Pesan Anda telah berhasil dikirim.',
+            }).then(() => {
+                form.reset();
             });
         });
+    });
     </script>
 </body>
 
