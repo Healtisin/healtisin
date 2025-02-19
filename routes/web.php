@@ -135,3 +135,6 @@ Route::get('/tentang-kami', function () {
     return view('about');
 })->name('about');
 
+Route::get('/contact-us', function () {
+    return view('partials.contact-us');
+})->name('contact-us');

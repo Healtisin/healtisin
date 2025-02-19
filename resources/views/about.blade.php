@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tentang Kami - Healtisin AI</title>
     @vite('resources/css/app.css')
 </head>
+
 <body class="bg-gray-50">
     @include('partials.header')
 
@@ -21,7 +23,8 @@
                 <div class="text-white">
                     <h1 class="text-5xl font-bold mb-6 animate-fade-in">Tentang Healtisin AI</h1>
                     <p class="text-xl opacity-90 max-w-2xl animate-slide-up">
-                        Menghadirkan revolusi kesehatan digital dengan kecerdasan buatan yang memahami kebutuhan kesehatan Anda
+                        Menghadirkan revolusi kesehatan digital dengan kecerdasan buatan yang memahami kebutuhan
+                        kesehatan Anda
                     </p>
                 </div>
             </div>
@@ -37,7 +40,8 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-bold mb-4">Skrining Kesehatan AI</h3>
-                    <p class="text-gray-600">Analisis kesehatan awal yang cepat dan akurat dengan teknologi AI mutakhir</p>
+                    <p class="text-gray-600">Analisis kesehatan awal yang cepat dan akurat dengan teknologi AI mutakhir
+                    </p>
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl">
@@ -68,15 +72,18 @@
                 <div class="space-y-8">
                     <div class="reveal-on-scroll">
                         <h2 class="text-3xl font-bold mb-4">Teknologi AI Mutakhir</h2>
-                        <p class="text-gray-600">Menggunakan model bahasa terbaru yang dilatih khusus untuk pemahaman medis dan kesehatan.</p>
+                        <p class="text-gray-600">Menggunakan model bahasa terbaru yang dilatih khusus untuk pemahaman
+                            medis dan kesehatan.</p>
                     </div>
                     <div class="reveal-on-scroll">
                         <h2 class="text-3xl font-bold mb-4">Keamanan Data Prioritas</h2>
-                        <p class="text-gray-600">Enkripsi end-to-end dan standar keamanan tertinggi untuk melindungi data kesehatan Anda.</p>
+                        <p class="text-gray-600">Enkripsi end-to-end dan standar keamanan tertinggi untuk melindungi
+                            data kesehatan Anda.</p>
                     </div>
                     <div class="reveal-on-scroll">
                         <h2 class="text-3xl font-bold mb-4">Integrasi Seamless</h2>
-                        <p class="text-gray-600">Terhubung dengan berbagai perangkat kesehatan dan rekam medis elektronik.</p>
+                        <p class="text-gray-600">Terhubung dengan berbagai perangkat kesehatan dan rekam medis
+                            elektronik.</p>
                     </div>
                 </div>
                 <div class="relative">
@@ -182,27 +189,27 @@
         top: 0;
     }
 
-    .animate-fade-in {
-        opacity: 0;
-        animation: fadeIn 1s ease-out forwards;
-    }
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
 
-    .animate-slide-up {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: slideUp 1s ease-out 0.5s forwards;
-    }
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
 
-    .reveal-on-scroll {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s ease-out;
-    }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
 
-    .reveal-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
     @keyframes float {
         0% { 
@@ -213,9 +220,11 @@
         }
     }
 
-    @keyframes fadeIn {
-        to { opacity: 1; }
-    }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
 
     @keyframes slideUp {
         to {
@@ -271,23 +280,24 @@
     </style>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const reveals = document.querySelectorAll('.reveal-on-scroll');
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal-on-scroll');
 
-        function reveal() {
-            reveals.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
+            function reveal() {
+                reveals.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
 
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add('visible');
-                }
-            });
-        }
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
+                });
+            }
 
-        window.addEventListener('scroll', reveal);
-        reveal(); // Initial check
-    });
+            window.addEventListener('scroll', reveal);
+            reveal(); // Initial check
+        });
     </script>
 </body>
+
 </html>
