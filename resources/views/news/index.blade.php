@@ -9,13 +9,26 @@
 <body class="bg-gray-50">
     @include('partials.header')
 
-    <main class="pt-24 pb-16">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-3xl font-bold text-gray-900 mb-4">Berita Terkini</h1>
-                <p class="text-gray-600">Temukan informasi terbaru seputar kesehatan dan teknologi</p>
+    <main class="pt-18 pb-16">
+        <!-- Hero Section dengan Animasi Paralaks -->
+        <div class="relative h-[500px] overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3]">
+                <div class="absolute inset-0 opacity-20">
+                    <div class="floating-dots"></div>
+                </div>
             </div>
+            <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center">
+                <div class="text-white">
+                    <h1 class="text-5xl font-bold mb-6 animate-fade-in">Berita Terkini</h1>
+                    <p class="text-xl opacity-90 max-w-2xl animate-slide-up">
+                        Temukan informasi terbaru seputar kesehatan dan teknologi
+                    </p>
+                </div>
+            </div>
+        </div>
 
+        <!-- Existing news content with adjusted padding -->
+        <div class="max-w-7xl mx-auto px-4 -mt-20 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($news as $item)
                 <article class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -44,5 +57,46 @@
             </div>
         </div>
     </main>
+
+    @include('partials.footer')
+
+    <style>
+        .floating-dots {
+            background-image: radial-gradient(circle, white 2px, transparent 0.5px);
+            background-size: 30px 30px;
+            height: 200%;
+            animation: float 20s linear infinite;
+            position: absolute;
+            width: 100%;
+            top: 0;
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </body>
 </html>

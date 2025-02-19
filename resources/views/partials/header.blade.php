@@ -19,29 +19,25 @@
 
             <!-- Desktop -->
             <nav class="hidden md:flex items-center gap-8 font-styrene text-gray-600 text-md font-semibold">
+                <a href="/" class="hover:text-[#24b0ba]">Beranda</a>
                 <div class="relative">
-                    <div id="healtisin-dropdown-trigger"
-                        class="flex items-center gap-1 cursor-pointer hover:text-[#24b0ba]">
-                        <span>Healtisin</span>
+                    <div id="healtisin-dropdown-trigger" class="flex items-center gap-1 cursor-pointer hover:text-[#24b0ba]">
+                        <span>Tentang Kami</span>
                         <svg id="dropdown-icon" class="w-4 h-4 rotate-icon" viewBox="0 0 24 24" fill="none">
                             <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </div>
-                    <div id="healtisin-dropdown"
-                        class="absolute hidden mt-2 w-48 bg-white rounded-lg shadow-lg transition-opacity duration-300 ease-in-out opacity-0">
-                        <a href="{{ route('about') }}"
-                            class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Tentang Kami</a>
-                        <a href="{{ route('contact-us') }}"
-                            class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Hubungi
-                            Kami</a>
-                        <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Bantuan</a>
+                    <div id="healtisin-dropdown" class="absolute hidden mt-2 w-48 bg-white rounded-lg transition-opacity duration-300 ease-in-out opacity-0 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] border border-gray-100">
+                        <div class="py-1">
+                            <a href="{{ route('about') }}" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">Tentang Healtisin</a>
+                            <a href="{{ route('faq') }}" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">FAQ</a>
+                            <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">Bantuan</a>
+                        </div>
                     </div>
                 </div>
-                <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
-                <a href="{{ route('faq') }}" class="hover:text-[#24b0ba]">FAQ</a>
                 <a href="{{ route('news.index') }}" class="hover:text-[#24b0ba]">Berita</a>
-                <a href="{{ route('login') }}"
-                    class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
+                <a href="{{ route('contact-us') }}" class="hover:text-[#24b0ba]">Kontak</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                     Cobalah Healtisin
                 </a>
             </nav>
@@ -50,28 +46,25 @@
         <!-- Mobile -->
         <div id="mobile-menu" class="hidden md:hidden mt-4 font-styrene font-bold">
             <div class="flex flex-col gap-4">
+                <a href="/" class="hover:text-[#24b0ba]">Beranda</a>
                 <div class="relative">
-                    <div id="mobile-healtisin-dropdown-trigger"
-                        class="flex items-center gap-1 cursor-pointer hover:text-[#24b0ba]">
-                        <span>Healtisin</span>
+                    <div id="mobile-healtisin-dropdown-trigger" class="flex items-center gap-1 cursor-pointer hover:text-[#24b0ba]">
+                        <span>Tentang Kami</span>
                         <svg id="mobile-dropdown-icon" class="w-4 h-4 rotate-icon" viewBox="0 0 24 24" fill="none">
                             <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </div>
-                    <div id="mobile-healtisin-dropdown" class="hidden mt-2 pl-4">
-                        <a href="/fitur1"
-                            class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Fitur 1</a>
-                        <a href="/fitur2"
-                            class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Fitur 2</a>
-                        <a href="/fitur3"
-                            class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Fitur 3</a>
+                    <div id="mobile-healtisin-dropdown" class="hidden mt-2 pl-4 bg-white rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] border border-gray-100">
+                        <div class="py-1">
+                            <a href="{{ route('about') }}" class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Tentang Healtisin</a>
+                            <a href="{{ route('faq') }}" class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">FAQ</a>
+                            <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:bg-[#24b0ba] hover:text-white">Bantuan</a>
+                        </div>
                     </div>
                 </div>
-                <a href="/perusahaan" class="hover:text-[#24b0ba]">Pricing</a>
-                <a href="{{ route('faq') }}" class="hover:text-[#24b0ba]">FAQ</a>
                 <a href="{{ route('news.index') }}" class="hover:text-[#24b0ba]">Berita</a>
-                <a href="{{ route('login') }}"
-                    class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
+                <a href="{{ route('contact-us') }}" class="hover:text-[#24b0ba]">Kontak</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                     Cobalah Healtisin
                 </a>
             </div>

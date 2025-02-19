@@ -7,64 +7,112 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
     @include('partials.header')
 
-    <main class="pt-24 pb-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-3xl font-bold text-gray-900 mb-4">Pertanyaan yang Sering Diajukan</h1>
-                <p class="text-gray-600">Temukan jawaban untuk pertanyaan umum tentang Healtisin AI</p>
-            </div>
-
-            <div class="space-y-6">
-                <!-- FAQ Items -->
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <button class="faq-button w-full px-6 py-4 text-left flex justify-between items-center">
-                        <span class="text-lg font-medium text-gray-900">Apa itu Healtisin AI?</span>
-                        <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
-                        <p class="text-gray-600">Healtisin AI adalah platform kesehatan digital yang menggunakan kecerdasan buatan untuk membantu Anda mendapatkan informasi kesehatan yang akurat dan terpercaya. Platform ini menyediakan konsultasi kesehatan, artikel kesehatan, dan fitur-fitur inovatif lainnya.</p>
-                    </div>
+    <main class="pt-18 pb-16">
+        <!-- Hero Section dengan Animasi Paralaks -->
+        <div class="relative h-[500px] overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3]">
+                <div class="absolute inset-0 opacity-20">
+                    <div class="floating-dots"></div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <button class="faq-button w-full px-6 py-4 text-left flex justify-between items-center">
-                        <span class="text-lg font-medium text-gray-900">Bagaimana cara berlangganan Healtisin Pro?</span>
-                        <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
-                        <p class="text-gray-600">Untuk berlangganan Healtisin Pro, Anda dapat:</p>
-                        <ol class="list-decimal ml-5 mt-2 space-y-2 text-gray-600">
-                            <li>Klik tombol "Cobalah Healtisin" di halaman utama</li>
-                            <li>Pilih paket berlangganan yang sesuai</li>
-                            <li>Pilih metode pembayaran</li>
-                            <li>Selesaikan proses pembayaran</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- Tambahkan FAQ items lainnya -->
             </div>
+            <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center mt-[22px]">
+                <div class="text-white">
+                    <h1 class="text-5xl font-bold mb-6 animate-fade-in">Pertanyaan yang Sering Diajukan</h1>
+                    <p class="text-xl opacity-90 max-w-2xl animate-slide-up">
+                        Temukan jawaban untuk pertanyaan umum tentang Healtisin AI
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Content -->
+        <div class="max-w-4xl mx-auto px-4 mt-14 relative z-10">
+            @include('partials.faq-items')
         </div>
     </main>
 
+    @include('partials.footer')
+
     <script>
-        // Toggle FAQ answers
-        document.querySelectorAll('.faq-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const answer = button.nextElementSibling;
-                const icon = button.querySelector('svg');
-                
-                answer.classList.toggle('hidden');
-                icon.classList.toggle('rotate-180');
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.faq-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const answer = button.nextElementSibling;
+                    const content = answer.querySelector('div');
+                    
+                    // Toggle active state for button
+                    button.classList.toggle('active');
+                    
+                    // Smooth height animation
+                    if (answer.style.maxHeight === '0px' || !answer.style.maxHeight) {
+                        answer.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        answer.style.maxHeight = '0px';
+                    }
+                });
             });
         });
     </script>
+
+    <style>
+        .floating-dots {
+            background-image: radial-gradient(circle, white 2px, transparent 0.5px);
+            background-size: 30px 30px;
+            height: 200%;
+            animation: float 20s linear infinite;
+            position: absolute;
+            width: 100%;
+            top: 0;
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .faq-answer {
+            position: relative;
+        }
+
+        .faq-answer::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, #e5e7eb, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .faq-button.active + .faq-answer::after {
+            opacity: 1;
+        }
+    </style>
 </body>
 </html>

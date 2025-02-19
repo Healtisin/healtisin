@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\FaqController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -124,9 +125,8 @@ Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
 Route::post('/chat/history', [ChatController::class, 'storeHistory'])->name('chat.history.store');
 Route::get('/chat/histories', [ChatController::class, 'getHistories']);
 
-Route::get('/faq', function () {
-    return view('faq');
-})->name('faq');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+Route::post('/faq/question/{id}/{type?}', [FaqController::class, 'incrementClick'])->name('faq.increment');
 
 Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('news.show');
