@@ -28,17 +28,16 @@
                         </svg>
                     </div>
                     <div id="healtisin-dropdown"
-                        class="absolute hidden mt-2 w-48 bg-white rounded-lg shadow-lg transition-opacity duration-300 ease-in-out opacity-0">
-                        <a href="{{ route('about') }}"
-                            class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Tentang Kami</a>
-                        <a href="{{ route('contact-us') }}"
-                            class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Hubungi
-                            Kami</a>
-                        <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba]">Bantuan</a>
+                        class="absolute hidden mt-2 w-48 bg-white rounded-lg transition-opacity duration-300 ease-in-out opacity-0 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] border border-gray-100">
+                        <div class="py-1">
+                            <a href="{{ route('about') }}" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">Tentang Healtisin</a>
+                            <a href="{{ route('faq') }}" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">FAQ</a>
+                            <a href="/bantuan" class="block px-4 py-2 text-gray-700 hover:text-[#24b0ba] hover:bg-gray-50">Bantuan</a>
+                        </div>
                     </div>
                 </div>
                 <a href="{{ route('news.index') }}" class="hover:text-[#24b0ba]">Berita</a>
-                <a href="{{ route('contact-us') }}" class="hover:text-[#24b0ba]">Kontak</a>
+                <a href="{{ route('contact') }}" class="hover:text-[#24b0ba]">Kontak</a>
                 <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                     Cobalah Healtisin
                 </a>
@@ -65,7 +64,7 @@
                     </div>
                 </div>
                 <a href="{{ route('news.index') }}" class="hover:text-[#24b0ba]">Berita</a>
-                <a href="{{ route('contact-us') }}" class="hover:text-[#24b0ba]">Kontak</a>
+                <a href="{{ route('contact') }}" class="hover:text-[#24b0ba]">Kontak</a>
                 <a href="{{ route('login') }}" class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
                     Cobalah Healtisin
                 </a>
