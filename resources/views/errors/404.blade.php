@@ -17,7 +17,7 @@
 
         <!-- Pesan Error -->
         <div class="text-center max-w-lg">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">
                 Oops! Sepertinya Anda Tersesat
             </h1>
             <p class="text-lg text-gray-600 mb-8">
@@ -26,7 +26,7 @@
 
             <!-- Tombol Navigasi dengan Efek Hover -->
             <div class="space-y-4 mb-8">
-                <a href="{{ url()->previous() }}" 
+                <a href="{{ url()->previous() !== url()->current() ? url()->previous() : '/' }}" 
                    class="group inline-flex items-center gap-2 px-6 py-3 bg-[#24b0ba] text-white rounded-full 
                           hover:bg-[#73c7e3] transition-all duration-300 transform hover:scale-105">
                     <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
