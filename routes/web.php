@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\NewsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -126,4 +127,7 @@ Route::get('/chat/histories', [ChatController::class, 'getHistories']);
 Route::get('/faq', function () {
     return view('faq');
 })->name('faq');
+
+Route::get('/berita', [NewsController::class, 'index'])->name('news.index');
+Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('news.show');
 

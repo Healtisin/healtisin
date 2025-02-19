@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345'),
             'is_active' => true,
         ]);
+
+        \App\Models\News::factory(10)->create();
     }
 }
