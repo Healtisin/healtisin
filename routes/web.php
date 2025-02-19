@@ -15,6 +15,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\MessageController;
+
 
 Route::get('/', function () {
     return view('welcome');
