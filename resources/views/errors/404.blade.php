@@ -38,7 +38,7 @@
         </div>
 
         <!-- Footer dengan Elemen Medis -->
-        <div class="mt-16 text-center">
+        <div class="text-center">
             <div class="flex items-center justify-center gap-2 text-gray-400 mb-2">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
