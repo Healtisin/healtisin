@@ -119,6 +119,10 @@ Route::prefix('admin')->group(function () {
 
     //Pricing
     Route::get('/pricing', [PricingController::class, 'index'])->name('admin.pricing');
+
+    //Messages
+    Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
+    Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
 });
 
 Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])->name('profile.phone.update');

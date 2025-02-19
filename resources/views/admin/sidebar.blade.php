@@ -108,6 +108,26 @@
                 </a>
             </li>
             <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="{{route('admin.messages')}}" class="flex items-center gap-3">
+                    <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        📅
+                    </span>
+                    <div class="flex-1 min-w-0 sidebar-text">
+                        <p class="text-sm font-medium text-gray-900 truncate">Messages</p>
+                    </div>
+                </a>
+            </li>
+            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="#" class="flex items-center gap-3">
+                    <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        📅
+                    </span>
+                    <div class="flex-1 min-w-0 sidebar-text">
+                        <p class="text-sm font-medium text-gray-900 truncate">Berita</p>
+                    </div>
+                </a>
+            </li>
+            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
                 <a href="#" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅

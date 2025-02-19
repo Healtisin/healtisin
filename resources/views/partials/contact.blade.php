@@ -103,12 +103,12 @@
                         doloremque soluta
                         facere maxime harum nam doloribus, numquam nesciunt eligendi id dignissimos pariatur recusandae
                         autem tempora ad aliquam nostrum?</p>
-                    @if(session('success'))
+                    <!-- @if(session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
                         role="alert">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
-                    @endif
+                    @endif -->
                     <form id="contactForm" action="{{ route('partials.contact.store') }}" method="POST"
                         class="space-y-4">
                         @csrf
