@@ -8,6 +8,8 @@ $breadcrumbs = [
 'admin.transactions' => ['Home', 'Transaksi'],
 'admin.payments' => ['Home', 'Pembayaran'],
 'admin.pricing' => ['Home', 'Pricing'],
+'admin.messages' => ['Home', 'Messages'],
+'admin.news' => ['Home', 'Berita'],
 ];
 
 $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
