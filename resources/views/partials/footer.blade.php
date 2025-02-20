@@ -61,8 +61,12 @@
                     <div>
                         <h6 class="text-base font-semibold mb-4">Legal & Safety</h6>
                         <ul class="space-y-3">
-                            <li><a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Use</a></li>
+                            <li><a href="{{ route('privacy.policy') }}"
+                                    class="text-gray-400 hover:text-white text-sm">Privacy
+                                    Policy</a>
+                            </li>
+                            <li><a href="{{ route('terms.of.use') }}"
+                                    class="text-gray-400 hover:text-white text-sm">Terms of Use</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-white text-sm">Report Vulnerabilities</a>
                             </li>
                         </ul>

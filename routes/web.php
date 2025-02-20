@@ -17,7 +17,8 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\TermsOfUseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -91,7 +92,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('pricing.process-payment');
     Route::get('/pricing/payment-confirmation/{id}', [PaymentController::class, 'paymentConfirmation'])
         ->name('pricing.payment-confirmation');
-        Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
+    Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
     Route::post('/pricing/payment/{payment}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])
         ->name('pricing.upload-proof');
 });
@@ -153,3 +154,6 @@ Route::prefix('partials')->group(function () {
     Route::get('/contact', [MessageController::class, 'create'])->name('partials.contact');
     Route::post('/contact', [MessageController::class, 'store'])->name('partials.contact.store');
 });
+
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy.policy');
+Route::get('/terms-of-use', [TermsOfUseController::class, 'index'])->name('terms.of.use');
