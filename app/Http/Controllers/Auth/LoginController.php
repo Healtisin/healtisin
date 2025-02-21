@@ -25,11 +25,9 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-        
-            // Ambil redirect dari input form, jika kosong arahkan ke home
-            $redirectTo = $request->input('redirect', route('home'));
-        
-            return redirect($redirectTo);
+            
+            // Langsung return redirect
+            return redirect()->intended(route('home')); 
         }
         
 
