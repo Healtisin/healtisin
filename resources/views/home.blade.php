@@ -257,11 +257,43 @@
         </div>
     `;
 
+<<<<<<< Updated upstream
     // Fungsi untuk mengirim pesan
     async function sendMessage() {
         const input = document.getElementById('chatInput');
         const messagesContainer = document.getElementById('chatMessages');
         const message = input.value.trim();
+=======
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messagesContainer = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Clear input
+                input.value = '';
+                
+                // Add user message
+                const userMessage = createUserMessageHtml(message);
+                messagesContainer.insertAdjacentHTML('beforeend', userMessage);
+                
+                // Add loading message
+                messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
+                
+                try {
+                    const response = await fetch('/chat/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            message: message,
+                            chatId: window.currentChatId // Kirim currentChatId jika ada
+                         })
+                    });
+>>>>>>> Stashed changes
 
         if (message) {
             // Clear input
@@ -275,6 +307,54 @@
             // Tambahkan pesan loading
             messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
 
+<<<<<<< Updated upstream
+=======
+                    // Add AI response with timestamp
+                    const aiResponse = createAIMessageHtml(data.message);
+                    messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+
+                    // Scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // Update currentChatId jika ini chat baru
+                    if (!window.currentChatId && data.chatId) {
+                        window.currentChatId = data.chatId;
+                    }
+
+                    // Update sidebar setelah pesan berhasil dikirim
+                    await updateSidebar();
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    showErrorMessage(error.message);
+                }
+            }
+        }
+
+        // Helper function untuk menampilkan pesan error
+        function showErrorMessage(message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const errorMessage = `
+                <div class="flex justify-start gap-2 items-start mb-4">
+                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col max-w-[75%]">
+                        <div class="bg-white border border-red-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                            <p class="text-red-600">${message}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Fungsi untuk menyimpan chat history
+        async function saveChatHistory(userMessage, aiResponse) {
+>>>>>>> Stashed changes
             try {
                 const response = await fetch('/chat/send', {
                     method: 'POST',
@@ -299,9 +379,35 @@
 
                 const data = await response.json();
 
+<<<<<<< Updated upstream
                 // Tambahkan respons AI ke UI
                 const aiResponse = createAIMessageHtml(data.message);
                 messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+=======
+        // Fungsi untuk update sidebar
+        async function updateSidebar() {
+            try {
+                const response = await fetch('/chat/histories');
+                if (!response.ok) {
+                    throw new Error('Gagal memperbarui sidebar');
+                }
+                const html = await response.text();
+                const chatHistoryContainer = document.querySelector('.chat-history');
+                if (chatHistoryContainer) {
+                    chatHistoryContainer.innerHTML = html;
+                    
+                    // Tambahkan kembali event listeners untuk tombol-tombol di sidebar
+                    const chatButtons = chatHistoryContainer.querySelectorAll('button[onclick^="loadChat"]');
+                    chatButtons.forEach(button => {
+                        const chatId = button.getAttribute('onclick').match(/\d+/)[0];
+                        button.onclick = () => loadChat(chatId);
+                    });
+                }
+            } catch (error) {
+                console.error('Error updating sidebar:', error);
+            }
+        }
+>>>>>>> Stashed changes
 
                 // Scroll ke bawah
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -444,6 +550,7 @@
             e.preventDefault();
             sendMessage();
         }
+<<<<<<< Updated upstream
     });
 
     // Fungsi untuk modal change password
@@ -515,8 +622,51 @@
             showErrorMessage('Gagal menghapus chat: ' + error.message);
         }
     }
+=======
+
+        // Fungsi untuk memuat chat history berdasarkan chatId
+        async function loadChat(chatId) {
+            try {
+                const response = await fetch(`/chat/${chatId}`); // Panggil rute /chat/{id}
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.message || 'Gagal memuat riwayat chat');
+                }
+
+                const data = await response.json();
+                const messages = data.messages;
+                const messagesContainer = document.getElementById('chatMessages');
+
+                // Bersihkan tampilan chat messages
+                messagesContainer.innerHTML = '';
+
+                // Tampilkan pesan-pesan dari riwayat chat
+                messages.forEach(messageData => {
+                    const messageHtml = messageData.role === 'user'
+                        ? createUserMessageHtml(messageData.content)
+                        : createAIMessageHtml(messageData.content);
+                    messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+                });
+
+                // Set currentChatId
+                window.currentChatId = chatId;
+
+                // Scroll ke bawah setelah memuat pesan
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            } catch (error) {
+                console.error('Error loading chat:', error);
+                showErrorMessage(error.message);
+            }
+        }
+>>>>>>> Stashed changes
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
 </body>
 
+<<<<<<< Updated upstream
 </html>
+=======
+
+
+>>>>>>> Stashed changes

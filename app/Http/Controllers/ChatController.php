@@ -15,17 +15,26 @@ class ChatController extends Controller
         try {
             $message = $request->message;
             $user = auth()->user();
+            $chatId = $request->chatId; // Ambil chatId dari request
             
-            // Gunakan currentChatId jika ada
+            \Log::info('sendMessage: chatId diterima dari request', ['chatId' => $chatId]); // Tambahkan log
+
             $chatHistory = null;
-            if ($request->has('chatId')) {
-                $chatHistory = ChatHistory::where('id', $request->chatId)
-                                        ->where('user_id', $user->id)
-                                        ->first();
+            if ($chatId) {
+                // Cari riwayat obrolan yang ada berdasarkan chatId
+                $chatHistory = ChatHistory::where('id', $chatId)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                \Log::info('sendMessage: Hasil pencarian ChatHistory berdasarkan chatId', ['chatHistory' => $chatHistory]); // Tambahkan log
+
+                if (!$chatHistory) {
+                    return response()->json(['status' => 'error', 'message' => 'Chat history tidak ditemukan'], 404);
+                }
             }
             
             if (!$chatHistory) {
-                // Buat chat history baru
+                // Buat chat history baru jika tidak ada chatId atau tidak ditemukan
                 $chatHistory = ChatHistory::create([
                     'user_id' => $user->id,
                     'title' => Str::limit($message, 50),
@@ -33,6 +42,7 @@ class ChatController extends Controller
                     'messages' => [['role' => 'user', 'content' => $message]],
                     'last_interaction' => now()
                 ]);
+                \Log::info('sendMessage: Chat history baru dibuat', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
             } else {
                 // Update chat yang ada
                 $messages = $chatHistory->messages;
@@ -43,6 +53,7 @@ class ChatController extends Controller
                     'messages' => $messages,
                     'last_interaction' => now()
                 ]);
+                \Log::info('sendMessage: Chat history yang ada diperbarui', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
             }
 
             // Proses dan simpan respons AI
@@ -55,11 +66,12 @@ class ChatController extends Controller
                 'last_message' => $aiResponse,
                 'last_interaction' => now()
             ]);
+            \Log::info('sendMessage: Respons AI ditambahkan dan chat history diperbarui', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
 
             return response()->json([
                 'status' => 'success',
                 'message' => $aiResponse,
-                'chatId' => $chatHistory->id
+                'chatId' => $chatHistory->id // Kirim chatId kembali ke client
             ]);
         } catch (\Exception $e) {
             \Log::error('Chat Error', ['message' => $e->getMessage()]);
@@ -106,9 +118,11 @@ class ChatController extends Controller
 
     public function show($id)
     {
+        \Log::info('show: Mencoba mengambil riwayat obrolan dengan ID', ['chatId' => $id]); // Tambahkan log
         try {
             $chatHistory = ChatHistory::findOrFail($id);
-            
+            \Log::info('show: Riwayat obrolan berhasil ditemukan', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
+
             if ($chatHistory->user_id !== auth()->id()) {
                 throw new \Exception('Tidak memiliki akses ke chat ini');
             }
@@ -118,6 +132,7 @@ class ChatController extends Controller
                 'messages' => $chatHistory->messages
             ]);
         } catch (\Exception $e) {
+            \Log::error('show: Gagal mengambil riwayat obrolan', ['chatId' => $id, 'error' => $e->getMessage()]); // Tambahkan log error
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
@@ -125,36 +140,17 @@ class ChatController extends Controller
         }
     }
 
-    public function storeHistory(Request $request)
-    {
-        try {
-            $chatHistory = ChatHistory::create([
-                'user_id' => auth()->id(),
-                'title' => $request->title,
-                'last_message' => $request->last_message,
-                'messages' => $request->messages,
-                'last_interaction' => now()
-            ]);
-
-            return response()->json([
-                'status' => 'success',
-                'id' => $chatHistory->id
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
     public function getHistories()
     {
+        \Log::info('getHistories: Memulai pengambilan riwayat obrolan');
         $histories = Auth::user()->chatHistories()
             ->latest('last_interaction')
             ->get();
-        
-        return view('partials.chat-histories', compact('histories'));
+        \Log::info('getHistories: Riwayat obrolan berhasil diambil', ['jumlah_riwayat' => $histories->count()]);
+
+        return view('partials.chat-histories', [
+            'histories' => $histories
+        ])->render();
     }
 
     public function deleteChat($id)

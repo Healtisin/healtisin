@@ -17,8 +17,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PrivacyPolicyController;
-use App\Http\Controllers\TermsOfUseController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -92,14 +91,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('pricing.process-payment');
     Route::get('/pricing/payment-confirmation/{id}', [PaymentController::class, 'paymentConfirmation'])
         ->name('pricing.payment-confirmation');
-    Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
     Route::post('/pricing/payment/{payment}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])
         ->name('pricing.upload-proof');
 });
-Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
-Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
-Route::get('/payment/pending', [PaymentController::class, 'paymentPending'])->name('payment.pending');
-Route::get('/payment/error', [PaymentController::class, 'paymentError'])->name('payment.error');
+
 //ADMIN
 Route::prefix('admin')->group(function () {
     // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -120,10 +115,6 @@ Route::prefix('admin')->group(function () {
 
     //Pricing
     Route::get('/pricing', [PricingController::class, 'index'])->name('admin.pricing');
-
-    //Messages
-    Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
-    Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
 });
 
 Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])->name('profile.phone.update');
@@ -133,7 +124,6 @@ Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('p
 Route::get('/activate/{token}', [RegisterController::class, 'activate'])->name('activate');
 
 Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
-Route::post('/chat/history', [ChatController::class, 'storeHistory'])->name('chat.history.store');
 Route::get('/chat/histories', [ChatController::class, 'getHistories']);
 
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
@@ -154,6 +144,3 @@ Route::prefix('partials')->group(function () {
     Route::get('/contact', [MessageController::class, 'create'])->name('partials.contact');
     Route::post('/contact', [MessageController::class, 'store'])->name('partials.contact.store');
 });
-
-Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy.policy');
-Route::get('/terms-of-use', [TermsOfUseController::class, 'index'])->name('terms.of.use');
