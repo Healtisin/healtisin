@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
-    
+
     <style>
         /* Scrollbar untuk Webkit (Chrome, Safari, Edge) */
         #chatMessages::-webkit-scrollbar {
@@ -13,22 +14,25 @@
         }
 
         #chatMessages::-webkit-scrollbar-track {
-            border-radius: 10px;           
-            background-color: #f8f8f8;     /* Warna background lebih terang/samar */
-            margin: 5px;                   
+            border-radius: 10px;
+            background-color: #f8f8f8;
+            /* Warna background lebih terang/samar */
+            margin: 5px;
         }
 
         #chatMessages::-webkit-scrollbar-thumb {
-            border-radius: 10px;           
-            background: rgba(156, 163, 175, 0.5);  /* Warna thumb abu-abu transparan */
-            border: 2px solid transparent; 
-            background-clip: padding-box;  
-            min-height: 50px;             
-            transition: background .2s;    
+            border-radius: 10px;
+            background: rgba(156, 163, 175, 0.5);
+            /* Warna thumb abu-abu transparan */
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            min-height: 50px;
+            transition: background .2s;
         }
 
         #chatMessages::-webkit-scrollbar-thumb:hover {
-            background: rgba(156, 163, 175, 0.7);  /* Warna hover sedikit lebih gelap */
+            background: rgba(156, 163, 175, 0.7);
+            /* Warna hover sedikit lebih gelap */
             border: 2px solid transparent;
         }
 
@@ -68,11 +72,13 @@
 
         /* Styling untuk textarea */
         #chatInput {
-            min-height: 56px;         /* Tinggi minimum untuk 1 baris (24px line-height + 32px padding) */
-            max-height: 128px;        /* Tinggi maksimum untuk 4 baris ((24px × 4) + 32px padding) */
+            min-height: 56px;
+            /* Tinggi minimum untuk 1 baris (24px line-height + 32px padding) */
+            max-height: 128px;
+            /* Tinggi maksimum untuk 4 baris ((24px × 4) + 32px padding) */
             padding: 16px 148px 16px 24px;
-            line-height: 24px;        
-            font-size: 16px;          
+            line-height: 24px;
+            font-size: 16px;
             overflow-y: auto;
             resize: none;
             box-sizing: border-box;
@@ -99,13 +105,17 @@
 
         /* Menyembunyikan scrollbar untuk IE, Edge dan Firefox */
         #chatInput {
-            -ms-overflow-style: none;  /* IE dan Edge */
-            scrollbar-width: none;     /* Firefox */
-            line-height: 20px;         /* Jarak antar baris */
+            -ms-overflow-style: none;
+            /* IE dan Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            line-height: 20px;
+            /* Jarak antar baris */
         }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
         <!-- Include Sidebar -->
@@ -123,27 +133,29 @@
 
                     <!-- Chat Input -->
                     <div class="relative flex items-center gap-2">
-                        <textarea 
-                            id="chatInput"
+                        <textarea id="chatInput"
                             class="w-full px-6 py-3 pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none"
-                            placeholder="Ketik pertanyaan Anda"
-                            rows="1"
-                        ></textarea>
-                        
+                            placeholder="Ketik pertanyaan Anda" rows="1"></textarea>
+
                         <div class="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             <button class="p-2 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                 </svg>
                             </button>
                             <button class="p-2 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>
                             </button>
-                            <button class="p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors" onclick="sendMessage()">
+                            <button
+                                class="p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors"
+                                onclick="sendMessage()">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                 </svg>
                             </button>
                         </div>
@@ -177,6 +189,13 @@
             }
         };
 
+        // Fungsi untuk menyesuaikan tinggi textarea
+        function adjustTextareaHeight() {
+            const chatInput = document.getElementById('chatInput');
+            chatInput.style.height = 'auto'; // Reset height
+            chatInput.style.height = chatInput.scrollHeight + 'px'; // Sesuaikan tinggi berdasarkan scrollHeight
+        }
+
         function openSettingsModal() {
             document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
@@ -198,7 +217,7 @@
 
         sidebarToggle.addEventListener('click', () => {
             isExpanded = !isExpanded;
-            
+
             if (isExpanded) {
                 sidebar.classList.remove('w-[90px]');
                 sidebar.classList.add('w-80');
@@ -240,18 +259,19 @@
             const input = document.getElementById('chatInput');
             const messagesContainer = document.getElementById('chatMessages');
             const message = input.value.trim();
-            
+
             if (message) {
                 // Clear input
                 input.value = '';
-                
+                adjustTextareaHeight();
+
                 // Add user message
                 const userMessage = createUserMessageHtml(message);
                 messagesContainer.insertAdjacentHTML('beforeend', userMessage);
-                
+
                 // Add loading message
                 messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
-                
+
                 try {
                     const response = await fetch('/chat/send', {
                         method: 'POST',
@@ -260,10 +280,10 @@
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ 
+                        body: JSON.stringify({
                             message: message,
                             chatId: window.currentChatId // Kirim currentChatId jika ada
-                         })
+                        })
                     });
 
                     // Remove loading message
@@ -335,9 +355,14 @@
                     body: JSON.stringify({
                         title: userMessage.substring(0, 50),
                         last_message: aiResponse,
-                        messages: [
-                            { role: 'user', content: userMessage },
-                            { role: 'assistant', content: aiResponse }
+                        messages: [{
+                                role: 'user',
+                                content: userMessage
+                            },
+                            {
+                                role: 'assistant',
+                                content: aiResponse
+                            }
                         ],
                         last_interaction: new Date().toISOString()
                     })
@@ -349,10 +374,10 @@
 
                 const data = await response.json();
                 window.currentChatId = data.id;
-                
+
                 // Update sidebar tanpa reload
                 updateSidebar();
-                
+
             } catch (error) {
                 console.error('Error saving chat history:', error);
                 showErrorMessage('Gagal menyimpan riwayat chat: ' + error.message);
@@ -370,7 +395,7 @@
                 const chatHistoryContainer = document.querySelector('.chat-history');
                 if (chatHistoryContainer) {
                     chatHistoryContainer.innerHTML = html;
-                    
+
                     // Tambahkan kembali event listeners untuk tombol-tombol di sidebar
                     const chatButtons = chatHistoryContainer.querySelectorAll('button[onclick^="loadChat"]');
                     chatButtons.forEach(button => {
@@ -404,33 +429,24 @@
         }
 
         function adjustTextareaHeight() {
-            const lineHeight = 24;
-            const padding = 32;
-            const maxLines = 4;
-            const maxHeight = (lineHeight * maxLines) + padding;
-            const textWidth = chatInput.clientWidth - 172; // Kurangi padding kanan dan kiri
-            
+            const lineHeight = 24; // Tinggi satu baris
+            const padding = 32; // Padding atas dan bawah
+            const maxLines = 4; // Batasan tampilan maksimum baris
+            const maxHeight = (lineHeight * maxLines) + padding; // Tinggi maksimum tampilan textarea
+
             // Reset height
             chatInput.style.height = 'auto';
-            
+
             // Hitung tinggi teks saat ini
-            const currentText = chatInput.value;
-            const textHeight = getTextHeight(currentText, textWidth, lineHeight);
-            const totalHeight = textHeight + padding;
-            
-            // Jika melebihi batas maksimum
-            if (totalHeight > maxHeight) {
-                // Potong teks per karakter sampai tingginya sesuai
-                let text = currentText;
-                while (getTextHeight(text, textWidth, lineHeight) + padding > maxHeight && text.length > 0) {
-                    text = text.slice(0, -1);
-                }
-                chatInput.value = text;
+            const textHeight = chatInput.scrollHeight;
+
+            // Jika tinggi teks melebihi batas tampilan, set tinggi maksimum dan aktifkan scroll
+            if (textHeight > maxHeight) {
                 chatInput.style.height = maxHeight + 'px';
-                chatInput.classList.add('overflow');
+                chatInput.style.overflowY = 'auto'; // Aktifkan scroll
             } else {
-                chatInput.style.height = Math.max(totalHeight, lineHeight + padding) + 'px';
-                chatInput.classList.remove('overflow');
+                chatInput.style.height = textHeight + 'px';
+                chatInput.style.overflowY = 'hidden'; // Nonaktifkan scroll jika tidak diperlukan
             }
         }
 
@@ -453,12 +469,13 @@
             const padding = 32;
             const maxHeight = (lineHeight * 4) + padding;
             const textWidth = this.clientWidth - 172;
-            
+
             // Cek apakah penambahan enter akan melebihi batas
             if (e.key === 'Enter' && !e.shiftKey) {
-                const futureText = this.value.slice(0, this.selectionStart) + '\n' + this.value.slice(this.selectionEnd);
+                const futureText = this.value.slice(0, this.selectionStart) + '\n' + this.value.slice(this
+                    .selectionEnd);
                 const futureHeight = getTextHeight(futureText, textWidth, lineHeight) + padding;
-                
+
                 if (futureHeight > maxHeight) {
                     e.preventDefault();
                 }
@@ -503,11 +520,11 @@
         }
 
         function createAIMessageHtml(message) {
-            const timestamp = new Date().toLocaleTimeString('id-ID', { 
-                hour: '2-digit', 
+            const timestamp = new Date().toLocaleTimeString('id-ID', {
+                hour: '2-digit',
                 minute: '2-digit'
             });
-            
+
             return `
                 <div class="flex justify-start gap-2 items-start mb-4">
                     <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
@@ -544,7 +561,7 @@
 
         async function confirmDeleteChat() {
             if (!chatToDelete) return;
-            
+
             try {
                 const response = await fetch(`/chat/delete/${chatToDelete}`, {
                     method: 'DELETE',
@@ -561,7 +578,7 @@
 
                 // Update sidebar
                 await updateSidebar();
-                
+
                 // Jika chat yang dihapus adalah chat yang sedang aktif
                 if (window.currentChatId === chatToDelete) {
                     window.currentChatId = null;
@@ -593,9 +610,9 @@
 
                 // Tampilkan pesan-pesan dari riwayat chat
                 messages.forEach(messageData => {
-                    const messageHtml = messageData.role === 'user'
-                        ? createUserMessageHtml(messageData.content)
-                        : createAIMessageHtml(messageData.content);
+                    const messageHtml = messageData.role === 'user' ?
+                        createUserMessageHtml(messageData.content) :
+                        createAIMessageHtml(messageData.content);
                     messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
                 });
 
@@ -610,15 +627,42 @@
                 showErrorMessage(error.message);
             }
         }
+
+
+        // Menyesuaikan tinggi textarea saat input atau paste
+        chatInput.addEventListener('input', adjustTextareaHeight);
+        chatInput.addEventListener('paste', () => setTimeout(adjustTextareaHeight, 0));
+
+        // Mengirim pesan saat tombol Enter ditekan
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Fungsi untuk modal change password
+        function showChangePasswordModal() {
+            closeSettingsModal();
+            document.getElementById('changePasswordModal').classList.remove('hidden');
+            document.getElementById('changePasswordModal').classList.add('flex');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('hidden');
+            document.getElementById('changePasswordModal').classList.remove('flex');
+            openSettingsModal();
+        }
+
+        // Fungsi untuk modal change name
+        function showChangeNameModal() {
+            closeSettingsModal();
+            const modal = document.getElementById('changeNameModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
