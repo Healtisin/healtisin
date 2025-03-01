@@ -16,7 +16,7 @@ class ChatController extends Controller
             $message = $request->message;
             $user = auth()->user();
             $chatId = $request->chatId; // Ambil chatId dari request
-            
+
             \Log::info('sendMessage: chatId diterima dari request', ['chatId' => $chatId]); // Tambahkan log
 
             $chatHistory = null;
@@ -32,7 +32,7 @@ class ChatController extends Controller
                     return response()->json(['status' => 'error', 'message' => 'Chat history tidak ditemukan'], 404);
                 }
             }
-            
+
             if (!$chatHistory) {
                 // Buat chat history baru jika tidak ada chatId atau tidak ditemukan
                 $chatHistory = ChatHistory::create([
@@ -47,7 +47,7 @@ class ChatController extends Controller
                 // Update chat yang ada
                 $messages = $chatHistory->messages;
                 $messages[] = ['role' => 'user', 'content' => $message];
-                
+
                 $chatHistory->update([
                     'last_message' => $message,
                     'messages' => $messages,
@@ -60,7 +60,7 @@ class ChatController extends Controller
             $aiResponse = $this->getAIResponse($message);
             $messages = $chatHistory->messages;
             $messages[] = ['role' => 'assistant', 'content' => $aiResponse];
-            
+
             $chatHistory->update([
                 'messages' => $messages,
                 'last_message' => $aiResponse,
@@ -99,11 +99,11 @@ class ChatController extends Controller
 
         if ($response->successful()) {
             $responseData = $response->json();
-            
+
             if (isset($responseData['candidates'][0]['content']['parts'][0]['text'])) {
                 return $responseData['candidates'][0]['content']['parts'][0]['text'];
             }
-            
+
             throw new \Exception('Format respons tidak valid');
         }
 
@@ -112,7 +112,7 @@ class ChatController extends Controller
             'response' => $response->json()
         ]);
 
-        throw new \Exception('Gagal mendapatkan respons dari AI: ' . 
+        throw new \Exception('Gagal mendapatkan respons dari AI: ' .
             ($response->json()['error']['message'] ?? 'Unknown error'));
     }
 
@@ -157,7 +157,7 @@ class ChatController extends Controller
     {
         try {
             $chatHistory = ChatHistory::findOrFail($id);
-            
+
             if ($chatHistory->user_id !== auth()->id()) {
                 return response()->json([
                     'status' => 'error',
@@ -167,7 +167,7 @@ class ChatController extends Controller
 
             $chatHistory->delete();
             \Log::info('deleteChat: Chat berhasil dihapus', ['chatId' => $id]);
-            
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Chat berhasil dihapus'
@@ -175,7 +175,7 @@ class ChatController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             \Log::error('deleteChat: Chat tidak ditemukan', ['chatId' => $id]);
             return response()->json([
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => 'Riwayat chat tidak ditemukan'
             ], 404);
         } catch (\Exception $e) {
@@ -187,4 +187,3 @@ class ChatController extends Controller
         }
     }
 }
-

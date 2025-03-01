@@ -144,7 +144,7 @@
                                         d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                 </svg>
                             </button>
-                            <button class="p-2 text-gray-500 hover:text-gray-700">
+                            <button id="start-record-btn" class="p-2 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -182,6 +182,23 @@
 
     <!-- JavaScript for modal functionality -->
     <script>
+        document.getElementById('start-record-btn').addEventListener('click', function() {
+            const recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'id-ID'; // Atur bahasa sesuai kebutuhan
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('chatInput').value = transcript;
+                sendMessage();
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Error occurred in recognition: ' + event.error);
+            };
+        });
+
         const Auth = {
             user: {
                 name: "{{ Auth::user()->name }}",
@@ -561,7 +578,7 @@
 
         function showDeleteChatModal(chatId) {
             chatToDelete = chatId;
-            
+
             Swal.fire({
                 title: 'Hapus Chat?',
                 text: "Anda tidak dapat mengembalikan chat yang sudah dihapus!",
@@ -587,7 +604,7 @@
 
         async function confirmDeleteChat() {
             if (!chatToDelete) return;
-            
+
             try {
                 const response = await fetch(`/chat/delete/${chatToDelete}`, {
                     method: 'DELETE',
@@ -599,13 +616,14 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (!response.ok) {
                     throw new Error(data.message || 'Gagal menghapus chat');
                 }
 
                 // Hapus elemen chat dari sidebar secara langsung
-                const chatElement = document.querySelector(`button[onclick="loadChat(${chatToDelete})"]`).closest('.relative');
+                const chatElement = document.querySelector(`button[onclick="loadChat(${chatToDelete})"]`).closest(
+                    '.relative');
                 if (chatElement) {
                     chatElement.remove();
                 }
@@ -632,7 +650,7 @@
                     icon: 'success',
                     title: 'Chat berhasil dihapus'
                 });
-                
+
             } catch (error) {
                 console.error('Error deleting chat:', error);
                 showErrorMessage(error.message);
@@ -713,8 +731,3 @@
 </body>
 
 </html>
-
-
-
-
-

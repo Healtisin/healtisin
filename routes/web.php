@@ -136,6 +136,7 @@ Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
 Route::post('/chat/history', [ChatController::class, 'storeHistory'])->name('chat.history.store');
 Route::get('/chat/histories', [ChatController::class, 'getHistories']);
 Route::delete('/chat/delete/{id}', [ChatController::class, 'deleteChat'])->name('chat.delete');
+Route::post('/chat/send', [ChatController::class, 'sendMessage']);
 
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
 Route::post('/faq/question/{id}/{type?}', [FaqController::class, 'incrementClick'])->name('faq.increment');
