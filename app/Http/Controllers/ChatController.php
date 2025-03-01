@@ -159,20 +159,31 @@ class ChatController extends Controller
             $chatHistory = ChatHistory::findOrFail($id);
             
             if ($chatHistory->user_id !== auth()->id()) {
-                throw new \Exception('Tidak memiliki akses ke chat ini');
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak memiliki akses untuk menghapus chat ini'
+                ], 403);
             }
 
             $chatHistory->delete();
-
+            \Log::info('deleteChat: Chat berhasil dihapus', ['chatId' => $id]);
+            
             return response()->json([
                 'status' => 'success',
                 'message' => 'Chat berhasil dihapus'
             ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('deleteChat: Chat tidak ditemukan', ['chatId' => $id]);
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Riwayat chat tidak ditemukan'
+            ], 404);
         } catch (\Exception $e) {
+            \Log::error('deleteChat: Gagal menghapus chat', ['chatId' => $id, 'error' => $e->getMessage()]);
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
-            ], 404);
+                'message' => 'Terjadi kesalahan saat menghapus chat'
+            ], 500);
         }
     }
 }

@@ -389,18 +389,33 @@
             try {
                 const response = await fetch('/chat/histories');
                 if (!response.ok) {
-                    throw new Error('Gagal memperbarui sidebar');
+                    console.error('Gagal memperbarui sidebar:', response.status);
+                    return;
                 }
                 const html = await response.text();
                 const chatHistoryContainer = document.querySelector('.chat-history');
                 if (chatHistoryContainer) {
                     chatHistoryContainer.innerHTML = html;
 
-                    // Tambahkan kembali event listeners untuk tombol-tombol di sidebar
-                    const chatButtons = chatHistoryContainer.querySelectorAll('button[onclick^="loadChat"]');
+                    // Tambahkan event listeners untuk tombol chat
+                    const chatButtons = chatHistoryContainer.querySelectorAll('.relative button:first-child');
                     chatButtons.forEach(button => {
-                        const chatId = button.getAttribute('onclick').match(/\d+/)[0];
-                        button.onclick = () => loadChat(chatId);
+                        const chatId = button.getAttribute('onclick')?.match(/\d+/)?.[0];
+                        if (chatId) {
+                            button.onclick = () => loadChat(parseInt(chatId));
+                        }
+                    });
+
+                    // Tambahkan event listeners untuk tombol hapus
+                    const deleteButtons = chatHistoryContainer.querySelectorAll('.relative button:last-child');
+                    deleteButtons.forEach(button => {
+                        const chatId = button.getAttribute('onclick')?.match(/\d+/)?.[0];
+                        if (chatId) {
+                            button.onclick = (e) => {
+                                e.stopPropagation(); // Hentikan event bubbling
+                                showDeleteChatModal(parseInt(chatId));
+                            };
+                        }
                     });
                 }
             } catch (error) {
@@ -545,11 +560,22 @@
         let chatToDelete = null;
 
         function showDeleteChatModal(chatId) {
-            event.stopPropagation();
             chatToDelete = chatId;
-            const modal = document.getElementById('deleteChatModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            
+            Swal.fire({
+                title: 'Hapus Chat?',
+                text: "Anda tidak dapat mengembalikan chat yang sudah dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmDeleteChat();
+                }
+            });
         }
 
         function closeDeleteChatModal() {
@@ -561,7 +587,7 @@
 
         async function confirmDeleteChat() {
             if (!chatToDelete) return;
-
+            
             try {
                 const response = await fetch(`/chat/delete/${chatToDelete}`, {
                     method: 'DELETE',
@@ -572,12 +598,17 @@
                     }
                 });
 
+                const data = await response.json();
+                
                 if (!response.ok) {
-                    throw new Error('Gagal menghapus chat');
+                    throw new Error(data.message || 'Gagal menghapus chat');
                 }
 
-                // Update sidebar
-                await updateSidebar();
+                // Hapus elemen chat dari sidebar secara langsung
+                const chatElement = document.querySelector(`button[onclick="loadChat(${chatToDelete})"]`).closest('.relative');
+                if (chatElement) {
+                    chatElement.remove();
+                }
 
                 // Jika chat yang dihapus adalah chat yang sedang aktif
                 if (window.currentChatId === chatToDelete) {
@@ -585,10 +616,26 @@
                     document.getElementById('chatMessages').innerHTML = '';
                 }
 
-                closeDeleteChatModal();
+                // Update sidebar untuk memastikan sinkronisasi data
+                await updateSidebar();
+
+                // Tampilkan notifikasi sukses
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Chat berhasil dihapus'
+                });
+                
             } catch (error) {
                 console.error('Error deleting chat:', error);
-                showErrorMessage('Gagal menghapus chat: ' + error.message);
+                showErrorMessage(error.message);
             }
         }
 
@@ -628,7 +675,6 @@
             }
         }
 
-
         // Menyesuaikan tinggi textarea saat input atau paste
         chatInput.addEventListener('input', adjustTextareaHeight);
         chatInput.addEventListener('paste', () => setTimeout(adjustTextareaHeight, 0));
@@ -663,6 +709,12 @@
         }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+
+
+
+
