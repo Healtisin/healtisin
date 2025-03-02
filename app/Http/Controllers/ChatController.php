@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 use App\Models\ChatHistory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Message;
+use App\Models\Chat;
 
 class ChatController extends Controller
 {
@@ -83,7 +85,7 @@ class ChatController extends Controller
     {
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' . config('services.gemini.api_key'), [
+        ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . config('services.gemini.api_key'), [
             'contents' => [
                 [
                     'parts' => [
@@ -184,6 +186,60 @@ class ChatController extends Controller
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat menghapus chat'
             ], 500);
+        }
+    }
+
+    public function deleteLastMessage($chatId)
+    {
+        try {
+            // Ambil chat history berdasarkan ID
+            $chatHistory = ChatHistory::where('id', $chatId)
+                                    ->where('user_id', auth()->id())
+                                    ->first();
+            
+            if (!$chatHistory) {
+                return response()->json(['message' => 'Chat history tidak ditemukan'], 404);
+            }
+            
+            // Ambil messages dari chat history
+            $messages = $chatHistory->messages;
+            
+            // Jika ini adalah pesan pertama/satu-satunya, hapus seluruh chat
+            if (count($messages) <= 1) {
+                $chatHistory->delete();
+                return response()->json([
+                    'success' => true,
+                    'chatDeleted' => true,
+                    'message' => 'Chat dihapus sepenuhnya'
+                ]);
+            }
+            
+            // Hapus pesan terakhir (pesan user)
+            array_pop($messages);
+            
+            // Jika masih ada pesan AI sebelumnya, gunakan sebagai last_message
+            // Jika tidak, gunakan string kosong
+            $lastMessage = '';
+            if (!empty($messages)) {
+                $lastMessage = end($messages)['content'] ?? '';
+            }
+            
+            // Update chat history
+            $chatHistory->update([
+                'messages' => $messages,
+                'last_message' => $lastMessage,
+                'last_interaction' => now()
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'chatDeleted' => false,
+                'message' => 'Pesan terakhir berhasil dihapus'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Delete Last Message Error', ['message' => $e->getMessage()]);
+            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
 }

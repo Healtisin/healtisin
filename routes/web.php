@@ -159,3 +159,6 @@ Route::prefix('partials')->group(function () {
 
 Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy.policy');
 Route::get('/terms-of-use', [TermsOfUseController::class, 'index'])->name('terms.of.use');
+
+Route::delete('/chat/delete-last-message/{chatId}', [ChatController::class, 'deleteLastMessage'])->middleware('auth');
+

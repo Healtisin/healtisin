@@ -150,12 +150,15 @@
                                         d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>
                             </button>
-                            <button
+                            <button id="sendButton"
                                 class="p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors"
-                                onclick="sendMessage()">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                onclick="handleSendButtonClick()">
+                                <svg id="sendIcon" class="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                                <svg id="cancelIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
@@ -272,6 +275,92 @@
             </div>
         `;
 
+        let isWaitingForResponse = false;
+        let currentRequest = null;
+        let messageBeingCancelled = false; // Flag untuk menandai proses pembatalan
+
+        function handleSendButtonClick() {
+            if (isWaitingForResponse) {
+                // Set flag pembatalan
+                messageBeingCancelled = true;
+                
+                // Cancel request
+                if (currentRequest) {
+                    currentRequest.abort();
+                }
+                
+                // Remove loading message
+                const loadingElement = document.getElementById('loadingMessage');
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+                
+                // Kembalikan pesan terakhir ke chat input
+                const lastUserMessage = document.querySelector('#chatMessages > div:last-of-type:not(#loadingMessage)');
+                if (lastUserMessage && lastUserMessage.classList.contains('justify-end')) {
+                    // Ambil teks pesan dari elemen terakhir
+                    const messageText = lastUserMessage.querySelector('p').textContent;
+                    
+                    // Masukkan kembali ke chat input
+                    document.getElementById('chatInput').value = messageText;
+                    adjustTextareaHeight();
+                    
+                    // Hapus pesan yang dibatalkan dari chat
+                    lastUserMessage.remove();
+                    
+                    // Hapus pesan dari database jika ada chatId
+                    if (window.currentChatId) {
+                        deleteLastMessage(window.currentChatId);
+                    }
+                }
+                
+                // Reset button state
+                toggleSendButton(false);
+                
+                // Show notification
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Permintaan dibatalkan'
+                });
+                
+                // Reset flag pembatalan setelah semua proses selesai
+                setTimeout(() => {
+                    messageBeingCancelled = false;
+                }, 500);
+            } else {
+                // Send message
+                sendMessage();
+            }
+        }
+
+        function toggleSendButton(isWaiting) {
+            const sendIcon = document.getElementById('sendIcon');
+            const cancelIcon = document.getElementById('cancelIcon');
+            const sendButton = document.getElementById('sendButton');
+            
+            isWaitingForResponse = isWaiting;
+            
+            if (isWaiting) {
+                sendIcon.classList.add('hidden');
+                cancelIcon.classList.remove('hidden');
+                sendButton.classList.remove('bg-[#24b0ba]', 'hover:bg-[#1d8f98]');
+                sendButton.classList.add('bg-red-500', 'hover:bg-red-600');
+            } else {
+                sendIcon.classList.remove('hidden');
+                cancelIcon.classList.add('hidden');
+                sendButton.classList.add('bg-[#24b0ba]', 'hover:bg-[#1d8f98]');
+                sendButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+            }
+        }
+
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const messagesContainer = document.getElementById('chatMessages');
@@ -288,8 +377,20 @@
 
                 // Add loading message
                 messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
+                
+                // Change button to cancel
+                toggleSendButton(true);
 
                 try {
+                    // Create AbortController for cancellation
+                    const controller = new AbortController();
+                    currentRequest = controller;
+                    
+                    // Jika pesan sedang dibatalkan, jangan lanjutkan request
+                    if (messageBeingCancelled) {
+                        throw new Error('AbortError');
+                    }
+                    
                     const response = await fetch('/chat/send', {
                         method: 'POST',
                         headers: {
@@ -299,14 +400,24 @@
                         },
                         body: JSON.stringify({
                             message: message,
-                            chatId: window.currentChatId // Kirim currentChatId jika ada
-                        })
+                            chatId: window.currentChatId, // Kirim currentChatId jika ada
+                            cancelToken: controller.signal.toString() // Kirim token unik untuk identifikasi request
+                        }),
+                        signal: controller.signal
                     });
 
                     // Remove loading message
                     const loadingElement = document.getElementById('loadingMessage');
                     if (loadingElement) {
                         loadingElement.remove();
+                    }
+                    
+                    // Reset button state
+                    toggleSendButton(false);
+                    
+                    // Jika pesan sedang dibatalkan, jangan proses respons
+                    if (messageBeingCancelled) {
+                        throw new Error('AbortError');
                     }
 
                     if (!response.ok) {
@@ -315,6 +426,21 @@
                     }
 
                     const data = await response.json();
+                    
+                    // Jika pesan sedang dibatalkan, jangan tampilkan respons
+                    if (messageBeingCancelled) {
+                        // Hapus chat jika ini adalah chat baru
+                        if (!window.currentChatId && data.chatId) {
+                            fetch(`/chat/delete/${data.chatId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                }
+                            });
+                        }
+                        throw new Error('AbortError');
+                    }
 
                     // Add AI response with timestamp
                     const aiResponse = createAIMessageHtml(data.message);
@@ -332,8 +458,23 @@
                     await updateSidebar();
 
                 } catch (error) {
-                    console.error('Error:', error);
-                    showErrorMessage(error.message);
+                    // Reset button state
+                    toggleSendButton(false);
+                    
+                    // Only show error if it's not an abort error
+                    if (error.name !== 'AbortError' && error.message !== 'AbortError') {
+                        console.error('Error:', error);
+                        showErrorMessage(error.message);
+                    } else {
+                        console.log('Permintaan dibatalkan, tidak ada data yang disimpan');
+                        
+                        // Jika ini adalah chat baru dan permintaan dibatalkan,
+                        // pastikan tidak ada chat yang dibuat di database
+                        if (window.currentChatId) {
+                            // Hapus pesan terakhir
+                            deleteLastMessage(window.currentChatId);
+                        }
+                    }
                 }
             }
         }
@@ -725,9 +866,44 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+
+        // Fungsi untuk menghapus pesan terakhir dari database
+        async function deleteLastMessage(chatId) {
+            try {
+                const response = await fetch(`/chat/delete-last-message/${chatId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.message || 'Gagal menghapus pesan terakhir');
+                }
+                
+                const data = await response.json();
+                
+                // Jika chat dihapus sepenuhnya, reset currentChatId
+                if (data.chatDeleted) {
+                    window.currentChatId = null;
+                }
+                
+                // Update sidebar setelah pesan dihapus
+                await updateSidebar();
+                
+            } catch (error) {
+                console.error('Error deleting last message:', error);
+            }
+        }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+
+
