@@ -7,7 +7,8 @@
 
     <div class="flex-1 overflow-y-auto p-4 scrollbar-hide" style="max-height: calc(100vh - 96px);">
         <ul class="space-y-2">
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         🏦
@@ -17,10 +18,9 @@
                     </div>
                 </a>
             </li>
-        </ul>
-        <!-- <h3 class="text-sm font-medium text-gray-500 mb-4 sidebar-text">Navigation</h3> -->
-        <ul class="space-y-2">
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.users') ? 'active' : '' }}">
                 <a href="{{ route('admin.users') }}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📊
@@ -30,7 +30,8 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.transactions') ? 'active' : '' }}">
                 <a href="{{ route('admin.transactions') }}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         🏦
@@ -59,25 +60,26 @@
                 </button>
 
                 <div id="website-info-dropdown" class="hidden pl-11 mt-1 space-y-2 transition-all duration-200">
-                    <a href=""
-                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                         Description
                     </a>
-                    <a href=""
-                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                    <a href="#"
+                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Footer
                     </a>
-                    <a href=""
-                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                    <a href="#"
+                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Meta Data
                     </a>
-                    <a href=""
-                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                    <a href="#"
+                        class="block py-2 px-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Logo
                     </a>
                 </div>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('#') ? 'active' : '' }}">
                 <a href="#" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         💸
@@ -87,7 +89,8 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.payments') ? 'active' : '' }}">
                 <a href="{{ route('admin.payments') }}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅
@@ -97,7 +100,8 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.pricing') ? 'active' : '' }}">
                 <a href="{{ route('admin.pricing') }}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅
@@ -107,7 +111,8 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('admin.messages') ? 'active' : '' }}">
                 <a href="{{route('admin.messages')}}" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅
@@ -117,7 +122,8 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('#') ? 'active' : '' }}">
                 <a href="#" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅
@@ -127,13 +133,14 @@
                     </div>
                 </a>
             </li>
-            <li class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors">
+            <li
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors {{ Route::is('#') ? 'active' : '' }}">
                 <a href="#" class="flex items-center gap-3">
                     <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         📅
                     </span>
                     <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-900 truncate">Log Detail</p>
+                        <p class="text-sm font-medium text-gray-900 truncate">Log Detail</p>
                     </div>
                 </a>
             </li>
@@ -158,6 +165,26 @@
             arrow.classList.remove('rotate-180');
         }
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownItems = document.querySelectorAll('#website-info-dropdown a');
+        let isAnyItemActive = false;
+
+        dropdownItems.forEach(item => {
+            if (item.classList.contains('active')) {
+                isAnyItemActive = true;
+            }
+        });
+
+        // Jika ada item yang aktif, buka dropdown
+        if (isAnyItemActive) {
+            const dropdown = document.getElementById('website-info-dropdown');
+            const arrow = document.getElementById('website-info-arrow');
+
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+            isWebsiteInfoOpen = true;
+        }
+    });
 </script>
 
 <style>
@@ -180,5 +207,26 @@
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+
+    .active {
+        background-color: #24b0ba !important;
+        color: white !important;
+    }
+
+    .active .sidebar-text p {
+        color: white !important;
+    }
+
+    /* .sidebar-text a {
+        color: white !important;
+    } */
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    .transition-all {
+        transition: all 0.3s ease;
     }
 </style>
