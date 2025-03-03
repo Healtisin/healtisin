@@ -17,63 +17,54 @@ class ChatController extends Controller
         try {
             $message = $request->message;
             $user = auth()->user();
-            $chatId = $request->chatId; // Ambil chatId dari request
+            $chatId = $request->chatId;
 
-            \Log::info('sendMessage: chatId diterima dari request', ['chatId' => $chatId]); // Tambahkan log
-
-            $chatHistory = null;
+            // Jangan buat chat history baru sampai ada respons AI berhasil
+            $messages = [['role' => 'user', 'content' => $message]];
+            
+            // Proses dan simpan respons AI
+            $aiResponse = $this->getAIResponse($message);
+            
+            // Setelah mendapat respons AI, baru buat atau update chat history
             if ($chatId) {
-                // Cari riwayat obrolan yang ada berdasarkan chatId
                 $chatHistory = ChatHistory::where('id', $chatId)
                     ->where('user_id', $user->id)
                     ->first();
 
-                \Log::info('sendMessage: Hasil pencarian ChatHistory berdasarkan chatId', ['chatHistory' => $chatHistory]); // Tambahkan log
-
                 if (!$chatHistory) {
                     return response()->json(['status' => 'error', 'message' => 'Chat history tidak ditemukan'], 404);
                 }
-            }
 
-            if (!$chatHistory) {
-                // Buat chat history baru jika tidak ada chatId atau tidak ditemukan
-                $chatHistory = ChatHistory::create([
-                    'user_id' => $user->id,
-                    'title' => Str::limit($message, 50),
-                    'last_message' => $message,
-                    'messages' => [['role' => 'user', 'content' => $message]],
-                    'last_interaction' => now()
-                ]);
-                \Log::info('sendMessage: Chat history baru dibuat', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
-            } else {
                 // Update chat yang ada
                 $messages = $chatHistory->messages;
                 $messages[] = ['role' => 'user', 'content' => $message];
+                $messages[] = ['role' => 'assistant', 'content' => $aiResponse];
 
                 $chatHistory->update([
-                    'last_message' => $message,
+                    'last_message' => $aiResponse,
                     'messages' => $messages,
                     'last_interaction' => now()
                 ]);
-                \Log::info('sendMessage: Chat history yang ada diperbarui', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
+            } else {
+                // Buat chat history baru setelah ada respons AI
+                $chatHistory = ChatHistory::create([
+                    'user_id' => $user->id,
+                    'title' => Str::limit($message, 50),
+                    'last_message' => $aiResponse,
+                    'messages' => array_merge($messages, [['role' => 'assistant', 'content' => $aiResponse]]),
+                    'last_interaction' => now()
+                ]);
             }
-
-            // Proses dan simpan respons AI
-            $aiResponse = $this->getAIResponse($message);
-            $messages = $chatHistory->messages;
-            $messages[] = ['role' => 'assistant', 'content' => $aiResponse];
-
-            $chatHistory->update([
-                'messages' => $messages,
-                'last_message' => $aiResponse,
-                'last_interaction' => now()
-            ]);
-            \Log::info('sendMessage: Respons AI ditambahkan dan chat history diperbarui', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
 
             return response()->json([
                 'status' => 'success',
                 'message' => $aiResponse,
-                'chatId' => $chatHistory->id // Kirim chatId kembali ke client
+                'chatId' => $chatHistory->id,
+                'chatHistory' => [ // Tambahkan data untuk update sidebar
+                    'id' => $chatHistory->id,
+                    'title' => $chatHistory->title,
+                    'last_interaction' => $chatHistory->last_interaction->diffForHumans()
+                ]
             ]);
         } catch (\Exception $e) {
             \Log::error('Chat Error', ['message' => $e->getMessage()]);

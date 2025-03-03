@@ -367,7 +367,6 @@
             const message = input.value.trim();
 
             if (message) {
-                // Clear input
                 input.value = '';
                 adjustTextareaHeight();
 
@@ -382,11 +381,9 @@
                 toggleSendButton(true);
 
                 try {
-                    // Create AbortController for cancellation
                     const controller = new AbortController();
                     currentRequest = controller;
                     
-                    // Jika pesan sedang dibatalkan, jangan lanjutkan request
                     if (messageBeingCancelled) {
                         throw new Error('AbortError');
                     }
@@ -400,8 +397,7 @@
                         },
                         body: JSON.stringify({
                             message: message,
-                            chatId: window.currentChatId, // Kirim currentChatId jika ada
-                            cancelToken: controller.signal.toString() // Kirim token unik untuk identifikasi request
+                            chatId: window.currentChatId
                         }),
                         signal: controller.signal
                     });
@@ -412,10 +408,8 @@
                         loadingElement.remove();
                     }
                     
-                    // Reset button state
                     toggleSendButton(false);
                     
-                    // Jika pesan sedang dibatalkan, jangan proses respons
                     if (messageBeingCancelled) {
                         throw new Error('AbortError');
                     }
@@ -427,11 +421,9 @@
 
                     const data = await response.json();
                     
-                    // Jika pesan sedang dibatalkan, jangan tampilkan respons
                     if (messageBeingCancelled) {
-                        // Hapus chat jika ini adalah chat baru
                         if (!window.currentChatId && data.chatId) {
-                            fetch(`/chat/delete/${data.chatId}`, {
+                            await fetch(`/chat/delete/${data.chatId}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -442,41 +434,69 @@
                         throw new Error('AbortError');
                     }
 
-                    // Add AI response with timestamp
+                    // Add AI response
                     const aiResponse = createAIMessageHtml(data.message);
                     messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
 
-                    // Scroll to bottom
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                    // Update currentChatId jika ini chat baru
+                    // Update currentChatId
                     if (!window.currentChatId && data.chatId) {
                         window.currentChatId = data.chatId;
+                        
+                        // Update sidebar tanpa reload
+                        if (data.chatHistory) {
+                            addNewChatToSidebar(data.chatHistory);
+                        }
                     }
 
-                    // Update sidebar setelah pesan berhasil dikirim
-                    await updateSidebar();
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
                 } catch (error) {
-                    // Reset button state
                     toggleSendButton(false);
                     
-                    // Only show error if it's not an abort error
                     if (error.name !== 'AbortError' && error.message !== 'AbortError') {
                         console.error('Error:', error);
                         showErrorMessage(error.message);
                     } else {
-                        console.log('Permintaan dibatalkan, tidak ada data yang disimpan');
+                        console.log('Permintaan dibatalkan');
                         
-                        // Jika ini adalah chat baru dan permintaan dibatalkan,
-                        // pastikan tidak ada chat yang dibuat di database
                         if (window.currentChatId) {
-                            // Hapus pesan terakhir
                             deleteLastMessage(window.currentChatId);
                         }
                     }
                 }
             }
+        }
+
+        // Tambahkan fungsi untuk menambah chat baru ke sidebar
+        function addNewChatToSidebar(chatData) {
+            const chatHistoryContainer = document.querySelector('.chat-history');
+            const newChatHtml = `
+                <div class="relative group">
+                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                        onclick="loadChat(${chatData.id})">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0 sidebar-text">
+                                <p class="text-sm font-medium text-gray-900 truncate">${chatData.title}</p>
+                                <p class="text-xs text-gray-400">${chatData.last_interaction}</p>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="showDeleteChatModal(${chatData.id})"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-red-50 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+            chatHistoryContainer.insertAdjacentHTML('afterbegin', newChatHtml);
         }
 
         // Helper function untuk menampilkan pesan error
@@ -904,6 +924,7 @@
 </body>
 
 </html>
+
 
 
 
