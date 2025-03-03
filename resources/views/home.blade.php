@@ -918,12 +918,25 @@
                 console.error('Error deleting last message:', error);
             }
         }
+
+        // Tampilkan pesan pembuka saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            // Include welcome message
+            @include('partials.welcome-message')
+            
+            const welcomeMessageHtml = createAIMessageHtml(welcomeMessage);
+            messagesContainer.innerHTML = welcomeMessageHtml;
+        });
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+
 
 
 

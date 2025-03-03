@@ -59,4 +59,10 @@ return [
         'is3ds' => env('MIDTRANS_IS_3DS', true),
     ],
 
+    'deepseek' => [
+        'api_key' => env('DEEPSEEK_API_KEY'),
+        'model' => env('DEEPSEEK_MODEL', 'deepseek-chat'),
+        'base_url' => env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1'),
+    ],
+
 ];

@@ -74,33 +74,61 @@ class ChatController extends Controller
 
     private function getAIResponse($message)
     {
+        // Daftar kata kunci kesehatan
+        $healthKeywords = [
+            'sakit', 'nyeri', 'pusing', 'demam', 'batuk', 'flu', 'pilek',
+            'mual', 'muntah', 'diare', 'penyakit', 'gejala', 'obat',
+            'vitamin', 'vaksin', 'kesehatan', 'dokter', 'rumah sakit',
+            'medis', 'pengobatan', 'terapi', 'diet', 'nutrisi', 'olahraga'
+        ];
+
+        // Cek apakah pertanyaan mengandung kata kunci kesehatan
+        $isHealthRelated = false;
+        foreach ($healthKeywords as $keyword) {
+            if (stripos($message, $keyword) !== false) {
+                $isHealthRelated = true;
+                break;
+            }
+        }
+
+        if (!$isHealthRelated) {
+            return "Maaf, saya hanya dapat menjawab pertanyaan seputar kesehatan. Silakan ajukan pertanyaan terkait kesehatan, gejala penyakit, atau informasi medis umum.";
+        }
+
+        // Tambahkan konteks untuk AI
+        $systemPrompt = "Anda adalah asisten AI kesehatan bernama Healtisin. Berikan informasi medis umum tanpa memberikan diagnosis spesifik atau resep obat. Selalu ingatkan pengguna untuk berkonsultasi dengan dokter untuk masalah kesehatan serius.";
+        
+        // Panggil API Deepseek
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . config('services.gemini.api_key'), [
-            'contents' => [
+            'Authorization' => 'Bearer ' . config('services.deepseek.api_key'),
+        ])->post(config('services.deepseek.base_url') . '/chat/completions', [
+            'model' => config('services.deepseek.model'),
+            'messages' => [
                 [
-                    'parts' => [
-                        ['text' => $message]
-                    ]
+                    'role' => 'system',
+                    'content' => $systemPrompt
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $message
                 ]
             ],
-            'generationConfig' => [
-                'temperature' => 0.7,
-                'maxOutputTokens' => 1000,
-            ]
+            'temperature' => 0.7,
+            'max_tokens' => 1000,
         ]);
 
         if ($response->successful()) {
             $responseData = $response->json();
 
-            if (isset($responseData['candidates'][0]['content']['parts'][0]['text'])) {
-                return $responseData['candidates'][0]['content']['parts'][0]['text'];
+            if (isset($responseData['choices'][0]['message']['content'])) {
+                return $responseData['choices'][0]['message']['content'];
             }
 
             throw new \Exception('Format respons tidak valid');
         }
 
-        \Log::error('Gemini API Error', [
+        \Log::error('Deepseek API Error', [
             'status' => $response->status(),
             'response' => $response->json()
         ]);
