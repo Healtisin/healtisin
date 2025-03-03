@@ -16,7 +16,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $input = $request->get('login');
-        
+
         $credentials = [];
         $field = filter_var($input, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $credentials[$field] = $input;
@@ -25,15 +25,20 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            
-        // Periksa apakah ada parameter redirect
-        $redirectUrl = $request->input('redirect');
-        if ($redirectUrl) {
-            return redirect()->to($redirectUrl); // Redirect ke URL yang diminta
+
+            // Redirect berdasarkan role
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard'); // Redirect ke dashboard admin
+            }
+
+            // Periksa apakah ada parameter redirect
+            $redirectUrl = $request->input('redirect');
+            if ($redirectUrl) {
+                return redirect()->to($redirectUrl); // Redirect ke URL yang diminta
+            }
+
+            return redirect()->intended(route('home')); // Default redirect ke home
         }
-        
-        return redirect()->intended(route('home')); // Default redirect ke home
-    }
 
         return back()->withErrors([
             'login' => 'Username/email atau password salah, atau akun belum diaktivasi.',

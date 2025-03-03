@@ -66,4 +66,8 @@ class Kernel extends HttpKernel
     {
         $schedule->command('users:delete-inactive')->daily();
     }
+    protected $routeMiddleware = [
+        // ...
+        'admin' => \App\Http\Middleware\EnsureIsAdmin::class,
+    ];
 }
