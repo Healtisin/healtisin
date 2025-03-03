@@ -261,47 +261,71 @@ class PaymentController extends Controller
             'customer_email' => $request->email,
             'customer_phone' => $request->phone,
             'expired_at' => now()->addHours(24),
-            'payment_code' => $this->generatePaymentCode($request->payment_method),
         ]);
     
-    // Setup konfigurasi Midtrans
-    Config::$serverKey = config('services.midtrans.server_key');
-    Config::$isProduction = config('services.midtrans.is_production');
-    Config::$isSanitized = true;
-    Config::$is3ds = true;
-
-    // Buat parameter transaksi Midtrans
-    $transactionDetails = [
-        'order_id' => $payment->id, // ID pembayaran
-        'gross_amount' => $payment->amount, // Jumlah pembayaran
-    ];
-
-    $customerDetails = [
-        'first_name' => $payment->customer_name,
-        'email' => $payment->customer_email,
-        'phone' => $payment->customer_phone,
-    ];
-
-    $params = [
-        'transaction_details' => $transactionDetails,
-        'customer_details' => $customerDetails,
-    ];
-
-    // Generate Snap Token
-    try {
-        $snapToken = Snap::getSnapToken($params);
-        Log::info('Snap Token berhasil di-generate:', ['snap_token' => $snapToken]); // Log Snap Token
-    } catch (\Exception $e) {
-        Log::error('Gagal generate Snap Token:', ['error' => $e->getMessage()]); // Log error
-        return redirect()->back()->with('error', 'Gagal memproses pembayaran. Silakan coba lagi.');
+        // Setup konfigurasi Midtrans
+        Config::$serverKey = config('services.midtrans.server_key');
+        Config::$isProduction = config('services.midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+    
+        // Buat parameter transaksi Midtrans
+        $transactionDetails = [
+            'order_id' => $payment->id, // ID pembayaran
+            'gross_amount' => $payment->amount, // Jumlah pembayaran
+        ];
+    
+        $customerDetails = [
+            'first_name' => $payment->customer_name,
+            'email' => $payment->customer_email,
+            'phone' => $payment->customer_phone,
+        ];
+    
+        // Tentukan metode pembayaran yang diaktifkan
+        $enabledPayments = [];
+        $specificParams = [];
+    
+        // Jika metode pembayaran adalah e-wallet, arahkan ke QRIS
+        if (in_array($request->payment_method, ['gopay', 'ovo', 'dana', 'shopeepay', 'qris'])) {
+            $enabledPayments = ['qris', 'gopay', 'shopeepay', 'dana', 'ovo'];
+        } elseif (in_array($request->payment_method, ['bca', 'mandiri', 'bni'])) {
+            $enabledPayments = ['bank_transfer']; // Hanya aktifkan transfer bank
+            $specificParams['bank_transfer'] = [
+                'bank' => $request->payment_method, // Tentukan bank (BCA, Mandiri, atau BNI)
+            ];
+        } elseif ($request->payment_method === 'cc') {
+            $enabledPayments = ['credit_card']; // Hanya aktifkan kartu kredit
+        } else {
+            return redirect()->back()->with('error', 'Metode pembayaran tidak valid.');
+        }
+    
+        // Gabungkan parameter transaksi
+        $params = [
+            'transaction_details' => $transactionDetails,
+            'customer_details' => $customerDetails,
+            'enabled_payments' => $enabledPayments, // Batasi metode pembayaran
+        ];
+    
+        // Tambahkan parameter khusus jika ada
+        if (!empty($specificParams)) {
+            $params = array_merge($params, $specificParams);
+        }
+    
+        // Generate Snap Token
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            Log::info('Snap Token berhasil di-generate:', ['snap_token' => $snapToken]); // Log Snap Token
+        } catch (\Exception $e) {
+            Log::error('Gagal generate Snap Token:', ['error' => $e->getMessage()]); // Log error
+            return redirect()->back()->with('error', 'Gagal memproses pembayaran. Silakan coba lagi.');
+        }
+    
+        // Simpan Snap Token ke database
+        $payment->update(['snap_token' => $snapToken]);
+    
+        // Redirect ke halaman konfirmasi pembayaran
+        return redirect()->route('pricing.payment-confirmation', $payment->id);
     }
-
-    // Simpan Snap Token ke database
-    $payment->update(['snap_token' => $snapToken]);
-
-    // Redirect ke halaman konfirmasi pembayaran
-    return redirect()->route('pricing.payment-confirmation', $payment->id);
-}
 
 public function paymentConfirmation($id)
 {

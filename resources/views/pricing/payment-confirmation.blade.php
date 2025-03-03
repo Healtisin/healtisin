@@ -113,35 +113,33 @@
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const snapToken = "{{ $payment->snap_token }}";
-            console.log("Snap Token:", snapToken); // Cek apakah token tersedia
+document.addEventListener('DOMContentLoaded', function() {
+    const snapToken = "{{ $payment->snap_token }}";
+    console.log("Snap Token:", snapToken); // Debugging
 
-            if (snapToken) {
-                snap.pay(snapToken, {
-                    onSuccess: function(result) {
-                        alert("Pembayaran berhasil!"); // Tambahkan alert di sini
-                        console.log("Success:", result); // Debugging
-                        window.location.href = "{{ route('home') }}";
-                    },
-                    onPending: function(result) {
-                        alert("Pembayaran tertunda! Mohon selesaikan pembayaran."); // Tambahkan alert di sini
-                        console.log("Pending:", result);
-                        window.location.href = "{{ route('home') }}";
-                    },
-                    onError: function(result) {
-                        alert("Pembayaran gagal! Silakan coba lagi."); // Tambahkan alert di sini
-                        console.log("Error:", result);
-                        window.location.href = "{{ route('home') }}";
-                    },
-                    onClose: function() {
-                        alert('Anda menutup pop-up pembayaran tanpa menyelesaikan transaksi.');
-                    }
-                });
-            } else {
-                alert('Snap Token tidak ditemukan. Silakan coba lagi.');
-            }
-        });
+    if (!snapToken) {
+        alert('Snap Token tidak ditemukan. Silakan coba lagi.');
+        return;
+    }
+
+    snap.pay(snapToken, {
+        onSuccess: function(result) {
+            console.log("Success:", result);
+            window.location.href = "{{ route('home') }}";
+        },
+        onPending: function(result) {
+            console.log("Pending:", result);
+            window.location.href = "{{ route('home') }}";
+        },
+        onError: function(result) {
+            console.log("Error:", result);
+            window.location.href = "{{ route('home') }}";
+        },
+        onClose: function() {
+            console.log('Popup pembayaran ditutup.');
+        }
+    });
+});
     </script>
     <script>
         // Countdown Timer
