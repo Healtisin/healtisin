@@ -6,113 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
-
-    <style>
-        /* Scrollbar untuk Webkit (Chrome, Safari, Edge) */
-        #chatMessages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #chatMessages::-webkit-scrollbar-track {
-            border-radius: 10px;
-            background-color: #f8f8f8;
-            /* Warna background lebih terang/samar */
-            margin: 5px;
-        }
-
-        #chatMessages::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(156, 163, 175, 0.5);
-            /* Warna thumb abu-abu transparan */
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            min-height: 50px;
-            transition: background .2s;
-        }
-
-        #chatMessages::-webkit-scrollbar-thumb:hover {
-            background: rgba(156, 163, 175, 0.7);
-            /* Warna hover sedikit lebih gelap */
-            border: 2px solid transparent;
-        }
-
-        /* Scrollbar untuk Firefox */
-        #chatMessages {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-        }
-
-        #chatMessages:hover {
-            scrollbar-color: rgba(156, 163, 175, 0.7) transparent;
-        }
-
-        /* Styling scrollbar untuk Webkit browsers (Chrome, Safari, Edge) */
-        #chatInput::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        #chatInput::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #chatInput::-webkit-scrollbar-thumb {
-            background: rgba(156, 163, 175, 0.5);
-            border-radius: 4px;
-        }
-
-        #chatInput::-webkit-scrollbar-thumb:hover {
-            background: rgba(156, 163, 175, 0.7);
-        }
-
-        /* Styling scrollbar untuk Firefox */
-        #chatInput {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-        }
-
-        /* Styling untuk textarea */
-        #chatInput {
-            min-height: 56px;
-            /* Tinggi minimum untuk 1 baris (24px line-height + 32px padding) */
-            max-height: 128px;
-            /* Tinggi maksimum untuk 4 baris ((24px × 4) + 32px padding) */
-            padding: 16px 148px 16px 24px;
-            line-height: 24px;
-            font-size: 16px;
-            overflow-y: auto;
-            resize: none;
-            box-sizing: border-box;
-            display: block;
-            position: relative;
-        }
-
-        /* Efek fade untuk konten yang tersembunyi */
-        #chatInput.overflow::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9) 70%);
-            pointer-events: none;
-        }
-
-        /* Menyembunyikan scrollbar untuk Chrome, Safari dan Opera */
-        #chatInput::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Menyembunyikan scrollbar untuk IE, Edge dan Firefox */
-        #chatInput {
-            -ms-overflow-style: none;
-            /* IE dan Edge */
-            scrollbar-width: none;
-            /* Firefox */
-            line-height: 20px;
-            /* Jarak antar baris */
-        }
-    </style>
+    @vite('resources/js/app.js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -767,8 +661,7 @@
 
             // Cek apakah penambahan enter akan melebihi batas
             if (e.key === 'Enter' && !e.shiftKey) {
-                const futureText = this.value.slice(0, this.selectionStart) + '\n' + this.value.slice(this
-                    .selectionEnd);
+                const futureText = this.value.slice(0, this.selectionStart) + '\n' + this.value.slice(this.selectionEnd);
                 const futureHeight = getTextHeight(futureText, textWidth, lineHeight) + padding;
 
                 if (futureHeight > maxHeight) {
@@ -1240,16 +1133,20 @@
             // Gunakan Clipboard API untuk menyalin teks
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
-                    // Tampilkan notifikasi berhasil
-                    const toast = document.createElement('div');
-                    toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
-                    toast.innerText = 'Teks berhasil disalin!';
-                    document.body.appendChild(toast);
+                    // Tampilkan notifikasi berhasil menggunakan SweetAlert2
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        iconColor: '#24b0ba'
+                    });
                     
-                    // Hilangkan notifikasi setelah 2 detik
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 2000);
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Teks berhasil disalin!'
+                    });
                 })
                 .catch(err => {
                     console.error('Gagal menyalin teks: ', err);
@@ -1262,14 +1159,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-

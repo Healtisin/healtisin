@@ -229,15 +229,6 @@
         display: none;
     }
 
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
     .active {
         background-color: #24b0ba !important;
         color: white !important;
