@@ -43,12 +43,15 @@
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Email</th>
-                            <th
+                            <!-- <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Password</th>
+                                Password</th> -->
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Status</th>
+                                <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Role</th>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Action</th>
@@ -82,9 +85,9 @@
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 {{ $user->email }}
                             </td>
-                            <td class="px-2 py-5 border-b border-gray-200 bg-white text-sm">
+                            <!-- <td class="px-2 py-5 border-b border-gray-200 bg-white text-sm">
                                 {{ $user->password }}
-                            </td>
+                            </td> -->
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 @if($user->is_active)
                                 <span
@@ -93,6 +96,9 @@
                                 <span
                                     class="px-2 py-1 text-sm font-semibold text-red-800 bg-red-200 rounded-full">Inactive</span>
                                 @endif
+                            </td>
+                            <td class="px-2 py-5 border-b border-gray-200 bg-white text-sm">
+                                {{ $user->role }}
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center space-x-2">
                                 <a href="{{ route('admin.users.edit', $user->id) }}"

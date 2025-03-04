@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail // Implementasikan di sini
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'subscription_status',
         'phone',
         'is_active',
+        'role',
         'email_verified_at'
     ];
 
@@ -40,7 +42,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        // Otomatis buat remember token saat user dibuat
+        static::creating(function ($user) {
+            $user->remember_token = Str::random(60); // Generate token acak
+        });
+    }
     /**
      * Get the attributes that should be cast.
      *

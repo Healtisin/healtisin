@@ -19,6 +19,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsOfUseController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', function () {
     return view('welcome');
@@ -95,6 +96,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
     Route::post('/pricing/payment/{payment}/upload-proof', [PaymentController::class, 'uploadPaymentProof'])
         ->name('pricing.upload-proof');
+    // Route untuk menangani klik link verifikasi email
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill(); // Verifikasi email
+        return redirect('/login')->with('success', 'Email verified successfully!');
+    })->middleware(['auth', 'signed'])->name('verification.verify');
+    // Route untuk aktivasi akun
+    Route::get('/activate-account/{id}', [UserController::class, 'activateAccount'])
+        ->name('activate.account');
 });
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
 Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
@@ -166,4 +175,3 @@ Route::post('/chat/regenerate', [ChatController::class, 'regenerate'])->name('ch
 
 // Route untuk edit message
 Route::post('/chat/edit-message', [App\Http\Controllers\ChatController::class, 'editMessage'])->middleware('auth');
-

@@ -41,7 +41,15 @@
                             class="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
                             placeholder="Enter email address">
                     </div>
-
+                    <!-- Field: Role -->
+                    <div class="space-y-4">
+                        <label for="role" class="block text-base font-medium text-gray-700">Role</label>
+                        <select name="role" id="role"
+                            class="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
                     <!-- Field: Status -->
                     <div class="space-y-4">
                         <label for="status" class="block text-base font-medium text-gray-700">Status</label>
