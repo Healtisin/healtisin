@@ -162,3 +162,8 @@ Route::get('/terms-of-use', [TermsOfUseController::class, 'index'])->name('terms
 
 Route::delete('/chat/delete-last-message/{chatId}', [ChatController::class, 'deleteLastMessage'])->middleware('auth');
 
+Route::post('/chat/regenerate', [ChatController::class, 'regenerate'])->name('chat.regenerate');
+
+// Route untuk edit message
+Route::post('/chat/edit-message', [App\Http\Controllers\ChatController::class, 'editMessage'])->middleware('auth');
+

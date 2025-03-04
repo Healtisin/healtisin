@@ -279,6 +279,11 @@
         let currentRequest = null;
         let messageBeingCancelled = false; // Flag untuk menandai proses pembatalan
 
+        // Tambahkan variabel untuk mode edit
+        let isEditing = false;
+        let editingMessageId = null;
+        let originalMessage = '';
+
         function handleSendButtonClick() {
             if (isWaitingForResponse) {
                 // Set flag pembatalan
@@ -367,6 +372,121 @@
             const message = input.value.trim();
 
             if (message) {
+                // Jika sedang mode edit
+                if (isEditing && editingMessageId) {
+                    // Jika pesan tidak berubah, batalkan edit
+                    if (message === originalMessage) {
+                        cancelEditMode(editingMessageId.querySelector('button[title="Batal edit"]'));
+                        return;
+                    }
+                    
+                    // Hapus pesan lama dari tampilan
+                    const oldMessageText = editingMessageId.querySelector('p');
+                    if (oldMessageText) {
+                        oldMessageText.textContent = message;
+                    }
+                    
+                    // Reset input dan mode edit
+                    input.value = '';
+                    adjustTextareaHeight();
+                    
+                    // Hapus respons AI setelah pesan yang diedit
+                    const allMessages = document.querySelectorAll('#chatMessages > div');
+                    const editedIndex = getMessageIndex(editingMessageId);
+                    console.log('Editing message at index:', editedIndex);
+                    
+                    // Hapus semua pesan setelah pesan yang diedit (respons AI)
+                    if (editedIndex >= 0 && editedIndex < allMessages.length - 1) {
+                        for (let i = allMessages.length - 1; i > editedIndex; i--) {
+                            allMessages[i].remove();
+                        }
+                    }
+                    
+                    // Tambahkan loading message
+                    messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
+                    
+                    // Change button to cancel
+                    toggleSendButton(true);
+                    
+                    // Kirim ke server jika ada chat ID
+                    if (window.currentChatId) {
+                        try {
+                            // Log data yang akan dikirim untuk debugging
+                            console.log('Sending edit request with data:', {
+                                chatId: window.currentChatId,
+                                messageIndex: editedIndex,
+                                newContent: message
+                            });
+                            
+                            const response = await fetch('/chat/edit-message', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    chatId: window.currentChatId,
+                                    messageIndex: editedIndex,
+                                    newContent: message
+                                })
+                            });
+                            
+                            // Log response status untuk debugging
+                            console.log('Edit response status:', response.status);
+                            
+                            const data = await response.json();
+                            console.log('Edit response data:', data);
+                            
+                            if (!response.ok) {
+                                throw new Error(data.message || 'Gagal mengedit pesan');
+                            }
+                            
+                            // Hapus loading message
+                            const loadingElement = document.getElementById('loadingMessage');
+                            if (loadingElement) {
+                                loadingElement.remove();
+                            }
+                            
+                            // Tambahkan respons AI baru jika ada
+                            if (data.aiResponse) {
+                                const aiResponse = createAIMessageHtml(data.aiResponse);
+                                messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+                            }
+                            
+                            // Reset status tombol kirim
+                            toggleSendButton(false);
+                            
+                            // Scroll ke bawah
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                            
+                        } catch (error) {
+                            console.error('Error editing message:', error);
+                            showErrorMessage(error.message);
+                            toggleSendButton(false);
+                            
+                            // Hapus loading message jika error
+                            const loadingElement = document.getElementById('loadingMessage');
+                            if (loadingElement) {
+                                loadingElement.remove();
+                            }
+                        }
+                    }
+                    
+                    // Reset mode edit
+                    const editButton = editingMessageId.querySelector('button[title="Batal edit"]');
+                    if (editButton) {
+                        cancelEditMode(editButton);
+                    } else {
+                        isEditing = false;
+                        editingMessageId = null;
+                        originalMessage = '';
+                    }
+                    
+                    return;
+                }
+                
+                // Proses pengiriman pesan normal (tidak dalam mode edit)
                 input.value = '';
                 adjustTextareaHeight();
 
@@ -704,22 +824,33 @@
             });
 
             return `
-                <div class="flex justify-end gap-2 items-start mb-4">
-                    <div class="flex flex-col items-end max-w-[75%]">
-                        <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
-                            <div class="flex flex-col">
-                                <p class="break-words whitespace-pre-wrap">${message.content || message}</p>
-                                <div class="flex justify-end">
-                                    <span class="text-xs text-white/70 mt-1">${timestamp}</span>
+                <div class="flex flex-col gap-2 mb-4">
+                    <div class="flex justify-end gap-2 items-start">
+                        <div class="flex flex-col items-end max-w-[75%]">
+                            <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
+                                <div class="flex flex-col">
+                                    <p class="break-words whitespace-pre-wrap">${message.content || message}</p>
+                                    <div class="flex justify-end">
+                                        <span class="text-xs text-white/70 mt-1">${timestamp}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            ${Auth.user.profile_photo 
+                                ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile" class="w-full h-full object-cover">` 
+                                : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
+                            }
+                        </div>
                     </div>
-                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        ${Auth.user.profile_photo 
-                            ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile" class="w-full h-full object-cover">` 
-                            : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
-                        }
+                    <div class="flex justify-end mr-14">
+                        <button onclick="editUserMessage(this)" 
+                            class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                            title="Edit message">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             `;
@@ -734,19 +865,39 @@
                 minute: '2-digit'
             });
 
+            // Cek apakah ini pesan pembuka
+            const isWelcomeMessage = (message.content || message)?.includes('Hai') && 
+                                    (message.content || message)?.includes('saya Healtisin') && 
+                                    (message.content || message)?.includes('Saya dapat membantu Anda dengan:');
+            
             return `
-                <div class="flex justify-start gap-2 items-start mb-4">
-                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col max-w-[75%]">
-                        <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                            <p class="text-gray-800 break-words whitespace-pre-wrap">${message.content || message}</p>
-                            <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
+                <div class="flex flex-col gap-2 mb-4">
+                    <div class="flex justify-start gap-2 items-start">
+                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col max-w-[75%]">
+                            <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                                <p class="text-gray-800 break-words whitespace-pre-wrap">${message.content || message}</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-xs text-gray-400">${timestamp}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    ${!isWelcomeMessage ? `
+                        <div class="flex justify-start ml-14">
+                            <button onclick="regenerateResponse()" 
+                                class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                                title="Regenerate response">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
@@ -945,12 +1096,172 @@
             const welcomeMessageHtml = createAIMessageHtml(welcomeMessage);
             messagesContainer.innerHTML = welcomeMessageHtml;
         });
+
+        async function regenerateResponse() {
+            if (isWaitingForResponse) return;
+            
+            try {
+                // Cek apakah ada chat history
+                if (!window.currentChatId) {
+                    throw new Error('Tidak dapat meregenerasi pesan pembuka');
+                }
+                
+                // Ambil semua pesan dalam chat
+                const messages = document.querySelectorAll('#chatMessages > div');
+                let lastUserMessage = null;
+                
+                // Cari pesan user terakhir
+                for (let i = messages.length - 1; i >= 0; i--) {
+                    const message = messages[i];
+                    if (message.querySelector('.flex.justify-end')) {
+                        lastUserMessage = message;
+                        break;
+                    }
+                }
+                
+                if (!lastUserMessage) {
+                    throw new Error('Tidak dapat menemukan pesan terakhir user');
+                }
+                
+                const messageText = lastUserMessage.querySelector('p').textContent;
+                
+                // Hapus pesan AI terakhir
+                const lastMessage = messages[messages.length - 1];
+                if (!lastMessage.querySelector('.flex.justify-end')) {
+                    lastMessage.remove();
+                }
+                
+                // Tambahkan loading message
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.insertAdjacentHTML('beforeend', loadingMessage);
+                
+                // Set status menunggu
+                toggleSendButton(true);
+                
+                // Kirim request regenerate
+                const response = await fetch('/chat/regenerate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: messageText,
+                        chatId: window.currentChatId
+                    })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.message || 'Gagal meregenerasi jawaban');
+                }
+
+                const data = await response.json();
+                
+                // Hapus loading message
+                const loadingElement = document.getElementById('loadingMessage');
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+                
+                // Tambahkan respons baru
+                const aiResponse = createAIMessageHtml(data.message);
+                messagesContainer.insertAdjacentHTML('beforeend', aiResponse);
+                
+                // Reset status
+                toggleSendButton(false);
+                
+                // Scroll ke bawah
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            } catch (error) {
+                console.error('Error regenerating response:', error);
+                showErrorMessage(error.message);
+                toggleSendButton(false);
+            }
+        }
+
+        function getMessageIndex(messageElement) {
+            const messages = document.querySelectorAll('#chatMessages > div');
+            const visibleMessages = Array.from(messages).filter(msg => !msg.id || msg.id !== 'loadingMessage');
+            return Array.from(visibleMessages).indexOf(messageElement);
+        }
+
+        // Tambahkan fungsi pengecek konsol untuk debug
+        function logMessageIndices() {
+            const messages = document.querySelectorAll('#chatMessages > div');
+            console.log('Total messages in DOM:', messages.length);
+            messages.forEach((msg, idx) => {
+                const isUser = msg.querySelector('.flex.justify-end') !== null;
+                const text = msg.querySelector('p')?.textContent.substring(0, 30) + '...';
+                console.log(`Message ${idx}: ${isUser ? 'User' : 'AI'} - ${text}`);
+            });
+        }
+
+        // Update fungsi untuk mengedit pesan
+        async function editUserMessage(button) {
+            const messageContainer = button.closest('.flex.flex-col.gap-2');
+            const messageText = messageContainer.querySelector('p').textContent;
+            const messageElement = messageContainer.closest('#chatMessages > div');
+            
+            // Simpan pesan asli
+            originalMessage = messageText;
+            
+            // Masukkan pesan ke input
+            document.getElementById('chatInput').value = messageText;
+            adjustTextareaHeight();
+            
+            // Hitung dan log indeks pesan untuk debugging
+            const messageIndex = getMessageIndex(messageElement);
+            console.log('Edit message at index:', messageIndex);
+            console.log('Original message:', originalMessage);
+            
+            // Set state editing
+            isEditing = true;
+            editingMessageId = messageElement;
+            
+            // Ubah tombol edit menjadi tombol batal
+            button.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            `;
+            button.title = "Batal edit";
+            button.onclick = function() { cancelEditMode(button); };
+            
+            // Fokus ke input
+            document.getElementById('chatInput').focus();
+        }
+
+        function cancelEditMode(button) {
+            // Reset input
+            document.getElementById('chatInput').value = '';
+            adjustTextareaHeight();
+            
+            // Reset state editing
+            isEditing = false;
+            editingMessageId = null;
+            originalMessage = '';
+            
+            // Kembalikan tombol ke bentuk edit
+            button.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            `;
+            button.title = "Edit message";
+            button.onclick = function() { editUserMessage(button); };
+        }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+
+
 
 
 

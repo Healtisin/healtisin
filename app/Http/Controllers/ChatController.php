@@ -13,6 +13,7 @@ use App\Exceptions\AIServiceException;
 use App\Constants\HealthKeywords;
 use App\Constants\Greetings;
 use App\Constants\QuestionPatterns;
+use Exception;
 
 class ChatController extends Controller
 {
@@ -255,7 +256,7 @@ class ChatController extends Controller
         } else {
             $basePrompt = "Anda adalah asisten kesehatan AI. Berikan jawaban yang mengalir dengan struktur berikut (tanpa menampilkan label section):
 
-            1. Mulai dengan tanggapan empatik dan personal terhadap keluhan/pertanyaan pengguna (1-2 kalimat). Lanjutkan dengan penjelasan ringkas tentang kondisi atau topik yang ditanyakan (2-3 kalimat)
+            1. Mulai dengan memberikan feedback yang sesuai (Bersifat opsional dan jika digunakan buat dalam 1-2 kalimat). Lanjutkan dengan penjelasan ringkas tentang kondisi atau topik yang ditanyakan (Wajib dan buat dalam 2-3 kalimat)
             
             2. Ajukan 2-3 pertanyaan yang relevan untuk memahami kondisi lebih baik, format:
                 1) Pertanyaan pertama?
@@ -472,7 +473,150 @@ class ChatController extends Controller
         }
         return 500; // Internal Server Error
     }
+
+    public function regenerate(Request $request)
+    {
+        try {
+            $message = $request->message;
+            $chatId = $request->chatId;
+            
+            // Validasi chat history
+            $chatHistory = ChatHistory::where('id', $chatId)
+                ->where('user_id', auth()->id())
+                ->first();
+                
+            if (!$chatHistory || empty($chatHistory->messages)) {
+                throw new \Exception('Tidak dapat menemukan riwayat chat');
+            }
+            
+            // Ambil pesan terakhir user dari messages array
+            $messages = $chatHistory->messages;
+            $lastUserMessageIndex = null;
+            
+            // Cari pesan user terakhir dari array messages
+            for ($i = count($messages) - 1; $i >= 0; $i--) {
+                if ($messages[$i]['role'] === 'user') {
+                    $lastUserMessageIndex = $i;
+                    break;
+                }
+            }
+            
+            if ($lastUserMessageIndex === null) {
+                throw new \Exception('Tidak dapat menemukan pesan terakhir user');
+            }
+            
+            $lastUserMessage = $messages[$lastUserMessageIndex]['content'];
+            
+            // Generate respons AI baru
+            $newResponse = $this->getAIResponse($lastUserMessage, $chatId);
+            
+            // Update chat history
+            if ($lastUserMessageIndex < count($messages) - 1) {
+                // Hapus respons AI sebelumnya
+                array_pop($messages);
+            }
+            
+            // Tambahkan respons baru
+            $messages[] = ['role' => 'assistant', 'content' => $newResponse];
+            
+            $chatHistory->update([
+                'last_message' => $newResponse,
+                'messages' => $messages,
+                'last_interaction' => now()
+            ]);
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => $newResponse
+            ]);
+            
+        } catch (\Exception $e) {
+            return $this->handleError($e, $request, 'Gagal meregenerasi jawaban');
+        }
+    }
+
+    public function editMessage(Request $request)
+    {
+        try {
+            $chatId = $request->chatId;
+            $messageIndex = $request->messageIndex;
+            $newContent = $request->newContent;
+            
+            // Validasi input
+            if (!$chatId || !isset($messageIndex) || !$newContent) {
+                throw new Exception('Parameter tidak lengkap');
+            }
+            
+            $chatHistory = ChatHistory::where('id', $chatId)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+                
+            $messages = $chatHistory->messages;
+            
+            // Debug log untuk melihat nilai messageIndex dan messages
+            \Log::info('Edit Message Request', [
+                'chatId' => $chatId,
+                'messageIndex' => $messageIndex,
+                'newContent' => $newContent,
+                'messages_count' => count($messages)
+            ]);
+            
+            // Update pesan
+            if (isset($messages[$messageIndex]) && $messages[$messageIndex]['role'] === 'user') {
+                // Simpan konten asli
+                $originalContent = $messages[$messageIndex]['content'];
+                
+                // Jika konten sama, tidak perlu diupdate
+                if ($originalContent === $newContent) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Tidak ada perubahan pada pesan'
+                    ]);
+                }
+                
+                // Update pesan user
+                $messages[$messageIndex]['content'] = $newContent;
+                
+                // Hapus semua pesan setelah pesan yang diedit
+                $messages = array_slice($messages, 0, $messageIndex + 1);
+                
+                // Generate respons AI baru
+                $newAIResponse = $this->getAIResponse($newContent, $chatId);
+                
+                // Tambahkan respons AI baru
+                $messages[] = ['role' => 'assistant', 'content' => $newAIResponse];
+                
+                // Update chat history
+                $chatHistory->update([
+                    'messages' => $messages,
+                    'last_message' => $newAIResponse,
+                    'last_interaction' => now()
+                ]);
+                
+                return response()->json([
+                    'status' => 'success',
+                    'aiResponse' => $newAIResponse
+                ]);
+            }
+            
+            throw new Exception('Pesan tidak ditemukan atau bukan pesan user');
+            
+        } catch (Exception $e) {
+            \Log::error('Edit Message Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 }
+
+
+
 
 
 
