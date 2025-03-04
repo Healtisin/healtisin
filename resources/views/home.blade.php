@@ -1189,7 +1189,7 @@
             const chatMessages = document.getElementById('chatMessages');
             if (chatMessages) {
                 // Tambahkan padding kanan untuk memberi jarak
-                chatMessages.style.paddingRight = '20px';
+                chatMessages.style.paddingRight = '16px';
                 
                 // Pastikan posisi relative agar Perfect Scrollbar bekerja dengan baik
                 chatMessages.style.position = 'relative';
