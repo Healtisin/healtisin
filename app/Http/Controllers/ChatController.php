@@ -73,7 +73,7 @@ class ChatController extends Controller
                 'status' => 'success',
                 'message' => $aiResponse,
                 'chatId' => $chatHistory->id,
-                'chatHistory' => [ // Tambahkan data untuk update sidebar
+                'chatHistory' => [
                     'id' => $chatHistory->id,
                     'title' => $chatHistory->title,
                     'last_interaction' => $chatHistory->last_interaction->diffForHumans()
@@ -81,7 +81,10 @@ class ChatController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('Chat Error', ['message' => $e->getMessage()]);
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            if ($request->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            }
+            return view('errors.ai-service', ['message' => 'Terjadi kesalahan saat berkomunikasi dengan AI']);
         }
     }
 
@@ -304,10 +307,10 @@ class ChatController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('show: Gagal mengambil riwayat obrolan', ['chatId' => $id, 'error' => $e->getMessage()]); // Tambahkan log error
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 404);
+            if (request()->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 404);
+            }
+            return view('errors.ai-service', ['message' => 'Tidak dapat mengakses riwayat chat']);
         }
     }
 
@@ -330,10 +333,7 @@ class ChatController extends Controller
             $chatHistory = ChatHistory::findOrFail($id);
 
             if ($chatHistory->user_id !== auth()->id()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Anda tidak memiliki akses untuk menghapus chat ini'
-                ], 403);
+                throw new \Exception('Anda tidak memiliki akses untuk menghapus chat ini');
             }
 
             $chatHistory->delete();
@@ -343,18 +343,12 @@ class ChatController extends Controller
                 'status' => 'success',
                 'message' => 'Chat berhasil dihapus'
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            \Log::error('deleteChat: Chat tidak ditemukan', ['chatId' => $id]);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Riwayat chat tidak ditemukan'
-            ], 404);
         } catch (\Exception $e) {
             \Log::error('deleteChat: Gagal menghapus chat', ['chatId' => $id, 'error' => $e->getMessage()]);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat menghapus chat'
-            ], 500);
+            if (request()->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            }
+            return view('errors.ai-service', ['message' => 'Gagal menghapus riwayat chat']);
         }
     }
 
@@ -364,7 +358,7 @@ class ChatController extends Controller
             // Ambil chat history berdasarkan ID
             $chatHistory = ChatHistory::where('id', $chatId)
                                     ->where('user_id', auth()->id())
-                                    ->first();
+                                    ->firstOrFail();
             
             if (!$chatHistory) {
                 return response()->json(['message' => 'Chat history tidak ditemukan'], 404);
@@ -408,7 +402,10 @@ class ChatController extends Controller
             
         } catch (\Exception $e) {
             \Log::error('Delete Last Message Error', ['message' => $e->getMessage()]);
-            return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+            if (request()->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 500);
+            }
+            return view('errors.ai-service', ['message' => 'Gagal menghapus pesan terakhir']);
         }
     }
 
@@ -432,6 +429,11 @@ class ChatController extends Controller
         return false;
     }
 }
+
+
+
+
+
 
 
 

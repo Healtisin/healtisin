@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layanan AI Tidak Tersedia - Healtisin AI</title>
+    <meta name="description" content="Halaman error layanan AI Healtisin">
+    
+    {{-- Tambahkan status code untuk SEO --}}
+    @if(isset($exception))
+        <meta name="robots" content="noindex">
+    @endif
+    
+    <title>{{ isset($exception) ? "{$exception->getStatusCode()} |" : "" }} Layanan AI Tidak Tersedia - Healtisin AI</title>
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-50">
@@ -15,12 +22,46 @@
         </div>
 
         <div class="text-center max-w-lg">
+            {{-- Tampilkan status code jika tersedia --}}
+            @if(isset($exception))
+                <p class="text-5xl font-bold text-[#24b0ba] mb-4">
+                    {{ $exception->getStatusCode() }}
+                </p>
+            @endif
+
             <h1 class="text-3xl font-bold text-gray-900 mb-4">
-                Oops! Layanan AI Sedang Bermasalah
+                @if(isset($exception))
+                    @switch($exception->getStatusCode())
+                        @case(404)
+                            Oops! Halaman Tidak Ditemukan
+                            @break
+                        @case(500)
+                            Oops! Terjadi Kesalahan Server
+                            @break
+                        @case(503)
+                            Oops! Layanan Sedang Dalam Pemeliharaan
+                            @break
+                        @default
+                            Oops! Layanan AI Sedang Bermasalah
+                    @endswitch
+                @else
+                    Oops! Layanan AI Sedang Bermasalah
+                @endif
             </h1>
+
             <p class="text-lg text-gray-600 mb-8">
-                {{ $message }}
+                {{ $message ?? $exception->getMessage() ?? 'Terjadi kesalahan yang tidak diketahui' }}
             </p>
+
+            {{-- Tambahkan saran tindakan --}}
+            <div class="text-gray-600 mb-8">
+                <p>Silakan coba:</p>
+                <ul class="mt-2 space-y-2">
+                    <li>• Muat ulang halaman</li>
+                    <li>• Periksa koneksi internet Anda</li>
+                    <li>• Kembali beberapa saat lagi</li>
+                </ul>
+            </div>
 
             <div class="space-y-4 mb-8">
                 <a href="{{ url()->previous() !== url()->current() ? url()->previous() : '/' }}" 
@@ -32,6 +73,14 @@
                     Kembali
                 </a>
             </div>
+
+            {{-- Tambahkan contact support --}}
+            <p class="text-sm text-gray-500">
+                Jika masalah berlanjut, silakan hubungi 
+                <a href="mailto:support@healtisin.com" class="text-[#24b0ba] hover:underline">
+                    support@healtisin.com
+                </a>
+            </p>
         </div>
     </div>
 </body>
