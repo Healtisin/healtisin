@@ -14,11 +14,13 @@ class ChatHistory extends Model
         'title',
         'last_message',
         'messages',
-        'last_interaction'
+        'last_interaction',
+        'context'
     ];
 
     protected $casts = [
         'messages' => 'array',
+        'context' => 'array',
         'last_interaction' => 'datetime'
     ];
 

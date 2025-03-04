@@ -36,7 +36,7 @@ class ChatController extends Controller
             $messages = [['role' => 'user', 'content' => $message]];
             
             // Proses dan simpan respons AI
-            $aiResponse = $this->getAIResponse($message);
+            $aiResponse = $this->getAIResponse($message, $chatId);
             
             // Setelah mendapat respons AI, baru buat atau update chat history
             if ($chatId) {
@@ -85,21 +85,33 @@ class ChatController extends Controller
         }
     }
 
-    private function getAIResponse($message)
+    private function getAIResponse($message, $chatId = null)
     {
         try {
-            // Periksa apakah pertanyaan terkait kesehatan
-            if (!$this->isHealthRelated($message)) {
-                $greetingResponse = "Halo! Saya adalah asisten kesehatan AI yang siap membantu Anda dengan informasi seputar kesehatan. Silakan tanyakan tentang gejala penyakit, informasi medis umum, atau topik kesehatan lainnya. Apa yang ingin Anda ketahui?";
-                return $greetingResponse;
+            // Dapatkan konteks percakapan sebelumnya jika ada
+            $conversationContext = '';
+            if ($chatId) {
+                $chatHistory = ChatHistory::find($chatId);
+                if ($chatHistory) {
+                    // Ambil 3 pertukaran pesan terakhir untuk konteks
+                    $recentMessages = array_slice($chatHistory->messages, -6);
+                    foreach ($recentMessages as $msg) {
+                        $conversationContext .= "{$msg['role']}: {$msg['content']}\n";
+                    }
+                }
             }
-            
-            // Dapatkan dataset Indonesia yang relevan dengan pertanyaan
+
+            // Dapatkan dataset medis yang relevan
             $relevantContext = $this->getRelevantMedicalContext($message);
             
-            // Peningkatan kontekstualisasi untuk model AI
-            $contextualizedMessage = $this->getContextualizedMessage($message, $relevantContext);
+            // Gabungkan konteks percakapan dengan prompt
+            $contextualizedMessage = $this->getContextualizedMessage(
+                $message,
+                $relevantContext,
+                $conversationContext
+            );
 
+            // Kirim ke Gemini API dengan konteks lengkap
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-goog-api-key' => config('services.gemini.api_key'),
@@ -212,7 +224,7 @@ class ChatController extends Controller
         return $context;
     }
     
-    private function getContextualizedMessage($message, $relevantContext = '')
+    private function getContextualizedMessage($message, $relevantContext = '', $conversationContext = '')
     {
         $isDescriptiveQuestion = false;
         foreach (QuestionPatterns::DESCRIPTIVE_PATTERNS as $pattern) {
@@ -261,11 +273,16 @@ class ChatController extends Controller
             Berikan jawaban dalam format yang rapi dan mudah dibaca.";
         }
         
-        if (!empty($relevantContext)) {
-            $basePrompt .= "\n\nGunakan informasi medis berikut sebagai referensi: " . $relevantContext;
+        if (!empty($conversationContext)) {
+            $basePrompt .= "\n\nKonteks percakapan sebelumnya:\n" . $conversationContext;
         }
         
-        $basePrompt .= "\n\nPertanyaan pengguna: " . $message . "\n\nBerikan jawaban sesuai format di atas.";
+        if (!empty($relevantContext)) {
+            $basePrompt .= "\n\nInformasi medis relevan:\n" . $relevantContext;
+        }
+        
+        $basePrompt .= "\n\nPertanyaan pengguna: " . $message;
+        $basePrompt .= "\n\nBerikan jawaban yang koheren dan terhubung dengan konteks percakapan sebelumnya jika relevan.";
         
         return $basePrompt;
     }

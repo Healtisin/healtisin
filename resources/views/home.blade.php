@@ -695,11 +695,24 @@
         }
 
         function createUserMessageHtml(message) {
+            const timestamp = message.timestamp ? new Date(message.timestamp).toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : new Date().toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
             return `
                 <div class="flex justify-end gap-2 items-start mb-4">
                     <div class="flex flex-col items-end max-w-[75%]">
                         <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
-                            <p class="break-words whitespace-pre-wrap">${message}</p>
+                            <div class="flex flex-col">
+                                <p class="break-words whitespace-pre-wrap">${message.content || message}</p>
+                                <div class="flex justify-end">
+                                    <span class="text-xs text-white/70 mt-1">${timestamp}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -713,7 +726,10 @@
         }
 
         function createAIMessageHtml(message) {
-            const timestamp = new Date().toLocaleTimeString('id-ID', {
+            const timestamp = message.timestamp ? new Date(message.timestamp).toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : new Date().toLocaleTimeString('id-ID', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
@@ -727,7 +743,7 @@
                     </div>
                     <div class="flex flex-col max-w-[75%]">
                         <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                            <p class="text-gray-800 break-words whitespace-pre-wrap">${message}</p>
+                            <p class="text-gray-800 break-words whitespace-pre-wrap">${message.content || message}</p>
                             <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
                         </div>
                     </div>
@@ -837,8 +853,8 @@
                 // Tampilkan pesan-pesan dari riwayat chat
                 messages.forEach(messageData => {
                     const messageHtml = messageData.role === 'user' ?
-                        createUserMessageHtml(messageData.content) :
-                        createAIMessageHtml(messageData.content);
+                        createUserMessageHtml(messageData) :
+                        createAIMessageHtml(messageData);
                     messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
                 });
 
@@ -935,6 +951,8 @@
 </body>
 
 </html>
+
+
 
 
 
