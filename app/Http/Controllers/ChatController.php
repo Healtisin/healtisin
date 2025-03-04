@@ -7,11 +7,21 @@ use Illuminate\Support\Facades\Http;
 use App\Models\ChatHistory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Message;
-use App\Models\Chat;
+use App\Services\MedicalDatasetService;
+use App\Exceptions\AIServiceException;
+use App\Constants\HealthKeywords;
+use App\Constants\Greetings;
+use App\Constants\QuestionPatterns;
 
 class ChatController extends Controller
 {
+    protected $medicalDataset;
+    
+    public function __construct(MedicalDatasetService $medicalDataset)
+    {
+        $this->medicalDataset = $medicalDataset;
+    }
+
     public function sendMessage(Request $request)
     {
         try {
@@ -74,67 +84,179 @@ class ChatController extends Controller
 
     private function getAIResponse($message)
     {
-        // Daftar kata kunci kesehatan
-        $healthKeywords = [
-            'sakit', 'nyeri', 'pusing', 'demam', 'batuk', 'flu', 'pilek',
-            'mual', 'muntah', 'diare', 'penyakit', 'gejala', 'obat',
-            'vitamin', 'vaksin', 'kesehatan', 'dokter', 'rumah sakit',
-            'medis', 'pengobatan', 'terapi', 'diet', 'nutrisi', 'olahraga'
-        ];
+        try {
+            // Periksa apakah pertanyaan terkait kesehatan
+            if (!$this->isHealthRelated($message)) {
+                $greetingResponse = "Halo! Saya adalah asisten kesehatan AI yang siap membantu Anda dengan informasi seputar kesehatan. Silakan tanyakan tentang gejala penyakit, informasi medis umum, atau topik kesehatan lainnya. Apa yang ingin Anda ketahui?";
+                return $greetingResponse;
+            }
+            
+            // Dapatkan dataset Indonesia yang relevan dengan pertanyaan
+            $relevantContext = $this->getRelevantMedicalContext($message);
+            
+            // Peningkatan kontekstualisasi untuk model AI
+            $contextualizedMessage = $this->getContextualizedMessage($message, $relevantContext);
 
-        // Cek apakah pertanyaan mengandung kata kunci kesehatan
-        $isHealthRelated = false;
-        foreach ($healthKeywords as $keyword) {
-            if (stripos($message, $keyword) !== false) {
-                $isHealthRelated = true;
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'x-goog-api-key' => config('services.gemini.api_key'),
+            ])->post('https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent', [
+                'contents' => [
+                    [
+                        'parts' => [
+                            ['text' => $contextualizedMessage]
+                        ]
+                    ]
+                ],
+                'generationConfig' => [
+                    'temperature' => 0.7,
+                    'maxOutputTokens' => 1000,
+                ]
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                
+                if (isset($responseData['candidates'][0]['content']['parts'][0]['text'])) {
+                    return $responseData['candidates'][0]['content']['parts'][0]['text'];
+                }
+
+                throw new AIServiceException('Format respons tidak valid dari Gemini API');
+            }
+
+            // Log error lengkap
+            \Log::error('Gemini API Error', [
+                'status' => $response->status(),
+                'response' => $response->json(),
+                'headers' => $response->headers(),
+                'body' => $response->body()
+            ]);
+
+            $errorMessage = $response->json()['error']['message'] ?? 'Unknown error';
+            throw new AIServiceException($errorMessage);
+
+        } catch (\Exception $e) {
+            \Log::error('AI Service Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            throw new AIServiceException($e->getMessage());
+        }
+    }
+
+    /**
+     * Mendapatkan konteks medis relevan dari dataset Indonesia
+     */
+    private function getRelevantMedicalContext($message)
+    {
+        $context = '';
+        $datasets = $this->medicalDataset->getIndonesianMedicalDatasets();
+        
+        // Cek penyakit tropis
+        foreach ($datasets['penyakit_tropis'] as $code => $disease) {
+            if (stripos($message, $disease['nama']) !== false || stripos($message, $code) !== false) {
+                $context .= "Informasi tentang {$disease['nama']}: ";
+                $context .= "Gejala umum meliputi " . implode(', ', $disease['gejala']) . ". ";
+                $context .= "Prevalensi: {$disease['prevalensi']}. ";
+                $context .= "Faktor risiko meliputi " . implode(', ', $disease['faktor_risiko']) . ". ";
+                return $context;
+            }
+        }
+        
+        // Cek penyakit tidak menular
+        foreach ($datasets['penyakit_tidak_menular'] as $code => $disease) {
+            if (stripos($message, $disease['nama']) !== false || stripos($message, $code) !== false) {
+                $context .= "Informasi tentang {$disease['nama']}: ";
+                $context .= "Gejala umum meliputi " . implode(', ', $disease['gejala']) . ". ";
+                $context .= "Prevalensi: {$disease['prevalensi']}. ";
+                $context .= "Faktor risiko meliputi " . implode(', ', $disease['faktor_risiko']) . ". ";
+                return $context;
+            }
+        }
+        
+        // Cek berdasarkan gejala
+        $symptomToDisease = [];
+        foreach ($datasets as $category => $diseases) {
+            foreach ($diseases as $code => $disease) {
+                if (isset($disease['gejala'])) {
+                    foreach ($disease['gejala'] as $symptom) {
+                        $symptomToDisease[$symptom][] = [
+                            'nama' => $disease['nama'],
+                            'code' => $code,
+                            'category' => $category
+                        ];
+                    }
+                }
+            }
+        }
+        
+        foreach ($symptomToDisease as $symptom => $relatedDiseases) {
+            if (stripos($message, $symptom) !== false) {
+                $context .= "Gejala '{$symptom}' dapat terkait dengan beberapa kondisi seperti: ";
+                $diseaseNames = array_map(function($d) { return $d['nama']; }, $relatedDiseases);
+                $context .= implode(', ', array_unique($diseaseNames)) . ". ";
+                $context .= "Namun, diagnosis tepat memerlukan pemeriksaan medis profesional. ";
+                return $context;
+            }
+        }
+        
+        return $context;
+    }
+    
+    private function getContextualizedMessage($message, $relevantContext = '')
+    {
+        $isDescriptiveQuestion = false;
+        foreach (QuestionPatterns::DESCRIPTIVE_PATTERNS as $pattern) {
+            if (preg_match($pattern, strtolower($message))) {
+                $isDescriptiveQuestion = true;
                 break;
             }
         }
 
-        if (!$isHealthRelated) {
-            return "Maaf, saya hanya dapat menjawab pertanyaan seputar kesehatan. Silakan ajukan pertanyaan terkait kesehatan, gejala penyakit, atau informasi medis umum.";
-        }
+        if ($isDescriptiveQuestion) {
+            $basePrompt = "Anda adalah asisten kesehatan AI. Berikan jawaban yang mengalir dengan struktur berikut (tanpa menampilkan label section):
 
-        // Tambahkan konteks untuk AI
-        $systemPrompt = "Anda adalah asisten AI kesehatan bernama Healtisin. Berikan informasi medis umum tanpa memberikan diagnosis spesifik atau resep obat. Selalu ingatkan pengguna untuk berkonsultasi dengan dokter untuk masalah kesehatan serius.";
+            1. Definisi atau penjelasan umum (1-2 paragraf)
+
+            2. Poin-poin penting yang perlu diketahui (1 paragraf)
+
+            3. Ajukan 2-3 pertanyaan yang relevan untuk mendapatkan informasi lebih lanjut, format:
+                1) Pertanyaan pertama?
+                2) Pertanyaan kedua?
+                3) (Opsional) Pertanyaan ketiga?
+
+            Gunakan bahasa yang mudah dipahami dan informatif. Hindari jargon medis yang terlalu teknis. 
+            Jika memberikan statistik atau data, pastikan menyebutkan sumbernya.
+            Gunakan huruf tebal untuk istilah penting dengan format.<b>istilah</b>.
+            Gunakan format <b>poin penting</b> untuk penekanan.
+            Hindari penggunaan simbol asterisk (*).";
+        } else {
+            $basePrompt = "Anda adalah asisten kesehatan AI. Berikan jawaban yang mengalir dengan struktur berikut (tanpa menampilkan label section):
+
+            1. Mulai dengan tanggapan empatik dan personal terhadap keluhan/pertanyaan pengguna (1-2 kalimat). Lanjutkan dengan penjelasan ringkas tentang kondisi atau topik yang ditanyakan (2-3 kalimat)
+            
+            2. Ajukan 2-3 pertanyaan yang relevan untuk memahami kondisi lebih baik, format:
+                1) Pertanyaan pertama?
+                2) Pertanyaan kedua?
+                3) (Opsional) Pertanyaan ketiga?
+            
+            3. Akhiri dengan satu kalimat penutup tindak lanjut yang harus dilakukan.
+
+            Berikan jawaban yang mengalir secara natural tanpa menampilkan label section. Gunakan bahasa yang ramah dan mudah dipahami. Hindari memberikan diagnosis spesifik atau resep obat.
+            Gunakan huruf tebal untuk istilah penting dengan format.<b>kata kunci</b>.
+            Gunakan ukuran font lebih besar untuk judul dengan format <h3>judul</h3>.
+            Gunakan format <b>poin penting</b> untuk penekanan.
+            Hindari penggunaan simbol asterisk (*).";
+        }
         
-        // Panggil API Deepseek
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . config('services.deepseek.api_key'),
-        ])->post(config('services.deepseek.base_url') . '/chat/completions', [
-            'model' => config('services.deepseek.model'),
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'content' => $systemPrompt
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $message
-                ]
-            ],
-            'temperature' => 0.7,
-            'max_tokens' => 1000,
-        ]);
-
-        if ($response->successful()) {
-            $responseData = $response->json();
-
-            if (isset($responseData['choices'][0]['message']['content'])) {
-                return $responseData['choices'][0]['message']['content'];
-            }
-
-            throw new \Exception('Format respons tidak valid');
+        if (!empty($relevantContext)) {
+            $basePrompt .= "\n\nGunakan informasi medis berikut sebagai referensi: " . $relevantContext;
         }
-
-        \Log::error('Deepseek API Error', [
-            'status' => $response->status(),
-            'response' => $response->json()
-        ]);
-
-        throw new \Exception('Gagal mendapatkan respons dari AI: ' .
-            ($response->json()['error']['message'] ?? 'Unknown error'));
+        
+        $basePrompt .= "\n\nPertanyaan pengguna: " . $message . "\n\nBerikan jawaban sesuai format di atas.";
+        
+        return $basePrompt;
     }
 
     public function show($id)
@@ -261,4 +383,27 @@ class ChatController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+
+    private function isHealthRelated($message)
+    {
+        // Cek apakah pesan mengandung sapaan
+        $lowercaseMessage = strtolower($message);
+        foreach (Greetings::getKeywords() as $greeting) {
+            if (stripos($lowercaseMessage, $greeting) !== false) {
+                return true;
+            }
+        }
+
+        // Periksa apakah ada kata kunci kesehatan dalam pesan
+        foreach (HealthKeywords::getKeywords() as $keyword) {
+            if (stripos($lowercaseMessage, $keyword) !== false) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
+
+
+

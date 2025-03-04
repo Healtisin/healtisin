@@ -65,4 +65,8 @@ return [
         'base_url' => env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1'),
     ],
 
+    'llama' => [
+        'api_key' => env('LLAMA_API_KEY'),
+    ],
+
 ];
