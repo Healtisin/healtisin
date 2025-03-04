@@ -32,5 +32,15 @@ function initializePerfectScrollbar() {
             minScrollbarLength: 20
         });
     }
+    
+    // Inisialisasi untuk sidebar admin
+    const adminSidebar = document.querySelector('#sidebar .scrollbar-hide');
+    if (adminSidebar) {
+        new PerfectScrollbar(adminSidebar, {
+            wheelSpeed: 1,
+            wheelPropagation: false,
+            minScrollbarLength: 20
+        });
+    }
 }
 

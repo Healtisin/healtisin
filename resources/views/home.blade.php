@@ -340,7 +340,7 @@
                             toggleSendButton(false);
                             
                             // Scroll ke bawah
-                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                            scrollToBottom(messagesContainer);
                             
                         } catch (error) {
                             console.error('Error editing message:', error);
@@ -444,7 +444,7 @@
                         }
                     }
 
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    scrollToBottom(messagesContainer);
 
                 } catch (error) {
                     toggleSendButton(false);
@@ -461,6 +461,9 @@
                     }
                 }
             }
+
+            // Setelah menambahkan pesan baru
+            updateScrollbars();
         }
 
         // Tambahkan fungsi untuk menambah chat baru ke sidebar
@@ -513,7 +516,8 @@
                 </div>
             `;
             messagesContainer.insertAdjacentHTML('beforeend', errorMessage);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            scrollToBottom(messagesContainer);
+            updateScrollbars();
         }
 
         // Fungsi untuk menyimpan chat history
@@ -595,6 +599,9 @@
             } catch (error) {
                 console.error('Error updating sidebar:', error);
             }
+
+            // Setelah update sidebar
+            updateScrollbars();
         }
 
         const chatInput = document.getElementById('chatInput');
@@ -902,12 +909,15 @@
                 window.currentChatId = chatId;
 
                 // Scroll ke bawah setelah memuat pesan
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                scrollToBottom(messagesContainer);
 
             } catch (error) {
                 console.error('Error loading chat:', error);
                 showErrorMessage(error.message);
             }
+
+            // Setelah memuat chat history
+            updateScrollbars();
         }
 
         // Menyesuaikan tinggi textarea saat input atau paste
@@ -1062,7 +1072,7 @@
                 toggleSendButton(false);
                 
                 // Scroll ke bawah
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                scrollToBottom(messagesContainer);
 
             } catch (error) {
                 console.error('Error regenerating response:', error);
@@ -1153,6 +1163,68 @@
                     showErrorMessage('Gagal menyalin teks');
                 });
         }
+
+        function updateScrollbars() {
+            // Update chat messages scrollbar
+            if (window.chatMessagesPS) {
+                window.chatMessagesPS.update();
+            }
+            
+            // Update chat history scrollbar
+            if (window.chatHistoryPS) {
+                window.chatHistoryPS.update();
+            }
+        }
+
+        function scrollToBottom(element) {
+            element.scrollTop = element.scrollHeight;
+            if (window.chatMessagesPS) {
+                window.chatMessagesPS.update();
+            }
+        }
+
+        // Inisialisasi Perfect Scrollbar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tambahkan padding untuk memberi jarak antara scrollbar dan konten
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                // Tambahkan padding kanan untuk memberi jarak
+                chatMessages.style.paddingRight = '20px';
+                
+                // Pastikan posisi relative agar Perfect Scrollbar bekerja dengan baik
+                chatMessages.style.position = 'relative';
+                
+                // Inisialisasi Perfect Scrollbar dengan konfigurasi khusus
+                window.chatMessagesPS = new PerfectScrollbar(chatMessages, {
+                    wheelSpeed: 1,
+                    wheelPropagation: true,
+                    minScrollbarLength: 20,
+                    suppressScrollX: true,
+                    // Geser scrollbar ke kanan sedikit
+                    scrollbarYMarginRight: 8
+                });
+            }
+            
+            const chatHistory = document.querySelector('.chat-history');
+            if (chatHistory) {
+                chatHistory.style.position = 'relative';
+                chatHistory.style.paddingRight = '16px';
+                window.chatHistoryPS = new PerfectScrollbar(chatHistory, {
+                    wheelSpeed: 1,
+                    wheelPropagation: false,
+                    minScrollbarLength: 20,
+                    suppressScrollX: true
+                });
+            }
+            
+            // Update scrollbar setelah inisialisasi
+            updateScrollbars();
+        });
+
+        // Perbarui scrollbar saat ukuran window berubah
+        window.addEventListener('resize', function() {
+            updateScrollbars();
+        });
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
