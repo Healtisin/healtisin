@@ -80,11 +80,7 @@ class ChatController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            \Log::error('Chat Error', ['message' => $e->getMessage()]);
-            if ($request->expectsJson()) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-            }
-            return view('errors.ai-service', ['message' => 'Terjadi kesalahan saat berkomunikasi dengan AI']);
+            return $this->handleError($e, $request, 'Gagal mengirim pesan');
         }
     }
 
@@ -306,11 +302,7 @@ class ChatController extends Controller
                 'messages' => $chatHistory->messages
             ]);
         } catch (\Exception $e) {
-            \Log::error('show: Gagal mengambil riwayat obrolan', ['chatId' => $id, 'error' => $e->getMessage()]); // Tambahkan log error
-            if (request()->expectsJson()) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 404);
-            }
-            return view('errors.ai-service', ['message' => 'Tidak dapat mengakses riwayat chat']);
+            return $this->handleError($e, request(), 'Gagal mengakses riwayat chat');
         }
     }
 
@@ -344,11 +336,7 @@ class ChatController extends Controller
                 'message' => 'Chat berhasil dihapus'
             ]);
         } catch (\Exception $e) {
-            \Log::error('deleteChat: Gagal menghapus chat', ['chatId' => $id, 'error' => $e->getMessage()]);
-            if (request()->expectsJson()) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-            }
-            return view('errors.ai-service', ['message' => 'Gagal menghapus riwayat chat']);
+            return $this->handleError($e, request(), 'Gagal menghapus chat');
         }
     }
 
@@ -402,10 +390,7 @@ class ChatController extends Controller
             
         } catch (\Exception $e) {
             \Log::error('Delete Last Message Error', ['message' => $e->getMessage()]);
-            if (request()->expectsJson()) {
-                return response()->json(['message' => $e->getMessage()], 500);
-            }
-            return view('errors.ai-service', ['message' => 'Gagal menghapus pesan terakhir']);
+            return $this->handleError($e, request(), 'Gagal menghapus pesan terakhir');
         }
     }
 
@@ -427,6 +412,65 @@ class ChatController extends Controller
         }
         
         return false;
+    }
+
+    private function handleError(\Exception $e, $request, $defaultMessage)
+    {
+        // Log error asli untuk debugging
+        \Log::error('Chat Error', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        // Tentukan pesan yang user-friendly berdasarkan jenis error
+        $userMessage = $this->getUserFriendlyErrorMessage($e);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $userMessage
+            ], $this->getErrorStatusCode($e));
+        }
+
+        // Redirect ke halaman error yang sesuai
+        return redirect()->route('error.show')->with('error', $userMessage);
+    }
+
+    private function getUserFriendlyErrorMessage(\Exception $e)
+    {
+        // Mapping pesan error teknis ke pesan yang user-friendly
+        $errorMessages = [
+            'Tidak dapat terhubung ke layanan AI' => 'Maaf, layanan AI sedang tidak tersedia. Silakan coba beberapa saat lagi.',
+            'Format respons tidak valid' => 'Maaf, kami mengalami kendala teknis. Tim kami sedang menangani masalah ini.',
+            'Chat history tidak ditemukan' => 'Riwayat chat tidak ditemukan atau telah dihapus.',
+            'Tidak memiliki akses ke chat ini' => 'Anda tidak memiliki akses ke percakapan ini.',
+            'DEADLINE_EXCEEDED' => 'Maaf, permintaan Anda membutuhkan waktu terlalu lama. Silakan coba lagi.',
+            'UNAVAILABLE' => 'Layanan sedang dalam pemeliharaan. Silakan coba beberapa saat lagi.'
+        ];
+
+        $message = $e->getMessage();
+        foreach ($errorMessages as $technical => $friendly) {
+            if (stripos($message, $technical) !== false) {
+                return $friendly;
+            }
+        }
+
+        // Default error message
+        return 'Maaf, terjadi kesalahan. Silakan coba beberapa saat lagi.';
+    }
+
+    private function getErrorStatusCode(\Exception $e)
+    {
+        if ($e instanceof AIServiceException) {
+            return 503; // Service Unavailable
+        }
+        if (stripos($e->getMessage(), 'tidak ditemukan') !== false) {
+            return 404; // Not Found
+        }
+        if (stripos($e->getMessage(), 'tidak memiliki akses') !== false) {
+            return 403; // Forbidden
+        }
+        return 500; // Internal Server Error
     }
 }
 
