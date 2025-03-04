@@ -392,8 +392,7 @@
                     
                     // Hapus respons AI setelah pesan yang diedit
                     const allMessages = document.querySelectorAll('#chatMessages > div');
-                    const editedIndex = getMessageIndex(editingMessageId);
-                    console.log('Editing message at index:', editedIndex);
+                    const editedIndex = Array.from(allMessages).indexOf(editingMessageId);
                     
                     // Hapus semua pesan setelah pesan yang diedit (respons AI)
                     if (editedIndex >= 0 && editedIndex < allMessages.length - 1) {
@@ -411,13 +410,6 @@
                     // Kirim ke server jika ada chat ID
                     if (window.currentChatId) {
                         try {
-                            // Log data yang akan dikirim untuk debugging
-                            console.log('Sending edit request with data:', {
-                                chatId: window.currentChatId,
-                                messageIndex: editedIndex,
-                                newContent: message
-                            });
-                            
                             const response = await fetch('/chat/edit-message', {
                                 method: 'POST',
                                 headers: {
@@ -427,20 +419,16 @@
                                 },
                                 body: JSON.stringify({
                                     chatId: window.currentChatId,
-                                    messageIndex: editedIndex,
+                                    messageIndex: getMessageIndex(editingMessageId),
                                     newContent: message
                                 })
                             });
                             
-                            // Log response status untuk debugging
-                            console.log('Edit response status:', response.status);
+                            if (!response.ok) {
+                                throw new Error('Gagal mengedit pesan');
+                            }
                             
                             const data = await response.json();
-                            console.log('Edit response data:', data);
-                            
-                            if (!response.ok) {
-                                throw new Error(data.message || 'Gagal mengedit pesan');
-                            }
                             
                             // Hapus loading message
                             const loadingElement = document.getElementById('loadingMessage');
@@ -464,12 +452,6 @@
                             console.error('Error editing message:', error);
                             showErrorMessage(error.message);
                             toggleSendButton(false);
-                            
-                            // Hapus loading message jika error
-                            const loadingElement = document.getElementById('loadingMessage');
-                            if (loadingElement) {
-                                loadingElement.remove();
-                            }
                         }
                     }
                     
@@ -844,6 +826,13 @@
                         </div>
                     </div>
                     <div class="flex justify-end mr-14">
+                        <button onclick="copyMessage(this.closest('.flex.flex-col.gap-2').querySelector('p').textContent)" 
+                            class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                            title="Salin pesan">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                        </button>
                         <button onclick="editUserMessage(this)" 
                             class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
                             title="Edit message">
@@ -889,6 +878,13 @@
                     </div>
                     ${!isWelcomeMessage ? `
                         <div class="flex justify-start ml-14">
+                            <button onclick="copyMessage(this.closest('.flex.flex-col.gap-2').querySelector('p').textContent)" 
+                                class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                                title="Salin pesan">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                            </button>
                             <button onclick="regenerateResponse()" 
                                 class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
                                 title="Regenerate response">
@@ -1182,25 +1178,7 @@
             }
         }
 
-        function getMessageIndex(messageElement) {
-            const messages = document.querySelectorAll('#chatMessages > div');
-            const visibleMessages = Array.from(messages).filter(msg => !msg.id || msg.id !== 'loadingMessage');
-            return Array.from(visibleMessages).indexOf(messageElement);
-        }
-
-        // Tambahkan fungsi pengecek konsol untuk debug
-        function logMessageIndices() {
-            const messages = document.querySelectorAll('#chatMessages > div');
-            console.log('Total messages in DOM:', messages.length);
-            messages.forEach((msg, idx) => {
-                const isUser = msg.querySelector('.flex.justify-end') !== null;
-                const text = msg.querySelector('p')?.textContent.substring(0, 30) + '...';
-                console.log(`Message ${idx}: ${isUser ? 'User' : 'AI'} - ${text}`);
-            });
-        }
-
-        // Update fungsi untuk mengedit pesan
-        async function editUserMessage(button) {
+        function editUserMessage(button) {
             const messageContainer = button.closest('.flex.flex-col.gap-2');
             const messageText = messageContainer.querySelector('p').textContent;
             const messageElement = messageContainer.closest('#chatMessages > div');
@@ -1211,11 +1189,6 @@
             // Masukkan pesan ke input
             document.getElementById('chatInput').value = messageText;
             adjustTextareaHeight();
-            
-            // Hitung dan log indeks pesan untuk debugging
-            const messageIndex = getMessageIndex(messageElement);
-            console.log('Edit message at index:', messageIndex);
-            console.log('Original message:', originalMessage);
             
             // Set state editing
             isEditing = true;
@@ -1252,6 +1225,36 @@
             `;
             button.title = "Edit message";
             button.onclick = function() { editUserMessage(button); };
+        }
+
+        function getMessageIndex(messageElement) {
+            const messages = document.querySelectorAll('#chatMessages > div');
+            return Array.from(messages).indexOf(messageElement);
+        }
+
+        // Tambahkan fungsi copyMessage untuk menyalin pesan
+        function copyMessage(text) {
+            // Tambahkan footer pesan
+            const textToCopy = text + "\n\nDibuat oleh: Healtisin";
+            
+            // Gunakan Clipboard API untuk menyalin teks
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    // Tampilkan notifikasi berhasil
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+                    toast.innerText = 'Teks berhasil disalin!';
+                    document.body.appendChild(toast);
+                    
+                    // Hilangkan notifikasi setelah 2 detik
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin teks: ', err);
+                    showErrorMessage('Gagal menyalin teks');
+                });
         }
     </script>
     <script src="{{ mix('js/translate.js') }}"></script>

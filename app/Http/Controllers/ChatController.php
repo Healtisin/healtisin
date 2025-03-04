@@ -80,7 +80,7 @@ class ChatController extends Controller
                     'last_interaction' => $chatHistory->last_interaction->diffForHumans()
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->handleError($e, $request, 'Gagal mengirim pesan');
         }
     }
@@ -155,7 +155,7 @@ class ChatController extends Controller
             $errorMessage = $response->json()['error']['message'] ?? 'Unknown error';
             throw new AIServiceException($errorMessage);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('AI Service Error', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -295,14 +295,14 @@ class ChatController extends Controller
             \Log::info('show: Riwayat obrolan berhasil ditemukan', ['chatHistoryId' => $chatHistory->id]); // Tambahkan log
 
             if ($chatHistory->user_id !== auth()->id()) {
-                throw new \Exception('Tidak memiliki akses ke chat ini');
+                throw new Exception('Tidak memiliki akses ke chat ini');
             }
 
             return response()->json([
                 'status' => 'success',
                 'messages' => $chatHistory->messages
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->handleError($e, request(), 'Gagal mengakses riwayat chat');
         }
     }
@@ -326,7 +326,7 @@ class ChatController extends Controller
             $chatHistory = ChatHistory::findOrFail($id);
 
             if ($chatHistory->user_id !== auth()->id()) {
-                throw new \Exception('Anda tidak memiliki akses untuk menghapus chat ini');
+                throw new Exception('Anda tidak memiliki akses untuk menghapus chat ini');
             }
 
             $chatHistory->delete();
@@ -336,7 +336,7 @@ class ChatController extends Controller
                 'status' => 'success',
                 'message' => 'Chat berhasil dihapus'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->handleError($e, request(), 'Gagal menghapus chat');
         }
     }
@@ -389,7 +389,7 @@ class ChatController extends Controller
                 'message' => 'Pesan terakhir berhasil dihapus'
             ]);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('Delete Last Message Error', ['message' => $e->getMessage()]);
             return $this->handleError($e, request(), 'Gagal menghapus pesan terakhir');
         }
@@ -415,7 +415,7 @@ class ChatController extends Controller
         return false;
     }
 
-    private function handleError(\Exception $e, $request, $defaultMessage)
+    private function handleError(Exception $e, $request, $defaultMessage)
     {
         // Log error asli untuk debugging
         \Log::error('Chat Error', [
@@ -437,7 +437,7 @@ class ChatController extends Controller
         return redirect()->route('error.show')->with('error', $userMessage);
     }
 
-    private function getUserFriendlyErrorMessage(\Exception $e)
+    private function getUserFriendlyErrorMessage(Exception $e)
     {
         // Mapping pesan error teknis ke pesan yang user-friendly
         $errorMessages = [
@@ -460,7 +460,7 @@ class ChatController extends Controller
         return 'Maaf, terjadi kesalahan. Silakan coba beberapa saat lagi.';
     }
 
-    private function getErrorStatusCode(\Exception $e)
+    private function getErrorStatusCode(Exception $e)
     {
         if ($e instanceof AIServiceException) {
             return 503; // Service Unavailable
@@ -486,7 +486,7 @@ class ChatController extends Controller
                 ->first();
                 
             if (!$chatHistory || empty($chatHistory->messages)) {
-                throw new \Exception('Tidak dapat menemukan riwayat chat');
+                throw new Exception('Tidak dapat menemukan riwayat chat');
             }
             
             // Ambil pesan terakhir user dari messages array
@@ -502,7 +502,7 @@ class ChatController extends Controller
             }
             
             if ($lastUserMessageIndex === null) {
-                throw new \Exception('Tidak dapat menemukan pesan terakhir user');
+                throw new Exception('Tidak dapat menemukan pesan terakhir user');
             }
             
             $lastUserMessage = $messages[$lastUserMessageIndex]['content'];
@@ -530,7 +530,7 @@ class ChatController extends Controller
                 'message' => $newResponse
             ]);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->handleError($e, $request, 'Gagal meregenerasi jawaban');
         }
     }
