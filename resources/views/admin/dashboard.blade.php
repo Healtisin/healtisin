@@ -4,7 +4,7 @@
 
 @include('components.breadcrumbs')
 
-<div class="p-8">
+<div class="p-8" id="scrollDashboard">
     <h1 class="text-2xl font-bold mb-8">Dashboard</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -131,12 +131,52 @@
         document.getElementById('userActivityChart'),
         config
     );
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi ulang perfect scrollbar untuk dashboard
+        const scrollDashboard = document.getElementById('scrollDashboard');
+        if (scrollDashboard && typeof PerfectScrollbar !== 'undefined') {
+            // Pastikan posisi relatif
+            scrollDashboard.style.position = 'relative';
+            
+            // Inisialisasi dengan konfigurasi yang sesuai
+            new PerfectScrollbar(scrollDashboard, {
+                wheelSpeed: 1,
+                wheelPropagation: true,
+                minScrollbarLength: 20,
+                suppressScrollX: true,
+                scrollbarYMarginRight: 4
+            });
+            
+            console.log('Perfect Scrollbar berhasil diinisialisasi untuk dashboard');
+        } else {
+            console.error('Element scrollDashboard tidak ditemukan atau PerfectScrollbar tidak terdefinisi');
+        }
+    });
 </script>
 
 <style>
     #userActivityChart {
         width: 350px !important;
         height: 350px !important;
+    }
+    
+    /* Styling tambahan untuk container perfect scrollbar */
+    #scrollDashboard {
+        position: relative;
+        max-height: calc(100vh - 60px); /* Sesuaikan dengan header Anda */
+        overflow-y: auto;
+        padding-right: 16px; /* Memberikan jarak dengan scrollbar */
+    }
+    
+    /* Styling khusus untuk scrollbar pada dashboard */
+    .ps__rail-y {
+        background-color: transparent !important;
+    }
+    
+    .ps__thumb-y {
+        background-color: rgba(156, 163, 175, 0.7) !important;
+        width: 6px !important;
     }
 </style>
 

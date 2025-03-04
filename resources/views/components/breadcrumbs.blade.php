@@ -21,7 +21,7 @@ $breadcrumbRoutes = [
 
 @endphp
 
-<header class="flex justify-between items-center px-8 py-5 shadow-sm">
+<header class="flex justify-between items-center px-8 py-4 shadow-md sticky top-0 z-50">
     <!-- Breadcrumbs -->
     <nav class="flex-1 text-gray-600" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-1 md:space-x-3">
@@ -30,7 +30,7 @@ $breadcrumbRoutes = [
                 @if($index === 0)
                 <a href="{{ route('admin.dashboard') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path
                             d="M10 2a1 1 0 00-.707.293l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h10a1 1 0 001-1v-6.586l1.293 1.293a1 1 0 001.414-1.414l-7-7A1 1 0 0010 2z" />
                     </svg>
@@ -60,9 +60,9 @@ $breadcrumbRoutes = [
     </nav>
 
     <!-- Notification and Profile Dropdown -->
-    <div class="flex items-center space-x-6">
+    <div class="flex items-center space-x-5">
         <!-- Notification Dropdown -->
-        <div class="relative">
+        <div class="flex relative">
             <button class="text-gray-500 hover:text-gray-700 focus:outline-none"
                 onclick="toggleDropdown('notificationDropdown', 'profileDropdown')">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ $breadcrumbRoutes = [
                 </svg>
             </button>
             <div id="notificationDropdown"
-                class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
                 <!-- Notification Content -->
                 <div class="px-4 py-3 border-b border-gray-200">
                     <div class="flex justify-between items-center">
@@ -106,12 +106,15 @@ $breadcrumbRoutes = [
         </div>
 
         <!-- Profile Dropdown -->
-        <div class="relative">
+        <div class="flex relative">
             <button class="text-gray-500 hover:text-gray-700 focus:outline-none"
                 onclick="toggleDropdown('profileDropdown', 'notificationDropdown')">
-                <img class="w-8 h-8 rounded-full" src="" alt="Profile">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
             </button>
-            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+            <div id="profileDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     <div class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
