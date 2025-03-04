@@ -8,6 +8,7 @@ use App\Models\ChatHistory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MedicalDatasetService;
+use App\Services\ResponseValidationService;
 use App\Exceptions\AIServiceException;
 use App\Constants\HealthKeywords;
 use App\Constants\Greetings;
@@ -16,10 +17,12 @@ use App\Constants\QuestionPatterns;
 class ChatController extends Controller
 {
     protected $medicalDataset;
+    protected $responseValidator;
     
-    public function __construct(MedicalDatasetService $medicalDataset)
+    public function __construct(MedicalDatasetService $medicalDataset, ResponseValidationService $responseValidator)
     {
         $this->medicalDataset = $medicalDataset;
+        $this->responseValidator = $responseValidator;
     }
 
     public function sendMessage(Request $request)
@@ -118,6 +121,11 @@ class ChatController extends Controller
                 $responseData = $response->json();
                 
                 if (isset($responseData['candidates'][0]['content']['parts'][0]['text'])) {
+                    // Validasi respons
+                    if (!$this->responseValidator->validateResponse($message, $responseData['candidates'][0]['content']['parts'][0]['text'])) {
+                        throw new AIServiceException('Format respons tidak valid');
+                    }
+
                     return $responseData['candidates'][0]['content']['parts'][0]['text'];
                 }
 
@@ -141,7 +149,7 @@ class ChatController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            throw new AIServiceException($e->getMessage());
+            throw new AIServiceException('Tidak dapat terhubung ke layanan AI');
         }
     }
 
