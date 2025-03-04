@@ -228,9 +228,11 @@ class ChatController extends Controller
 
             Gunakan bahasa yang mudah dipahami dan informatif. Hindari jargon medis yang terlalu teknis. 
             Jika memberikan statistik atau data, pastikan menyebutkan sumbernya.
-            Gunakan huruf tebal untuk istilah penting dengan format.<b>istilah</b>.
-            Gunakan format <b>poin penting</b> untuk penekanan.
-            Hindari penggunaan simbol asterisk (*).";
+
+            Gunakan huruf tebal untuk istilah penting dengan format <b>istilah</b>.
+            Gunakan format <b>poin penting</b> untuk penekanan penting.
+            Hindari penggunaan simbol asterisk (*), hashtag (#), dan simbol lainnya.
+            Berikan jawaban dalam format yang rapi dan mudah dibaca.";
         } else {
             $basePrompt = "Anda adalah asisten kesehatan AI. Berikan jawaban yang mengalir dengan struktur berikut (tanpa menampilkan label section):
 
@@ -244,10 +246,11 @@ class ChatController extends Controller
             3. Akhiri dengan satu kalimat penutup tindak lanjut yang harus dilakukan.
 
             Berikan jawaban yang mengalir secara natural tanpa menampilkan label section. Gunakan bahasa yang ramah dan mudah dipahami. Hindari memberikan diagnosis spesifik atau resep obat.
-            Gunakan huruf tebal untuk istilah penting dengan format.<b>kata kunci</b>.
-            Gunakan ukuran font lebih besar untuk judul dengan format <h3>judul</h3>.
-            Gunakan format <b>poin penting</b> untuk penekanan.
-            Hindari penggunaan simbol asterisk (*).";
+            
+            Gunakan huruf tebal untuk istilah penting dengan format <b>kata kunci</b>.
+            Gunakan format <b>poin penting</b> untuk penekanan penting.
+            Hindari penggunaan simbol asterisk (*), hashtag (#), dan simbol lainnya.
+            Berikan jawaban dalam format yang rapi dan mudah dibaca.";
         }
         
         if (!empty($relevantContext)) {
