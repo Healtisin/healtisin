@@ -16,8 +16,8 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.1
-        extensions: mbstring, bcmath, pdo_mysql
+        php-version: 8.2
+        extensions: mbstring, bcmath, pdo_mysql, sqlite3
         ini-values: post_max_size=256M, upload_max_filesize=256M
         coverage: none
 
@@ -31,7 +31,8 @@ jobs:
       run: |
         echo "APP_ENV=testing" >> .env
         echo "APP_DEBUG=true" >> .env
-        echo "DB_CONNECTION=sqlite" >> .env # Use SQLite or skip DB connection
+        echo "DB_CONNECTION=sqlite" >> .env
+        echo "DB_DATABASE=:memory:" >> .env
 
     - name: Skip database-dependent tests
       run: |
@@ -48,7 +49,7 @@ jobs:
     needs: build
     environment:
       name: production
-      url: 192.168.192.82/dashboard
+      url: http://your-domain.com
     if: always()  # Deploy tetap dijalankan meskipun build gagal
 
     steps:
@@ -58,7 +59,8 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.1
+        php-version: 8.2
+        extensions: mbstring, bcmath, pdo_mysql
 
     - name: Install dependencies
       run: composer install --no-dev --no-progress --prefer-dist --optimize-autoloader
@@ -92,17 +94,29 @@ jobs:
     
     - name: Deploy to server
       run: |
-        ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no root@192.168.192.82 << 'EOF'
-          cd /var/www/html/healtisin
+        ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no root@192.168.192.209 << 'EOF'
+          cd /var/www/html/healtisinn
+          if [ ! -d .git ]; then
+            git init
+            git remote add origin https://github.com/widad-sksn/healtisinn.git
+            git fetch
+            git checkout main
+          fi
           git pull origin main
-          composer install --no-dev --optimize-autoloader
-          php artisan migrate --force
-          php artisan cache:clear
-          php artisan config:clear
-          php artisan route:clear
-          php artisan view:clear
-          php artisan queue:restart
-
+          # Atur izin dan kepemilikan
+          sudo chown -R www-data:www-data /var/www/html/healtisinn
+          sudo chmod -R 755 /var/www/html/healtisinn
+          sudo chmod -R 775 /var/www/html/healtisinn/storage
+          sudo chmod -R 775 /var/www/html/healtisinn/bootstrap/cache
+          # Jalankan Composer dan Artisan
+          export PATH="$PATH:/usr/local/bin"
+          sudo -u www-data composer install --no-dev --optimize-autoloader
+          sudo -u www-data php artisan migrate --force
+          sudo -u www-data php artisan cache:clear
+          sudo -u www-data php artisan config:clear
+          sudo -u www-data php artisan route:clear
+          sudo -u www-data php artisan view:clear
+          sudo -u www-data php artisan queue:restart
         EOF
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
