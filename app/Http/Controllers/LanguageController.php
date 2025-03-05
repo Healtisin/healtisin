@@ -21,6 +21,9 @@ class LanguageController extends Controller
         App::setLocale($request->language);
         Session::put('locale', $request->language);
         
+        // Tambahkan cookie untuk menyimpan preferensi bahasa user
+        cookie()->queue('user_locale', $request->language, 43200); // 30 hari
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Bahasa berhasil diubah'

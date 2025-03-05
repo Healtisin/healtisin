@@ -7,7 +7,69 @@
     <title>Home - Healtisin AI</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    @vite('resources/js/translate.js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script>
+        // Inisialisasi preferensi bahasa sebelum halaman dimuat sepenuhnya
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil bahasa dari URL jika ada
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            
+            if (langParam && ['id', 'en', 'ja', 'ko', 'zh'].includes(langParam)) {
+                changeLanguage(langParam);
+            } else {
+                // Perbarui tampilan bahasa sesuai dengan bahasa yang disimpan di cookie
+                updateLanguageDisplay();
+            }
+        });
+
+        // Fungsi untuk memperbarui tampilan bahasa
+function updateLanguageDisplay() {
+            // Perbarui tanda ceklis di modal bahasa
+            const langButtons = document.querySelectorAll('[data-lang-code]');
+            if (langButtons.length === 0) return;
+            
+            // Cek cookie untuk mendapatkan bahasa yang disimpan
+            const cookies = document.cookie.split(';');
+            let userLocale = '{{ App::getLocale() }}'; // Default dari server
+            
+            for (const cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'user_locale') {
+                    userLocale = value;
+                    break;
+                }
+            }
+            
+            // Perbarui tanda ceklis
+            langButtons.forEach(button => {
+                const checkMark = button.querySelector('.language-check-mark');
+                if (button.dataset.langCode === userLocale) {
+                    checkMark.classList.remove('hidden');
+                } else {
+                    checkMark.classList.add('hidden');
+                }
+            });
+            
+            // Perbarui tampilan bahasa di input jika ada
+            const languageDisplayElement = document.getElementById('current-language-display');
+            if (languageDisplayElement) {
+                const languages = {
+                    'id': 'Bahasa Indonesia',
+                    'en': 'English',
+                    'ja': '日本語',
+                    'ko': '한국어',
+                    'zh': '中文'
+                };
+                
+                if (languages[userLocale]) {
+                    languageDisplayElement.value = languages[userLocale];
+                }
+            }
+        }
+    </script>
 </head>
 
 <body class="bg-gray-50">
@@ -22,7 +84,45 @@
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->
                     <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2" id="chatMessages">
-                        <!-- Pesan akan ditambahkan secara dinamis di sini -->
+                        <!-- Welcome Message Template (hidden) -->
+                        <div id="welcomeMessageTemplate" class="hidden">
+                            <div class="flex flex-col gap-2 mb-4">
+                                <div class="flex justify-start gap-2 items-start">
+                                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex flex-col max-w-[75%]">
+                                        <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                                            <div class="text-gray-800 break-words">
+                                                <p><span data-translate="welcome-greeting">Hai {{ Auth::user()->name }}, saya Healtisin 👋</span></p>
+                                                <p><span data-translate="welcome-intro">Saya adalah asisten AI kesehatan yang siap membantu Anda dengan informasi kesehatan umum.</span></p><br>
+                                                <p><span data-translate="welcome-capabilities">⚕️ Saya dapat membantu Anda dengan:</span></p>
+                                                <ul class="list-disc pl-5 space-y-0">
+                                                    <li><span data-translate="welcome-cap-1">Skrining gejala dan keluhan kesehatan</span></li>
+                                                    <li><span data-translate="welcome-cap-2">Informasi penyakit umum</span></li>
+                                                    <li><span data-translate="welcome-cap-3">Tips kesehatan dan gaya hidup sehat</span></li>
+                                                    <li><span data-translate="welcome-cap-4">Pertolongan pertama dasar</span></li>
+                                                    <li><span data-translate="welcome-cap-5">Informasi nutrisi dan diet sehat</span></li>
+                                                </ul><br>
+                                                <p><span data-translate="welcome-important">⚠️ Penting untuk diingat:</span></p>
+                                                <ul class="list-disc pl-5 space-y-0">
+                                                    <li><span data-translate="welcome-imp-1">Saya TIDAK memberikan diagnosis medis</span></li>
+                                                    <li><span data-translate="welcome-imp-2">Saya TIDAK meresepkan obat</span></li>
+                                                    <li><span data-translate="welcome-imp-3">Saya TIDAK menggantikan konsultasi dokter</span></li>
+                                                    <li><span data-translate="welcome-imp-4">Untuk kondisi serius, segera kunjungi fasilitas kesehatan</span></li>
+                                                </ul>
+                                                <p><span data-translate="welcome-ask">Silakan ceritakan keluhan atau pertanyaan kesehatan Anda.</span></p>
+                                            </div>
+                                            <div class="flex items-center mt-2">
+                                                <span class="text-xs text-gray-400">{{ now()->toTimeString('minute') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Chat Input -->
@@ -846,8 +946,7 @@
                 }
 
                 // Hapus elemen chat dari sidebar secara langsung
-                const chatElement = document.querySelector(`button[onclick="loadChat(${chatToDelete})"]`).closest(
-                    '.relative');
+                const chatElement = document.querySelector(`button[onclick="loadChat(${chatToDelete})"]`).closest('.relative');
                 if (chatElement) {
                     chatElement.remove();
                 }
@@ -858,10 +957,7 @@
                     document.getElementById('chatMessages').innerHTML = '';
                 }
 
-                // Update sidebar untuk memastikan sinkronisasi data
-                await updateSidebar();
-
-                // Tampilkan notifikasi sukses
+                // Tampilkan notifikasi sukses SEBELUM update sidebar
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -874,6 +970,9 @@
                     icon: 'success',
                     title: 'Chat berhasil dihapus'
                 });
+
+                // Update sidebar untuk memastikan sinkronisasi data
+                updateSidebar();
 
             } catch (error) {
                 console.error('Error deleting chat:', error);
@@ -989,11 +1088,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             const messagesContainer = document.getElementById('chatMessages');
             
-            // Include welcome message
-            @include('partials.welcome-message')
+            // Menggunakan template yang sudah ada di HTML
+            const welcomeTemplate = document.getElementById('welcomeMessageTemplate');
             
-            const welcomeMessageHtml = createAIMessageHtml(welcomeMessage);
-            messagesContainer.innerHTML = welcomeMessageHtml;
+            if (welcomeTemplate) {
+                // Clone template welcome message
+                const welcomeMsg = welcomeTemplate.cloneNode(true);
+                welcomeMsg.classList.remove('hidden');
+                welcomeMsg.removeAttribute('id');
+                
+                // Tambahkan ke container pesan
+                messagesContainer.appendChild(welcomeMsg);
+                
+                // Terapkan terjemahan pada pesan selamat datang
+                if (typeof applyTranslation === 'function') {
+                    applyTranslation();
+                }
+            }
         });
 
         async function regenerateResponse() {
@@ -1008,11 +1119,14 @@
                 // Ambil semua pesan dalam chat
                 const messages = document.querySelectorAll('#chatMessages > div');
                 let lastUserMessage = null;
+                let lastAiMessage = null;
                 
-                // Cari pesan user terakhir
+                // Cari pesan user terakhir dan pesan AI terakhir
                 for (let i = messages.length - 1; i >= 0; i--) {
                     const message = messages[i];
-                    if (message.querySelector('.flex.justify-end')) {
+                    if (!lastAiMessage && !message.querySelector('.flex.justify-end')) {
+                        lastAiMessage = message;
+                    } else if (!lastUserMessage && message.querySelector('.flex.justify-end')) {
                         lastUserMessage = message;
                         break;
                     }
@@ -1024,10 +1138,9 @@
                 
                 const messageText = lastUserMessage.querySelector('p').textContent;
                 
-                // Hapus pesan AI terakhir
-                const lastMessage = messages[messages.length - 1];
-                if (!lastMessage.querySelector('.flex.justify-end')) {
-                    lastMessage.remove();
+                // Hapus pesan AI terakhir jika ada
+                if (lastAiMessage) {
+                    lastAiMessage.remove();
                 }
                 
                 // Tambahkan loading message
@@ -1231,3 +1344,4 @@
 </body>
 
 </html>
+

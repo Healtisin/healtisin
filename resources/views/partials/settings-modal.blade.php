@@ -103,6 +103,7 @@
                         <label class="block text-sm text-gray-600 mb-1">Bahasa</label>
                         <div class="relative">
                             <input type="text" 
+                                   id="current-language-display"
                                    value="{{ config('app.available_languages')[App::getLocale()]['native'] }}"
                                    class="w-full px-3 py-2 border rounded-md bg-gray-50" 
                                    readonly>
@@ -204,30 +205,33 @@
 </div>
 
 <!-- Language Modal -->
-<div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
-    <div class="bg-white rounded-lg w-[400px]">
+<div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg w-80">
+        <!-- Modal Header -->
         <div class="flex items-center justify-between p-4 border-b">
-            <h3 class="text-xl font-semibold">Ubah Bahasa</h3>
+            <h3 class="text-xl font-semibold">Pilih Bahasa</h3>
             <button onclick="closeLanguageModal()" class="p-1 hover:bg-gray-100 rounded-full">
                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
-        
+
+        <!-- Modal Content -->
         <div class="p-6">
             @foreach(config('app.available_languages') as $code => $lang)
                 <button onclick="changeLanguage('{{ $code }}')"
-                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 flex items-center justify-between mb-2">
+                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 flex items-center justify-between mb-2"
+                        data-lang-code="{{ $code }}">
                     <div>
                         <span class="text-sm">{{ $lang['native'] }}</span>
-                        <span class="text-xs text-gray-500">({{ $lang['name'] }})</span>
+                        <span class="text-xs text-gray-500" data-no-translate>({{ $lang['name'] }})</span>
                     </div>
-                    @if(App::getLocale() == $code)
+                    <span class="language-check-mark {{ App::getLocale() == $code ? '' : 'hidden' }}">
                         <svg class="w-5 h-5 text-[#24b0ba]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                    @endif
+                    </span>
                 </button>
             @endforeach
         </div>
@@ -326,6 +330,8 @@ function closeLanguageModal() {
 
 async function changeLanguage(lang) {
     try {
+        console.log('Mengubah bahasa ke:', lang);
+        
         const response = await fetch('/language/change', {
             method: 'POST',
             headers: {
@@ -339,8 +345,40 @@ async function changeLanguage(lang) {
         if (!response.ok) {
             throw new Error('Gagal mengubah bahasa');
         }
-
-        window.location.reload();
+        
+        const responseData = await response.json();
+        console.log('Respon server:', responseData);
+        
+        // Perbarui tampilan bahasa di input
+        const languageDisplayElement = document.getElementById('current-language-display');
+        if (languageDisplayElement) {
+            // Gunakan nilai native dari config bahasa
+            const languages = {
+                'id': 'Bahasa Indonesia',
+                'en': 'English',
+                'ja': '日本語',
+                'ko': '한국어',
+                'zh': '中文'
+            };
+            
+            if (languages[lang]) {
+                languageDisplayElement.value = languages[lang];
+            }
+        }
+        
+        // Jika bahasa yang dipilih adalah Indonesia (default), muat ulang halaman
+        if (lang === 'id') {
+            window.location.reload();
+            return;
+        }
+        
+        // Jika bahasa yang dipilih bukan default, gunakan fungsi translate
+        if (typeof window.changeLanguage === 'function') {
+            await window.changeLanguage(lang);
+        } else {
+            console.error('Fungsi window.changeLanguage tidak ditemukan!');
+            alert('Fungsi terjemahan tidak tersedia. Silakan muat ulang halaman.');
+        }
     } catch (error) {
         console.error('Language change error:', error);
         alert('Gagal mengubah bahasa: ' + error.message);

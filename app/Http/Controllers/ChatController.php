@@ -510,7 +510,7 @@ class ChatController extends Controller
             // Generate respons AI baru
             $newResponse = $this->getAIResponse($lastUserMessage, $chatId);
             
-            // Update chat history
+            // Update chat history - hapus pesan AI terakhir jika ada
             if ($lastUserMessageIndex < count($messages) - 1) {
                 // Hapus respons AI sebelumnya
                 array_pop($messages);
@@ -614,6 +614,7 @@ class ChatController extends Controller
         }
     }
 }
+
 
 
 
