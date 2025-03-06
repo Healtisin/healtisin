@@ -102,15 +102,15 @@ Route::middleware(['auth'])->group(function () {
         return redirect('/login')->with('success', 'Email verified successfully!');
     })->middleware(['auth', 'signed'])->name('verification.verify');
     // Route untuk aktivasi akun
-    Route::get('/activate-account/{id}', [UserController::class, 'activateAccount'])
-        ->name('activate.account');
+    Route::get('/activate-account/{id}/{type}', [UserController::class, 'activateAccount'])
+    ->name('activate.account');
 });
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
 Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 Route::get('/payment/pending', [PaymentController::class, 'paymentPending'])->name('payment.pending');
 Route::get('/payment/error', [PaymentController::class, 'paymentError'])->name('payment.error');
 //ADMIN
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
     // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/users', [UserController::class, 'index'])->name('admin.users');
@@ -120,6 +120,10 @@ Route::prefix('admin')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
+    //Admin Punya bro
+        Route::get('/admins/{admin}/edit', [UserController::class, 'editAdmin'])->name('admin.admins.edit');
+        Route::put('/admins/{admin}', [UserController::class, 'updateAdmin'])->name('admin.admins.update');
+        Route::delete('/admins/{admin}', [UserController::class, 'destroyAdmin'])->name('admin.admins.destroy');
     //Transaksi
     Route::get('/transactions', [TransactionController::class, 'index'])->name('admin.transactions');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');

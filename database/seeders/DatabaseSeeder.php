@@ -27,17 +27,10 @@ class DatabaseSeeder extends Seeder
             'username' => 'healtisin',
             'password' => Hash::make('12345'),
             'is_active' => true,
-            'role' => 'user', // Role user biasa
         ]);
 
-        User::factory()->create([
-            'name' => 'adminhealtisin',
-            'email' => 'admin.healtisin@gmail.com',
-            'username' => 'admin.healtisin',
-            'password' => Hash::make('12345'),
-            'is_active' => true,
-            'role' => 'admin', // Role user biasa
-        ]);
+        // Panggil seeder untuk admin
+        $this->call(AdminSeeder::class);
 
         \App\Models\News::factory(10)->create();
     }

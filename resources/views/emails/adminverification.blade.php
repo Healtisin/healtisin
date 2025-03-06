@@ -1,5 +1,3 @@
-<!-- resources/views/emails/adminverification.blade.php -->
-
 <!DOCTYPE html>
 <html>
 <head>

@@ -3,17 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
+        // Ambil parameter role dari request (jika ada)
+        $role = $request->query('role', 'user'); // Default: user
+
+        // Jika role adalah 'user', ambil data dari tabel users
+        if ($role === 'user') {
+            $users = User::all();
+        }
+        // Jika role adalah 'admin', ambil data dari tabel admins
+        elseif ($role === 'admin') {
+            $users = Admin::all();
+        }
+
+        return view('admin.users.index', compact('users', 'role'));
     }
 
     public function create()
@@ -29,26 +42,39 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'mobile' => 'required|string|max:20',
             'email' => 'required|email|unique:users',
-            'role' => 'required|in:user,admin',
+            'role' => 'required|in:user,admin', // Tambahkan validasi untuk role
             'password' => 'nullable|string|min:8', // Password opsional
         ]);
     
         // Generate password acak jika admin tidak memasukkan password
         $password = $validated['password'] ?? Str::random(8);
     
-        // Simpan user baru
-        $user = User::create([
-            'name' => $validated['name'],
-            'username' => $validated['username'],
-            'mobile' => $validated['mobile'],
-            'email' => $validated['email'],
-            'password' => Hash::make($password), // Hash password
-            'role' => $validated['role'],
-            'is_active' => false, // Default status inactive
-        ]);
+        // Simpan user baru berdasarkan role
+        if ($validated['role'] === 'user') {
+            $user = User::create([
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'mobile' => $validated['mobile'],
+                'email' => $validated['email'],
+                'password' => Hash::make($password), // Hash password
+                'is_active' => false, // Default status inactive
+            ]);
+        } elseif ($validated['role'] === 'admin') {
+            $user = Admin::create([
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'mobile' => $validated['mobile'],
+                'email' => $validated['email'],
+                'password' => Hash::make($password), // Hash password
+                'is_active' => false, // Default status inactive
+            ]);
+        }
     
-        // Generate URL aktivasi (tanpa signed URL)
-        $activationUrl = route('activate.account', ['id' => $user->id]);
+        // Generate URL aktivasi dengan parameter type
+        $activationUrl = route('activate.account', [
+            'id' => $user->id,
+            'type' => $validated['role'], // Tambahkan parameter type
+        ]);
     
         // Kirim email verifikasi tanpa Mailable class
         Mail::send('emails.adminverification', [
@@ -57,12 +83,12 @@ class UserController extends Controller
             'password' => $password, // Kirim password ke email
         ], function ($message) use ($user) {
             $message->to($user->email) // Email penerima
-                    ->subject('Verifikasi Akun Anda'); // Subject email
+                ->subject('Verifikasi Akun Anda'); // Subject email
         });
     
         // Redirect dengan pesan sukses
         return redirect()
-            ->route('admin.users')
+            ->route('admin.users', ['role' => $validated['role']]) // Redirect ke halaman sesuai role
             ->with('success', 'User created successfully. Please check email for activation.')
             ->with('generated_password', $password); // Password untuk ditampilkan sekali
     }
@@ -79,7 +105,6 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'mobile' => 'required|string|max:20',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:user,admin',
         ]);
 
         $user->update($validated);
@@ -89,6 +114,7 @@ class UserController extends Controller
             ->with('success', 'User updated successfully.');
     }
 
+
     public function destroy(User $user)
     {
         $user->delete();
@@ -97,24 +123,57 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully.');
     }
 
-        // Method untuk aktivasi akun
-        public function activateAccount($id)
-        {
-            // Cari user berdasarkan ID
+    // Method untuk aktivasi akun
+    public function activateAccount($id, $type = 'user')
+    {
+        // Cari user atau admin berdasarkan ID dan tipe
+        if ($type === 'user') {
             $user = User::find($id);
-        
-            // Jika user tidak ditemukan
-            if (!$user) {
-                return redirect()->route('login')->with('error', 'User not found.');
-            }
-        
-            // Update kolom email_verified_at dan is_active
-            $user->update([
-                'email_verified_at' => now(), // Set waktu sekarang
-                'is_active' => true, // Set status aktif
-            ]);
-        
-            // Redirect ke halaman login dengan pesan sukses
-            return redirect()->route('login')->with('success', 'Akun Anda berhasil diaktivasi. Silakan login.');
+        } elseif ($type === 'admin') {
+            $user = Admin::find($id);
+        } else {
+            return redirect()->route('login')->with('error', 'Tipe akun tidak valid.');
         }
+    
+        // Jika user/admin tidak ditemukan
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Akun tidak ditemukan.');
+        }
+    
+        // Update kolom email_verified_at dan is_active
+        $user->update([
+            'email_verified_at' => now(), // Set waktu sekarang
+            'is_active' => true, // Set status aktif
+        ]);
+    
+        // Redirect ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Akun Anda berhasil diaktivasi. Silakan login.');
+    }
+    
+    public function editAdmin(Admin $admin)
+    {
+        return view('admin.users.edit', compact('admin'));
+    }
+    public function updateAdmin(Request $request, Admin $admin)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:admins,username,' . $admin->id,
+            'mobile' => 'required|string|max:20',
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
+        ]);
+
+        $admin->update($validated);
+
+        return redirect()
+            ->route('admin.users', ['role' => 'admin'])
+            ->with('success', 'Admin updated successfully.');
+    }
+    public function destroyAdmin(Admin $admin)
+    {
+        $admin->delete();
+        return redirect()
+            ->route('admin.users', ['role' => 'admin'])
+            ->with('success', 'Admin deleted successfully.');
+    }
 }

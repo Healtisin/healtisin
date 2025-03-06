@@ -29,7 +29,6 @@ class User extends Authenticatable implements MustVerifyEmail // Implementasikan
         'subscription_status',
         'phone',
         'is_active',
-        'role',
         'email_verified_at'
     ];
 
