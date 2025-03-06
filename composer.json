@@ -12,7 +12,9 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.9",
-        "midtrans/midtrans-php": "^2.6"
+        "midtrans/midtrans-php": "^2.6",
+        "socialiteproviders/google": "^4.1",
+        "socialiteproviders/manager": "^4.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
