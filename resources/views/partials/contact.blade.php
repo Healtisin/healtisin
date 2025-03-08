@@ -102,10 +102,12 @@
 
                 <div class="reveal-on-scroll">
                     <h2 class="text-3xl font-bold dark:text-gray-100">Kirim Pesan</h2>
-                    <p class="my-6 dark:text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt mollitia enim
-                        doloremque soluta
-                        facere maxime harum nam doloribus, numquam nesciunt eligendi id dignissimos pariatur recusandae
-                        autem tempora ad aliquam nostrum?</p>
+                    <p class="my-6 dark:text-gray-400">
+                        Kami siap membantu Anda dengan berbagai pertanyaan seputar layanan kesehatan digital Healtisin.
+                        Tim support kami tersedia 24/7 untuk memberikan bantuan teknis, informasi layanan, atau
+                        menjawab kekhawatiran Anda tentang kesehatan. Silakan isi formulir di bawah ini, dan kami
+                        akan merespons secepat mungkin untuk memastikan pengalaman terbaik Anda menggunakan platform kami.
+                    </p>
                     <!-- @if(session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
                         role="alert">
