@@ -6,10 +6,10 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-4 scrollbar-hide" style="max-height: calc(100vh - 96px);">
-        <ul class="space-y-2">
+        <ul class="space-y-3">
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path
@@ -24,7 +24,7 @@
 
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.users') ? 'active' : '' }}">
-                <a href="{{ route('admin.users') }}" class="flex items-center gap-3">
+                <a href="{{ route('admin.users') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path
@@ -38,7 +38,7 @@
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.transactions') ? 'active' : '' }}">
-                <a href="{{ route('admin.transactions') }}" class="flex items-center gap-3">
+                <a href="{{ route('admin.transactions') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path
@@ -53,7 +53,7 @@
             <li class="w-full text-left rounded-lg">
                 <button onclick="toggleWebsiteInfo()"
                     class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-4">
                         <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                                 <path
@@ -71,28 +71,28 @@
                     </div>
                 </button>
 
-                <div id="website-info-dropdown" class="hidden pl-11 mt-1 space-y-2 transition-all duration-200">
+                <div id="website-info-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
                     <a href="{{ route('admin.dashboard') }}"
-                        class="block py-2 px-3 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                         Description
                     </a>
                     <a href="#"
-                        class="block py-2 px-3 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Footer
                     </a>
                     <a href="#"
-                        class="block py-2 px-3 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Meta Data
                     </a>
                     <a href="#"
-                        class="block py-2 px-3 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Logo
                     </a>
                 </div>
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                <a href="#" class="flex items-center gap-3">
+                <a href="#" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path
@@ -106,7 +106,7 @@
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.payments') ? 'active' : '' }}">
-                <a href="{{ route('admin.payments') }}" class="flex items-center gap-3">
+                <a href="{{ route('admin.payments') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
@@ -120,7 +120,7 @@
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.pricing') ? 'active' : '' }}">
-                <a href="{{ route('admin.pricing') }}" class="flex items-center gap-3">
+                <a href="{{ route('admin.pricing') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path
@@ -134,7 +134,7 @@
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.messages') ? 'active' : '' }}">
-                <a href="{{route('admin.messages')}}" class="flex items-center gap-3">
+                <a href="{{route('admin.messages')}}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
@@ -148,7 +148,7 @@
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                <a href="#" class="flex items-center gap-3">
+                <a href="#" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
@@ -160,19 +160,37 @@
                     </div>
                 </a>
             </li>
-            <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.logs.*') ? 'active' : '' }}">
-                <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3">
-                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+            <li class="w-full text-left rounded-lg">
+                <button onclick="toggleSystemLogs()"
+                    class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path
+                                    d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+                            </svg>
+                        </span>
+                        <div class="min-w-0 sidebar-text">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Log Sistem</p>
+                        </div>
+                        <svg id="system-logs-arrow" class="w-4 h-4 transition-transform duration-200"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                    </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">System Logs</p>
                     </div>
-                </a>
+                </button>
+
+                <div id="system-logs-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
+                    <a href="{{ route('admin.logs.index', ['log_type' => 'database']) }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ request('log_type', 'database') === 'database' && Route::is('admin.logs.index') ? 'active' : '' }}">
+                        Database Log
+                    </a>
+                    <a href="{{ route('admin.logs.index', ['log_type' => 'file']) }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ request('log_type') === 'file' && Route::is('admin.logs.index') ? 'active' : '' }}">
+                        File Log
+                    </a>
+                </div>
             </li>
         </ul>
     </div>
@@ -180,6 +198,7 @@
 
 <script>
     let isWebsiteInfoOpen = false;
+    let isSystemLogsOpen = false;
 
     function toggleWebsiteInfo() {
         const dropdown = document.getElementById('website-info-dropdown');
@@ -195,23 +214,59 @@
             arrow.classList.remove('rotate-180');
         }
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdownItems = document.querySelectorAll('#website-info-dropdown a');
-        let isAnyItemActive = false;
 
-        dropdownItems.forEach(item => {
+    function toggleSystemLogs() {
+        const dropdown = document.getElementById('system-logs-dropdown');
+        const arrow = document.getElementById('system-logs-arrow');
+
+        isSystemLogsOpen = !isSystemLogsOpen;
+
+        if (isSystemLogsOpen) {
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+        } else {
+            dropdown.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Website Info dropdown
+        const websiteInfoItems = document.querySelectorAll('#website-info-dropdown a');
+        let isAnyWebsiteInfoActive = false;
+
+        websiteInfoItems.forEach(item => {
             if (item.classList.contains('active')) {
-                isAnyItemActive = true;
+                isAnyWebsiteInfoActive = true;
             }
         });
 
-        if (isAnyItemActive) {
+        if (isAnyWebsiteInfoActive) {
             const dropdown = document.getElementById('website-info-dropdown');
             const arrow = document.getElementById('website-info-arrow');
 
             dropdown.classList.remove('hidden');
             arrow.classList.add('rotate-180');
             isWebsiteInfoOpen = true;
+        }
+
+        // System Logs dropdown
+        const systemLogsItems = document.querySelectorAll('#system-logs-dropdown a');
+        let isAnySystemLogActive = false;
+
+        systemLogsItems.forEach(item => {
+            if (item.classList.contains('active')) {
+                isAnySystemLogActive = true;
+            }
+        });
+
+        if (isAnySystemLogActive) {
+            const dropdown = document.getElementById('system-logs-dropdown');
+            const arrow = document.getElementById('system-logs-arrow');
+
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+            isSystemLogsOpen = true;
         }
     });
 </script>
@@ -251,6 +306,10 @@
     }
 
     #website-info-arrow {
+        @apply text-gray-700 dark:text-gray-200;
+    }
+
+    #system-logs-arrow {
         @apply text-gray-700 dark:text-gray-200;
     }
 </style>
