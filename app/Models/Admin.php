@@ -21,6 +21,8 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'name',
         'username',
         'email',
+        'phone', // Tambahkan ini
+        'profile_photo', // Tambahkan ini
         'password',
         'is_active',
         'email_verified_at'

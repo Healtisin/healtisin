@@ -51,26 +51,20 @@
                             <option value="admin">Admin</option>
                         </select>
                     </div>
-
                     <!-- Field: Status -->
                     <div class="space-y-4">
                         <label for="status" class="block text-base font-medium text-gray-700 dark:text-gray-300">Status</label>
-                        <select name="status" id="status"
-                            class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4">
-                            <option value="">Select status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
+                        <input type="text" name="status" id="status" value="Active" readonly
+                            class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-300 bg-gray-100 dark:bg-gray-300 text-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4 cursor-not-allowed">
                     </div>
-                </div>
 
-                <!-- Submit Button -->
-                <div class="mt-10">
-                    <button type="submit"
-                        class="bg-[#24b0ba] dark:bg-[#24b0ba]/80 text-white px-8 py-3 rounded-lg hover:bg-[#73c7e3] dark:hover:bg-[#73c7e3]/80 transition duration-300 text-base font-medium">
-                        Save Member
-                    </button>
-                </div>
+                    <!-- Submit Button -->
+                    <div class="mt-10">
+                        <button type="submit"
+                            class="bg-[#24b0ba] dark:bg-[#24b0ba]/80 text-white px-8 py-3 rounded-lg hover:bg-[#73c7e3] dark:hover:bg-[#73c7e3]/80 transition duration-300 text-base font-medium">
+                            Save Member
+                        </button>
+                    </div>
             </form>
         </div>
     </div>

@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Verifikasi Akun Anda</title>
+    <title>Akun Anda Telah Dibuat</title>
 </head>
 <body>
     <h1>Halo, {{ $user->name }}!</h1>
-    <p>Terima kasih telah mendaftar. Berikut adalah detail akun Anda:</p>
+    <p>Akun Anda telah berhasil dibuat oleh administrator. Berikut adalah detail login Anda:</p>
     <ul>
-        <li>Email: {{ $user->email }}</li>
-        <li>Password: {{ $password }}</li>
+        <li><strong>Email:</strong> {{ $user->email }}</li>
+        <li><strong>Password:</strong> {{ $password }}</li>
     </ul>
-    <p>Silakan klik tombol di bawah ini untuk mengaktifkan akun Anda:</p>
-    <a href="{{ $activationUrl }}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;">
-        Aktivasi Akun
-    </a>
-    <p>Jika Anda tidak membuat akun, abaikan email ini.</p>
+    <p>Silakan gunakan informasi di atas untuk masuk ke sistem.</p>
+    <p>Untuk keamanan, kami menyarankan Anda segera mengganti password setelah login pertama.</p>
+    <p>Jika Anda merasa tidak pernah meminta akun ini, harap abaikan email ini.</p>
+    <br>
+    <p>Salam,</p>
+    <p><strong>Administrator Healtisin</strong></p>
 </body>
 </html>

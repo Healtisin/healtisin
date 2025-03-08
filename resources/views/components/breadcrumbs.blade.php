@@ -149,7 +149,7 @@ $breadcrumbRoutes = [
                     </svg>
                 </button>
                 <div id="profileDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <a href="#" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <div class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -179,7 +179,8 @@ $breadcrumbRoutes = [
         </div>
     </div>
 </header>
-
+<!-- Panggil komponen settings modal -->
+<x-settings />
 <script>
     function toggleDropdown(dropdownId, otherDropdownId) {
         const dropdown = document.getElementById(dropdownId);
@@ -193,7 +194,23 @@ $breadcrumbRoutes = [
         // Toggle current dropdown
         dropdown.classList.toggle('hidden');
     }
+    // Fungsi untuk membuka modal settings
+    function openSettingsModal() {
+        document.getElementById('settingsModal').classList.remove('hidden');
+    }
 
+    // Fungsi untuk menutup modal settings
+    function closeSettingsModal() {
+        document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    // Tutup modal jika mengklik di luar modal
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('settingsModal');
+        if (event.target === modal) {
+            closeSettingsModal();
+        }
+    });
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
         const notificationDropdown = document.getElementById('notificationDropdown');

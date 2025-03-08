@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
     })->middleware(['auth', 'signed'])->name('verification.verify');
     // Route untuk aktivasi akun
     Route::get('/activate-account/{id}/{type}', [UserController::class, 'activateAccount'])
-    ->name('activate.account');
+        ->name('activate.account');
 });
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification']);
 Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
@@ -122,9 +122,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
     //Admin Punya bro
-        Route::get('/admins/{admin}/edit', [UserController::class, 'editAdmin'])->name('admin.admins.edit');
-        Route::put('/admins/{admin}', [UserController::class, 'updateAdmin'])->name('admin.admins.update');
-        Route::delete('/admins/{admin}', [UserController::class, 'destroyAdmin'])->name('admin.admins.destroy');
+    Route::get('/admins/{admin}/edit', [UserController::class, 'editAdmin'])->name('admin.admins.edit');
+    Route::put('/admins/{admin}', [UserController::class, 'updateAdmin'])->name('admin.admins.update');
+    Route::delete('/admins/{admin}', [UserController::class, 'destroyAdmin'])->name('admin.admins.destroy');
     //Transaksi
     Route::get('/transactions', [TransactionController::class, 'index'])->name('admin.transactions');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');
@@ -138,12 +138,20 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     //Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
-    
+
     //System Logs
     Route::get('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'index'])->name('admin.logs.index');
     Route::get('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'show'])->name('admin.logs.show');
     Route::delete('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'destroy'])->name('admin.logs.destroy');
     Route::delete('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'clearByDate'])->name('admin.logs.clear');
+
+    // Route untuk settings
+    Route::prefix('settings')->group(function () {
+        Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('settings.updateProfile');
+        Route::post('/change-password', [UserController::class, 'changePassword'])->name('settings.changePassword');
+        Route::post('/upload-photo', [UserController::class, 'uploadPhoto'])->name('settings.uploadPhoto');
+        Route::delete('/delete-photo', [UserController::class, 'deletePhoto'])->name('settings.deletePhoto');
+    });
 });
 
 Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])->name('profile.phone.update');
@@ -190,30 +198,30 @@ Route::post('/chat/edit-message', [App\Http\Controllers\ChatController::class, '
 Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 
 // Route untuk menguji fitur log
-Route::get('/test-log', function() {
+Route::get('/test-log', function () {
     // Log error
     LogHelper::error('user', 'Gagal login: kredensial tidak valid', ['username' => 'test@example.com']);
     LogHelper::error('api', 'API Rate limit exceeded', ['endpoint' => '/api/users']);
-    
+
     // Log warning
     LogHelper::warning('transaction', 'Pembayaran timeout', ['order_id' => 'ORD-123']);
     LogHelper::warning('system', 'Penggunaan CPU tinggi', ['usage' => '95%']);
-    
+
     // Log info
     LogHelper::info('view', 'Halaman dashboard diakses', ['page' => 'dashboard']);
     LogHelper::info('user', 'User berhasil mendaftar', ['user_id' => 1]);
-    
+
     // Log audit
     LogHelper::auditSuccess('user', 'User berhasil mengubah password', ['user_id' => 1]);
     LogHelper::auditFailure('transaction', 'Percobaan pembayaran gagal', ['order_id' => 'ORD-123']);
-    
+
     // Log menggunakan helper segment
     LogHelper::transaction(LogHelper::ERROR, 'Transaksi gagal', ['amount' => 1000000]);
     LogHelper::api(LogHelper::WARNING, 'Endpoint deprecated', ['endpoint' => '/api/v1/users']);
     LogHelper::user(LogHelper::INFO, 'User logout', ['user_id' => 1]);
     LogHelper::view(LogHelper::INFO, 'Form kontak dibuka', ['referrer' => 'homepage']);
     LogHelper::system(LogHelper::ERROR, 'Database connection failed', ['host' => 'localhost']);
-    
+
     return redirect()->route('admin.logs.index')
         ->with('success', 'Log berhasil dibuat');
 });
