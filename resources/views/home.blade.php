@@ -25,7 +25,7 @@
                 <!-- Chat Interface -->
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->
-                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2 dark:bg-gray-800 rounded-lg" id="chatMessages">
+                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2 dark:bg-gray-800/50 rounded-lg" id="chatMessages">
                         <!-- Welcome Message Template (hidden) -->
                         <div id="welcomeMessageTemplate" class="hidden">
                             <div class="flex flex-col gap-2 mb-4">
@@ -36,8 +36,8 @@
                                         </svg>
                                     </div>
                                     <div class="flex flex-col max-w-[75%]">
-                                        <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                                            <div class="text-gray-800 break-words">
+                                        <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                                            <div class="text-gray-800 dark:text-gray-200 break-words">
                                                 <p><span data-translate="welcome-greeting">Hai {{ Auth::user()->name }}, saya Healtisin 👋</span></p>
                                                 <p><span data-translate="welcome-intro">Saya adalah asisten AI kesehatan yang siap membantu Anda dengan informasi kesehatan umum.</span></p><br>
                                                 <p><span data-translate="welcome-capabilities">⚕️ Saya dapat membantu Anda dengan:</span></p>
@@ -70,17 +70,17 @@
                     <!-- Chat Input -->
                     <div class="relative flex items-center gap-2">
                         <textarea id="chatInput"
-                            class="w-full px-6 py-3 pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none"
+                            class="w-full px-6 py-3 pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400"
                             placeholder="Ketik pertanyaan Anda" rows="1"></textarea>
 
                         <div class="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                            <button class="p-2 text-gray-500 hover:text-gray-700">
+                            <button class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                 </svg>
                             </button>
-                            <button id="start-record-btn" class="p-2 text-gray-500 hover:text-gray-700">
+                            <button id="start-record-btn" class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -197,15 +197,15 @@
 
         const loadingMessage = `
             <div id="loadingMessage" class="flex justify-start gap-2 items-start mb-4">
-                <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </div>
                 <div class="flex flex-col max-w-[75%]">
-                    <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                        <p class="text-gray-600">Sedang mengetik...</p>
+                    <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                        <p class="text-gray-600 dark:text-gray-300">Sedang mengetik...</p>
                     </div>
                 </div>
             </div>
@@ -751,7 +751,7 @@
                 <div class="flex flex-col gap-2 mb-4">
                     <div class="flex justify-end gap-2 items-start">
                         <div class="flex flex-col items-end max-w-[75%]">
-                            <div class="bg-[#24b0ba] text-white rounded-2xl px-4 py-2 inline-block">
+                            <div class="bg-[#24b0ba] dark:bg-[#24b0ba]/80 text-white rounded-2xl px-4 py-2 inline-block">
                                 <div class="flex flex-col">
                                     <p class="break-words whitespace-pre-wrap">${message.content || message}</p>
                                     <div class="flex justify-end">
@@ -760,7 +760,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <div class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                             ${Auth.user.profile_photo 
                                 ? `<img src="/storage/${Auth.user.profile_photo}" alt="Profile" class="w-full h-full object-cover">` 
                                 : `<span class="text-white font-medium">${Auth.user.name.charAt(0).toUpperCase()}</span>`
@@ -769,14 +769,14 @@
                     </div>
                     <div class="flex justify-end mr-14">
                         <button onclick="copyMessage(this.closest('.flex.flex-col.gap-2').querySelector('p').textContent)" 
-                            class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                            class="text-[#24b0ba] dark:text-[#24b0ba]/80 hover:text-[#1d8f98] dark:hover:text-[#73c7e3] p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                             title="Salin pesan">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                             </svg>
                         </button>
                         <button onclick="editUserMessage(this)" 
-                            class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                            class="text-[#24b0ba] dark:text-[#24b0ba]/80 hover:text-[#1d8f98] dark:hover:text-[#73c7e3] p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                             title="Edit message">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -796,7 +796,6 @@
                 minute: '2-digit'
             });
 
-            // Cek apakah ini pesan pembuka
             const isWelcomeMessage = (message.content || message)?.includes('Hai') && 
                                     (message.content || message)?.includes('saya Healtisin') && 
                                     (message.content || message)?.includes('Saya dapat membantu Anda dengan:');
@@ -804,16 +803,16 @@
             return `
                 <div class="flex flex-col gap-2 mb-4">
                     <div class="flex justify-start gap-2 items-start">
-                        <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                        <div class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                             </svg>
                         </div>
                         <div class="flex flex-col max-w-[75%]">
-                            <div class="bg-white border border-gray-200 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                                <p class="text-gray-800 break-words whitespace-pre-wrap">${message.content || message}</p>
+                            <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-2 inline-block shadow-sm">
+                                <p class="text-gray-800 dark:text-gray-200 break-words whitespace-pre-wrap">${message.content || message}</p>
                                 <div class="flex items-center mt-2">
-                                    <span class="text-xs text-gray-400">${timestamp}</span>
+                                    <span class="text-xs text-gray-400 dark:text-gray-500">${timestamp}</span>
                                 </div>
                             </div>
                         </div>
@@ -821,14 +820,14 @@
                     ${!isWelcomeMessage ? `
                         <div class="flex justify-start ml-14">
                             <button onclick="copyMessage(this.closest('.flex.flex-col.gap-2').querySelector('p').textContent)" 
-                                class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                                class="text-[#24b0ba] dark:text-[#24b0ba]/80 hover:text-[#1d8f98] dark:hover:text-[#73c7e3] p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                 title="Salin pesan">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                                 </svg>
                             </button>
                             <button onclick="regenerateResponse()" 
-                                class="text-[#24b0ba] hover:text-[#1d8f98] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                                class="text-[#24b0ba] dark:text-[#24b0ba]/80 hover:text-[#1d8f98] dark:hover:text-[#73c7e3] p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                 title="Regenerate response">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
