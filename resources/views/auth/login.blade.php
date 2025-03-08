@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     @include('lang.language-modal')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-[800px] flex">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-[800px] flex">
             <!-- Form Section -->
             <div class="w-1/2 p-8">
-                <h2 class="text-2xl font-semibold mb-6">Sign In</h2>
+                <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">Sign In</h2>
                 
                 @if (session('success'))
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                    <div class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-200 p-4 mb-4">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if (session('error'))
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+                    <div class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4 mb-4">
                         {{ session('error') }}
                     </div>
                 @endif

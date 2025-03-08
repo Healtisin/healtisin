@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Tidak Ditemukan - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     @include('lang.language-modal')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex flex-col items-center justify-center px-4">
         <!-- Animasi Ilustrasi -->
         <div class="mb-4 relative flex justify-center items-center">
@@ -19,10 +20,10 @@
 
         <!-- Pesan Error -->
         <div class="text-center max-w-lg">
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
                 Oops! Sepertinya Anda Tersesat
             </h1>
-            <p class="text-lg text-gray-600 mb-8">
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
                 Halaman yang Anda cari mungkin sedang dalam pemeriksaan atau telah dipindahkan ke ruangan lain.
             </p>
 

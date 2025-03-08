@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @vite('resources/js/translate.js')
@@ -13,7 +14,7 @@
     @include('lang.language-modal')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="flex min-h-screen">
         <!-- Include Sidebar -->
         @include('partials.sidebar')
@@ -24,7 +25,7 @@
                 <!-- Chat Interface -->
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->
-                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2" id="chatMessages">
+                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2 dark:bg-gray-800 rounded-lg" id="chatMessages">
                         <!-- Welcome Message Template (hidden) -->
                         <div id="welcomeMessageTemplate" class="hidden">
                             <div class="flex flex-col gap-2 mb-4">

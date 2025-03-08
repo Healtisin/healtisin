@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Detail Pembayaran - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('lang.language-modal')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
-        <header class="fixed w-full bg-white shadow-sm z-10">
+        <header class="fixed w-full bg-white dark:bg-gray-800 shadow-sm z-10">
             <div class="max-w-7xl mx-auto px-4 py-4">
                 <a href="{{ route('pricing.select-package') }}" 
-                   class="inline-flex items-center text-gray-600 hover:text-[#24b0ba]">
+                   class="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                               d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -34,7 +35,7 @@
                         <div class="h-1 w-16 bg-[#24b0ba]"></div>
                         <div class="w-8 h-8 bg-[#24b0ba] text-white rounded-full flex items-center justify-center">2</div>
                         <div class="h-1 w-16 bg-[#24b0ba]"></div>
-                        <div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center">3</div>
+                        <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full flex items-center justify-center">3</div>
                     </div>
                 </div>
 
@@ -44,51 +45,51 @@
                     <input type="hidden" name="payment_method" value="{{ $payment_method }}">
 
                     <!-- Detail Informasi -->
-                    <div class="bg-white rounded-xl shadow-lg p-8">
-                        <h3 class="text-xl font-semibold mb-6">Informasi Pembayaran</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                        <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
                                 <input type="text" name="full_name" required
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba]"
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                        value="{{ auth()->user()->name }}">
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                                 <input type="email" name="email" required
-                                       class="w-full px-4 py-2 border rounded-lg bg-gray-50" 
+                                       class="w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
                                        value="{{ auth()->user()->email }}" readonly>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor HP</label>
                                 <input type="tel" name="phone" required
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba]"
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                        placeholder="Contoh: 08123456789">
                             </div>
 
                             @if($payment_method === 'credit_card')
-                            <div class="space-y-4 pt-4 border-t">
-                                <h4 class="font-medium">Detail Kartu Kredit</h4>
+                            <div class="space-y-4 pt-4 border-t dark:border-gray-700">
+                                <h4 class="font-medium dark:text-gray-200">Detail Kartu Kredit</h4>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Kartu</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor Kartu</label>
                                     <input type="text" name="card_number" required
-                                           class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba]"
+                                           class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                            placeholder="1234 5678 9012 3456">
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Kadaluarsa</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Kadaluarsa</label>
                                         <input type="text" name="expiry_date" required
-                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba]"
+                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                                placeholder="MM/YY">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVV</label>
                                         <input type="text" name="cvv" required maxlength="3"
-                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba]"
+                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                                placeholder="123">
                                     </div>
                                 </div>
@@ -98,22 +99,22 @@
                     </div>
 
                     <!-- Ringkasan Pembayaran -->
-                    <div class="bg-white rounded-xl shadow-lg p-8">
-                        <h3 class="text-xl font-semibold mb-6">Ringkasan Pembayaran</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                        <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Ringkasan Pembayaran</h3>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Paket Pro {{ $package['name'] }}</span>
-                                <span class="font-medium">Rp {{ number_format($package['total'], 0, ',', '.') }}</span>
+                                <span class="text-gray-600 dark:text-gray-400">Paket Pro {{ $package['name'] }}</span>
+                                <span class="font-medium dark:text-gray-200">Rp {{ number_format($package['total'], 0, ',', '.') }}</span>
                             </div>
                             @if($package['discount'] > 0)
-                            <div class="flex justify-between items-center text-green-600">
+                            <div class="flex justify-between items-center text-green-600 dark:text-green-400">
                                 <span>Hemat {{ $package['discount'] }}%</span>
                                 <span>-Rp {{ number_format($package['savings'], 0, ',', '.') }}</span>
                             </div>
                             @endif
-                            <div class="flex justify-between items-center pt-4 border-t font-bold">
-                                <span>Total Pembayaran</span>
-                                <span class="text-xl text-[#24b0ba]">
+                            <div class="flex justify-between items-center pt-4 border-t dark:border-gray-700 font-bold">
+                                <span class="dark:text-gray-200">Total Pembayaran</span>
+                                <span class="text-xl text-[#24b0ba] dark:text-[#73c7e3]">
                                     Rp {{ number_format($package['final_total'], 0, ',', '.') }}
                                 </span>
                             </div>

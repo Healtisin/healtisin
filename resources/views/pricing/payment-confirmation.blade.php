@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Konfirmasi Pembayaran - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('lang.language-modal')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex flex-col">
-        <header class="fixed w-full bg-white shadow-sm z-10">
+        <header class="fixed w-full bg-white dark:bg-gray-800 shadow-sm z-10">
             <div class="max-w-7xl mx-auto px-4 py-4">
-                <a href="{{ route('home') }}" class="inline-flex items-center text-gray-600 hover:text-[#24b0ba]">
+                <a href="{{ route('home') }}" class="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
@@ -28,38 +29,38 @@
             <div class="max-w-3xl mx-auto px-4 py-12">
                 <!-- Status Pembayaran -->
                 <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-4">
-                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h1 class="text-2xl font-bold mb-2">Menunggu Pembayaran</h1>
-                    <p class="text-gray-600">Selesaikan pembayaran sebelum</p>
-                    <p class="text-lg font-semibold text-[#24b0ba]">{{ $payment->expired_at->format('d M Y H:i') }} WIB</p>
+                    <h1 class="text-2xl font-bold mb-2 dark:text-gray-100">Menunggu Pembayaran</h1>
+                    <p class="text-gray-600 dark:text-gray-400">Selesaikan pembayaran sebelum</p>
+                    <p class="text-lg font-semibold text-[#24b0ba] dark:text-[#73c7e3]">{{ $payment->expired_at->format('d M Y H:i') }} WIB</p>
                 </div>
 
                 <!-- Informasi Pembayaran -->
-                <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                    <h3 class="text-xl font-semibold mb-6">Informasi Pembayaran</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+                    <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
                     <div class="space-y-4">
                         <div class="flex justify-between">
-                            <span class="text-gray-600">ID Pembayaran</span>
-                            <span class="font-medium">{{ $payment->id }}</span>
+                            <span class="text-gray-600 dark:text-gray-400">ID Pembayaran</span>
+                            <span class="font-medium dark:text-gray-200">{{ $payment->id }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Total Pembayaran</span>
-                            <span class="font-bold text-[#24b0ba]">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
+                            <span class="text-gray-600 dark:text-gray-400">Total Pembayaran</span>
+                            <span class="font-bold text-[#24b0ba] dark:text-[#73c7e3]">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Metode Pembayaran</span>
-                            <span class="font-medium">{{ strtoupper($payment->payment_method) }}</span>
+                            <span class="text-gray-600 dark:text-gray-400">Metode Pembayaran</span>
+                            <span class="font-medium dark:text-gray-200">{{ strtoupper($payment->payment_method) }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Instruksi Pembayaran -->
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <h3 class="text-xl font-semibold mb-6">Cara Pembayaran</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Cara Pembayaran</h3>
                     @if($payment->payment_method === 'paypal')
                     @include('pricing.partials.paypal-instructions')
                     @elseif($payment->payment_method === 'cc')

@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Privacy Policy - Healtisin AI</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('lang.language-modal')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     @include('partials.header')
 
     <main class="pt-19 pb-16">
@@ -36,42 +37,42 @@
 
         <!-- Konten Privacy Policy -->
         <div class="max-w-6xl mx-auto px-4 py-12">
-            <div class="bg-white p-8 rounded-lg shadow-md">
-                <h2 class="text-3xl font-bold mb-6">Healtisin Privacy Policy</h2>
-                <p class="text-gray-600 mb-2 text-sm font-semibold uppercase tracking-widest">Last Update: February 14,
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold mb-6 dark:text-gray-100">Healtisin Privacy Policy</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm font-semibold uppercase tracking-widest">Last Update: February 14,
                     2025</p>
-                <p class="text-gray-600 mb-6">Selamat datang di Healtisin!</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Selamat datang di Healtisin!</p>
 
-                <h3 class="text-2xl font-bold mb-4">Introduction</h3>
-                <p class="text-gray-600 mb-6">
+                <h3 class="text-2xl font-bold mb-4 dark:text-gray-100">Introduction</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Kebijakan privasi ("Privacy Policy") ini berlaku untuk informasi pribadi yang diproses oleh
                     Healtisin dalam kaitannya dengan aplikasi, situs web, perangkat lunak, dan layanan terkait
                     (misalnya, "Layanan") yang merujuk atau terhubung ke Kebijakan Privasi ini. Layanan memungkinkan
                     Anda untuk membuat dan berinteraksi dengan chatbot.
                 </p>
 
-                <h3 class="text-2xl font-bold mb-4">Informasi yang Kami Kumpulkan</h3>
-                <p class="text-gray-600 mb-6">
+                <h3 class="text-2xl font-bold mb-4 dark:text-gray-100">Informasi yang Kami Kumpulkan</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Dalam upaya memberikan layanan kesehatan digital yang optimal, Healtisin AI mengumpulkan beberapa jenis informasi
                     penting dengan persetujuan pengguna. Informasi ini diperlukan untuk memberikan analisis kesehatan yang akurat,
                     rekomendasi yang tepat, dan pengalaman yang dipersonalisasi sesuai kebutuhan kesehatan Anda.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">Data Kesehatan Pribadi</h4>
-                <ul class="list-disc list-inside text-gray-600 mb-6">
-                    <li class="mb-2"><strong>Informasi Dasar:</strong> Usia, jenis kelamin, tinggi badan, berat badan, dan riwayat kesehatan umum.</li>
-                    <li class="mb-2"><strong>Riwayat Medis:</strong> Kondisi kesehatan yang ada, alergi, pengobatan yang sedang dijalani, dan riwayat operasi.</li>
-                    <li class="mb-2"><strong>Gejala:</strong> Keluhan kesehatan yang dialami, durasi gejala, dan tingkat keparahan.</li>
+                <h4 class="text-xl font-bold mb-4 dark:text-gray-100">Data Kesehatan Pribadi</h4>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-6">
+                    <li class="mb-2"><strong class="dark:text-gray-300">Informasi Dasar:</strong> Usia, jenis kelamin, tinggi badan, berat badan, dan riwayat kesehatan umum.</li>
+                    <li class="mb-2"><strong class="dark:text-gray-300">Riwayat Medis:</strong> Kondisi kesehatan yang ada, alergi, pengobatan yang sedang dijalani, dan riwayat operasi.</li>
+                    <li class="mb-2"><strong class="dark:text-gray-300">Gejala:</strong> Keluhan kesehatan yang dialami, durasi gejala, dan tingkat keparahan.</li>
                 </ul>
 
-                <h4 class="text-xl font-bold mb-4">Data Penggunaan Layanan</h4>
-                <ul class="list-disc list-inside text-gray-600 mb-6">
-                    <li class="mb-2"><strong>Interaksi Platform:</strong> Riwayat konsultasi, hasil skrining kesehatan, dan rekomendasi yang diterima.</li>
-                    <li class="mb-2"><strong>Data Teknis:</strong> Informasi perangkat, log aktivitas, dan data penggunaan aplikasi untuk peningkatan layanan.</li>
-                    <li class="mb-2"><strong>Feedback:</strong> Masukan dan penilaian Anda terhadap layanan untuk evaluasi dan pengembangan sistem.</li>
+                <h4 class="text-xl font-bold mb-4 dark:text-gray-100">Data Penggunaan Layanan</h4>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-6">
+                    <li class="mb-2"><strong class="dark:text-gray-300">Interaksi Platform:</strong> Riwayat konsultasi, hasil skrining kesehatan, dan rekomendasi yang diterima.</li>
+                    <li class="mb-2"><strong class="dark:text-gray-300">Data Teknis:</strong> Informasi perangkat, log aktivitas, dan data penggunaan aplikasi untuk peningkatan layanan.</li>
+                    <li class="mb-2"><strong class="dark:text-gray-300">Feedback:</strong> Masukan dan penilaian Anda terhadap layanan untuk evaluasi dan pengembangan sistem.</li>
                 </ul>
 
-                <p class="text-gray-600 mb-6">
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Semua informasi yang dikumpulkan dilindungi dengan standar keamanan tinggi dan hanya digunakan untuk
                     tujuan yang telah disebutkan dalam kebijakan privasi ini. Kami berkomitmen untuk menjaga kerahasiaan
                     dan keamanan data kesehatan Anda sesuai dengan regulasi yang berlaku.

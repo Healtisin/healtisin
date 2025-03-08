@@ -1,10 +1,10 @@
 <!-- Delete Account Modal -->
 <div id="deleteAccountModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
-    <div class="bg-white rounded-lg w-[500px] p-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-[500px] p-6">
         <div class="flex items-center justify-between mb-4">
-            <h4 class="text-lg font-medium text-red-600">Hapus Akun</h4>
-            <button onclick="closeDeleteAccountModal()" class="p-1 hover:bg-gray-100 rounded-full">
-                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <h4 class="text-lg font-medium text-red-600 dark:text-red-400">Hapus Akun</h4>
+            <button onclick="closeDeleteAccountModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -15,7 +15,7 @@
         
         <div class="mb-6">
             <!-- Warning Messages -->
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+            <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 mb-4">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,8 +23,8 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-600">Peringatan: Tindakan ini tidak dapat dibatalkan</h3>
-                        <div class="mt-2 text-sm text-red-500">
+                        <h3 class="text-sm font-medium text-red-600 dark:text-red-400">Peringatan: Tindakan ini tidak dapat dibatalkan</h3>
+                        <div class="mt-2 text-sm text-red-500 dark:text-red-300">
                             <ul class="list-disc pl-5 space-y-1">
                                 <li>Semua data akun Anda akan dihapus secara permanen</li>
                                 <li>Semua riwayat aktivitas akan dihapus</li>
@@ -41,23 +41,23 @@
                 @method('DELETE')
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Masukkan kata sandi Anda untuk konfirmasi</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Masukkan kata sandi Anda untuk konfirmasi</label>
                     <input type="password" 
                            name="password" 
-                           class="w-full px-3 py-2 border rounded-md" 
+                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
                            required>
-                    <span id="password_error" class="text-red-600 text-sm hidden"></span>
+                    <span id="password_error" class="text-red-600 dark:text-red-400 text-sm hidden"></span>
                 </div>
             </form>
         </div>
 
         <div class="flex justify-end gap-2">
             <button onclick="closeDeleteAccountModal()" 
-                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">
+                    class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                 Batal
             </button>
             <button onclick="document.getElementById('deleteAccountForm').submit()" 
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                 Ya, Saya Mengerti dan Ingin Menghapus Akun
             </button>
         </div>
