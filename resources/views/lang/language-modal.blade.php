@@ -5,7 +5,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const langParam = urlParams.get('lang');
         
-        if (langParam && ['id', 'en', 'ja', 'ko', 'zh'].includes(langParam)) {
+        if (langParam && ['id', 'en'].includes(langParam)) {
             changeLanguage(langParam);
         } else {
             // Perbarui tampilan bahasa sesuai dengan bahasa yang disimpan di cookie
@@ -46,10 +46,7 @@
         if (languageDisplayElement) {
             const languages = {
                 'id': 'Bahasa Indonesia',
-                'en': 'English',
-                'ja': '日本語',
-                'ko': '한국어',
-                'zh': '中文'
+                'en': 'English'
             };
             
             if (languages[userLocale]) {

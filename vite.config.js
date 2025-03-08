@@ -7,7 +7,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/js/translate.js'
+                'resources/js/translate.js',
+                'resources/js/dark-mode.js'
             ],
             refresh: true,
         }),

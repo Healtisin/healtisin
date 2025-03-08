@@ -1,5 +1,3 @@
-import { translate } from 'google-translate-api-browser';
-
 // Fungsi untuk menerjemahkan teks menggunakan API MyMemory (gratis)
 async function translateText(text, targetLang) {
     if (!text || text.trim() === '' || text.length > 500) return text;
@@ -233,9 +231,6 @@ window.changeLanguage = async function(lang) {
             const languageNames = {
                 'id': 'Bahasa Indonesia',
                 'en': 'Bahasa Inggris',
-                'ja': 'Bahasa Jepang',
-                'ko': 'Bahasa Korea',
-                'zh': 'Bahasa Mandarin'
             };
             
             alertDiv.textContent = 'Bahasa berhasil diubah ke ' + 
@@ -248,15 +243,12 @@ window.changeLanguage = async function(lang) {
             }, 3000);
 
             // Perbarui elemen tampilan bahasa di settings modal
-            const languageDisplayElement = document.querySelector('input[value*="Bahasa Indonesia"], input[value*="English"], input[value*="日本語"], input[value*="한국어"], input[value*="中文"]');
+            const languageDisplayElement = document.querySelector('input[value*="Bahasa Indonesia"], input[value*="English"]');
             if (languageDisplayElement) {
                 // Gunakan nilai native dari config bahasa
                 const languages = {
                     'id': 'Bahasa Indonesia',
                     'en': 'English',
-                    'ja': '日本語',
-                    'ko': '한국어',
-                    'zh': '中文'
                 };
                 
                 if (languages[lang]) {

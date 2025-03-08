@@ -93,18 +93,6 @@ return [
             'name' => 'English',
             'native' => 'English',
         ],
-        'ja' => [
-            'name' => 'Japanese',
-            'native' => '日本語',
-        ],
-        'ko' => [
-            'name' => 'Korean',
-            'native' => '한국어',
-        ],
-        'zh' => [
-            'name' => 'Chinese',
-            'native' => '中文',
-        ]
     ],
 
     /*
