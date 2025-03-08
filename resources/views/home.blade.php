@@ -1279,6 +1279,62 @@
         window.addEventListener('resize', function() {
             updateScrollbars();
         });
+
+        // Fungsi untuk toggle tema gelap/terang
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Fungsi untuk toggle bahasa
+        function toggleLanguage() {
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'id' ? 'en' : 'id';
+            
+            // Simpan preferensi bahasa
+            localStorage.setItem('language', newLang);
+            
+            // Terapkan terjemahan
+            document.documentElement.lang = newLang;
+            if (typeof applyTranslation === 'function') {
+                applyTranslation();
+            }
+
+            // Tampilkan notifikasi
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: newLang === 'id' ? 'Bahasa diubah ke Indonesia' : 'Language changed to English'
+            });
+        }
+
+        // Inisialisasi tema dan bahasa saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi tema
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Inisialisasi bahasa
+            const language = localStorage.getItem('language') || 'id';
+            document.documentElement.lang = language;
+            if (typeof applyTranslation === 'function') {
+                applyTranslation();
+            }
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

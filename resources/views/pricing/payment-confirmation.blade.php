@@ -15,13 +15,28 @@
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex flex-col">
         <header class="fixed w-full bg-white dark:bg-gray-800 shadow-sm z-10">
-            <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                 <a href="{{ route('home') }}" class="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     Kembali ke Beranda
                 </a>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleLanguage()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" title="Ganti Bahasa">
+                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                    </button>
+                    <button onclick="toggleTheme()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" title="Ganti Tema">
+                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -116,33 +131,52 @@
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const snapToken = "{{ $payment->snap_token }}";
-    console.log("Snap Token:", snapToken); // Debugging
-
-    if (!snapToken) {
-        alert('Snap Token tidak ditemukan. Silakan coba lagi.');
-        return;
-    }
-
-    snap.pay(snapToken, {
-        onSuccess: function(result) {
-            console.log("Success:", result);
-            window.location.href = "{{ route('home') }}";
-        },
-        onPending: function(result) {
-            console.log("Pending:", result);
-            window.location.href = "{{ route('home') }}";
-        },
-        onError: function(result) {
-            console.log("Error:", result);
-            window.location.href = "{{ route('home') }}";
-        },
-        onClose: function() {
-            console.log('Popup pembayaran ditutup.');
+        // Fungsi untuk toggle bahasa
+        function toggleLanguage() {
+            const languageModal = document.getElementById('languageModal');
+            if (languageModal) {
+                languageModal.classList.remove('hidden');
+            }
         }
-    });
-});
+
+        // Fungsi untuk toggle tema
+        function toggleTheme() {
+            if (localStorage.theme === 'dark') {
+                localStorage.theme = 'light';
+                document.documentElement.classList.remove('dark');
+            } else {
+                localStorage.theme = 'dark';
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const snapToken = "{{ $payment->snap_token }}";
+            console.log("Snap Token:", snapToken); // Debugging
+
+            if (!snapToken) {
+                alert('Snap Token tidak ditemukan. Silakan coba lagi.');
+                return;
+            }
+
+            snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    console.log("Success:", result);
+                    window.location.href = "{{ route('home') }}";
+                },
+                onPending: function(result) {
+                    console.log("Pending:", result);
+                    window.location.href = "{{ route('home') }}";
+                },
+                onError: function(result) {
+                    console.log("Error:", result);
+                    window.location.href = "{{ route('home') }}";
+                },
+                onClose: function() {
+                    console.log('Popup pembayaran ditutup.');
+                }
+            });
+        });
     </script>
     <script>
         // Countdown Timer
