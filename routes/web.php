@@ -20,6 +20,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsOfUseController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Helpers\LogHelper;
 
 Route::get('/', function () {
     return view('welcome');
@@ -137,6 +138,12 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     //Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
+    
+    //System Logs
+    Route::get('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'index'])->name('admin.logs.index');
+    Route::get('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'show'])->name('admin.logs.show');
+    Route::delete('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'destroy'])->name('admin.logs.destroy');
+    Route::delete('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'clearByDate'])->name('admin.logs.clear');
 });
 
 Route::post('/profile/phone/update', [ProfileController::class, 'updatePhone'])->name('profile.phone.update');
@@ -181,3 +188,32 @@ Route::post('/chat/regenerate', [ChatController::class, 'regenerate'])->name('ch
 Route::post('/chat/edit-message', [App\Http\Controllers\ChatController::class, 'editMessage'])->middleware('auth');
 
 Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+
+// Route untuk menguji fitur log
+Route::get('/test-log', function() {
+    // Log error
+    LogHelper::error('user', 'Gagal login: kredensial tidak valid', ['username' => 'test@example.com']);
+    LogHelper::error('api', 'API Rate limit exceeded', ['endpoint' => '/api/users']);
+    
+    // Log warning
+    LogHelper::warning('transaction', 'Pembayaran timeout', ['order_id' => 'ORD-123']);
+    LogHelper::warning('system', 'Penggunaan CPU tinggi', ['usage' => '95%']);
+    
+    // Log info
+    LogHelper::info('view', 'Halaman dashboard diakses', ['page' => 'dashboard']);
+    LogHelper::info('user', 'User berhasil mendaftar', ['user_id' => 1]);
+    
+    // Log audit
+    LogHelper::auditSuccess('user', 'User berhasil mengubah password', ['user_id' => 1]);
+    LogHelper::auditFailure('transaction', 'Percobaan pembayaran gagal', ['order_id' => 'ORD-123']);
+    
+    // Log menggunakan helper segment
+    LogHelper::transaction(LogHelper::ERROR, 'Transaksi gagal', ['amount' => 1000000]);
+    LogHelper::api(LogHelper::WARNING, 'Endpoint deprecated', ['endpoint' => '/api/v1/users']);
+    LogHelper::user(LogHelper::INFO, 'User logout', ['user_id' => 1]);
+    LogHelper::view(LogHelper::INFO, 'Form kontak dibuka', ['referrer' => 'homepage']);
+    LogHelper::system(LogHelper::ERROR, 'Database connection failed', ['host' => 'localhost']);
+    
+    return redirect()->route('admin.logs.index')
+        ->with('success', 'Log berhasil dibuat');
+});

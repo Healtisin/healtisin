@@ -161,8 +161,8 @@
                 </a>
             </li>
             <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                <a href="#" class="flex items-center gap-3">
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.logs.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
@@ -170,7 +170,7 @@
                         </svg>
                     </span>
                     <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Log Detail</p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">System Logs</p>
                     </div>
                 </a>
             </li>

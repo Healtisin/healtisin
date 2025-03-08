@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use App\Helpers\LogHelper;
 
 class UserController extends Controller
 {
@@ -86,6 +87,12 @@ class UserController extends Controller
                 ->subject('Verifikasi Akun Anda'); // Subject email
         });
     
+        // Tambahkan log
+        LogHelper::info('user', "User baru ditambahkan: {$user->name}", [
+            'user_id' => $user->id,
+            'email' => $user->email
+        ]);
+    
         // Redirect dengan pesan sukses
         return redirect()
             ->route('admin.users', ['role' => $validated['role']]) // Redirect ke halaman sesuai role
@@ -109,6 +116,12 @@ class UserController extends Controller
 
         $user->update($validated);
 
+        // Tambahkan log
+        LogHelper::info('user', "User diperbarui: {$user->name}", [
+            'user_id' => $user->id,
+            'changes' => $request->only(['name', 'email', 'status'])
+        ]);
+
         return redirect()
             ->route('admin.users')
             ->with('success', 'User updated successfully.');
@@ -118,6 +131,13 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        
+        // Tambahkan log
+        LogHelper::info('user', "User dihapus: {$user->name}", [
+            'user_id' => $user->id,
+            'email' => $user->email
+        ]);
+
         return redirect()
             ->route('admin.users')
             ->with('success', 'User deleted successfully.');

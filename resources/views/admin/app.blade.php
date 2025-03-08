@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Healtisin AI</title>
+    <title>@yield('title', 'Healtisin AI Admin')</title>
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
