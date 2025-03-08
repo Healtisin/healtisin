@@ -15,19 +15,27 @@
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     @include('partials.header')
 
-    <main class="pt-24 pb-16">
+    <main class="pt-16 md:pt-24 pb-12 md:pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Hero Section -->
-            @include('partials.hero')
+            <div class="mb-16 md:mb-24">
+                @include('partials.hero')
+            </div>
 
             <!-- Capabilities Section -->
-            @include('partials.capabilities')
+            <div class="mb-16 md:mb-24">
+                @include('partials.capabilities')
+            </div>
 
             <!-- Pricing Section -->
-            @include('partials.pricing')
+            <div class="mb-16 md:mb-24">
+                @include('partials.pricing')
+            </div>
 
             <!-- Why Healtisin Section -->
-            @include('partials.benefits')
+            <div class="mb-16 md:mb-24">
+                @include('partials.benefits')
+            </div>
         </div>
     </main>
 

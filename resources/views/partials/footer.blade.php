@@ -1,9 +1,10 @@
 <footer class="bg-gray-900 dark:bg-gray-950 text-white py-12">
     <div class="container mx-auto px-4">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <!-- kiri -->
-                <div class="md:col-span-2">
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Bagian Kiri (Logo, Sosial Media, Deskripsi) -->
+                <div class="md:col-span-2 lg:col-span-2">
                     <div class="flex items-center mb-6">
                         <img src="{{ asset('images/logo-white.png') }}" alt="Logo" class="h-8">
                     </div>
@@ -30,8 +31,9 @@
                     </div>
                 </div>
 
-                <!-- kanan -->
-                <div class="md:col-span-2 grid grid-cols-4 gap-8 justify-self-end">
+                <!-- Bagian Kanan (Quick Links, Legal & Safety, Information) -->
+                <div class="md:col-span-2 lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Quick Links -->
                     <div>
                         <h6 class="text-base font-semibold mb-4">Quick Links</h6>
                         <ul class="space-y-3">
@@ -54,21 +56,23 @@
                         </ul>
                     </div>
 
+                    <!-- Legal & Safety -->
                     <div>
                         <h6 class="text-base font-semibold mb-4">Legal & Safety</h6>
                         <ul class="space-y-3">
-                            <li><a href="{{ route('privacy.policy') }}"
-                                    class="text-gray-400 hover:text-white text-sm">Privacy
-                                    Policy</a>
+                            <li>
+                                <a href="{{ route('privacy.policy') }}"
+                                    class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
                             </li>
-                            <li><a href="{{ route('terms.of.use') }}"
-                                    class="text-gray-400 hover:text-white text-sm">Terms of Use</a></li>
-                            <!-- <li><a href="#" class="text-gray-400 hover:text-white text-sm">Report Vulnerabilities</a>
-                            </li> -->
+                            <li>
+                                <a href="{{ route('terms.of.use') }}"
+                                    class="text-gray-400 hover:text-white text-sm">Terms of Use</a>
+                            </li>
                         </ul>
                     </div>
 
-                    <div>
+                    <!-- Information -->
+                    <div class="sm:col-span-2 lg:col-span-1">
                         <h6 class="text-base font-semibold mb-4">Information</h6>
                         <ul class="space-y-3">
                             <li class="flex items-center space-x-3">

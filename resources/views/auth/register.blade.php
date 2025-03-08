@@ -1,5 +1,10 @@
 <!DOCTYPE html>
+<<<<<<< Updated upstream
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+=======
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+>>>>>>> Stashed changes
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +14,7 @@
     @vite('resources/js/translate.js')
     @include('lang.language-modal')
 </head>
+<<<<<<< Updated upstream
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <!-- Header with Language and Theme Toggles -->
     <div class="fixed top-0 right-0 p-4 flex items-center gap-2">
@@ -35,23 +41,36 @@
 
     <div class="min-h-screen flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-[1000px] flex">
+=======
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-[1000px] flex flex-col lg:flex-row">
+>>>>>>> Stashed changes
             <!-- Welcome Section -->
-            <div class="w-1/2 bg-[#24b0ba] p-8 text-white rounded-l-lg flex flex-col items-center justify-center">
-                <h2 class="text-3xl font-semibold mb-4">Welcome Back!</h2>
-                <p class="mb-6">Already have an account?</p>
-                <a href="{{ route('login') }}" class="px-6 py-2 border-2 border-white rounded-full hover:bg-white hover:text-[#24b0ba]">
+            <div
+                class="w-full lg:w-1/2 bg-[#24b0ba] p-6 md:p-8 text-white rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none flex flex-col items-center justify-center">
+                <h2 class="text-2xl md:text-3xl font-semibold mb-4">Welcome Back!</h2>
+                <p class="mb-6 text-center">Already have an account?</p>
+                <a href="{{ route('login') }}"
+                    class="px-6 py-2 border-2 border-white rounded-full hover:bg-white hover:text-[#24b0ba]">
                     Sign In
                 </a>
             </div>
 
             <!-- Form Section -->
+<<<<<<< Updated upstream
             <div class="w-4/5 p-8">
+=======
+            <div class="w-full lg:w-1/2 p-6 md:p-8">
+>>>>>>> Stashed changes
                 <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">Create Account</h2>
                 <form action="{{ route('register') }}" method="POST">
                     @csrf
                     <!-- Kolom Input -->
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="mb-4">
+<<<<<<< Updated upstream
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">NAME</label>
                             <input type="text" name="name" class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" required>
                         </div>
@@ -82,9 +101,53 @@
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CONFIRM PASSWORD</label>
                             <input type="password" name="password_confirmation" class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" required>
+=======
+                            <label class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">NAME</label>
+                            <input type="text" name="name"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">EMAIL</label>
+                            <input type="email" name="email"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">NOMOR
+                                TELEPON</label>
+                            <input type="tel" name="phone"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 @error('phone') border-red-500 @enderror"
+                                placeholder="Contoh: 08123456789" value="{{ old('phone') }}" required>
+                            @error('phone')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-4">
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">USERNAME</label>
+                            <input type="text" name="username"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">PASSWORD</label>
+                            <input type="password" name="password"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">CONFIRM
+                                PASSWORD</label>
+                            <input type="password" name="password_confirmation"
+                                class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+>>>>>>> Stashed changes
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#1d8f98] mt-4">
+                    <button type="submit"
+                        class="w-full py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#1d8f98] mt-4">
                         Sign Up
                     </button>
                 </form>
@@ -96,13 +159,23 @@
                             <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
+<<<<<<< Updated upstream
                             <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Atau daftar dengan</span>
+=======
+                            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Atau daftar
+                                dengan</span>
+>>>>>>> Stashed changes
                         </div>
                     </div>
-                    
+
                     <div class="mt-4">
+<<<<<<< Updated upstream
                         <a href="{{ url('auth/google') }}" 
                            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+=======
+                        <a href="{{ url('auth/google') }}"
+                            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+>>>>>>> Stashed changes
                             <img src="https://www.google.com/favicon.ico" alt="Google" class="h-5 w-5 mr-2">
                             Daftar dengan Google
                         </a>
@@ -112,4 +185,5 @@
         </div>
     </div>
 </body>
+
 </html>
