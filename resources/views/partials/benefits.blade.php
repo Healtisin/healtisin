@@ -14,8 +14,8 @@
                 </svg>
             </div>
             <h3 class="text-xl font-semibold mb-4">Respon Cepat</h3>
-            <p class="text-gray-600">Dapatkan jawaban instan untuk pertanyaan kesehatan Anda dengan
-                teknologi AI mutakhir kami</p>
+            <p class="text-gray-600">Temukan solusi kesehatan dalam hitungan detik dengan AI pintar yang menganalisis keluhan Anda secara real-time
+            </p>
         </div>
 
         <!-- Reason 2 -->

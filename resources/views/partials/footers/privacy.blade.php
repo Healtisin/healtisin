@@ -50,30 +50,32 @@
                     Anda untuk membuat dan berinteraksi dengan chatbot.
                 </p>
 
-                <h3 class="text-2xl font-bold mb-4">What Information We Collect</h3>
+                <h3 class="text-2xl font-bold mb-4">Informasi yang Kami Kumpulkan</h3>
                 <p class="text-gray-600 mb-6">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis tempore nemo saepe, fuga esse
-                    incidunt officia dolorem quas. Animi tenetur consequatur dolor molestias, nam odit quos iusto ad.
-                    Animi, eligendi!
+                    Dalam upaya memberikan layanan kesehatan digital yang optimal, Healtisin AI mengumpulkan beberapa jenis informasi
+                    penting dengan persetujuan pengguna. Informasi ini diperlukan untuk memberikan analisis kesehatan yang akurat,
+                    rekomendasi yang tepat, dan pengalaman yang dipersonalisasi sesuai kebutuhan kesehatan Anda.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">Information You Provide</h4>
-                <p class="text-gray-600 mb-6">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga vero, tenetur cumque ipsam alias
-                    minus, quos hic fugit eaque id expedita inventore quasi cupiditate reprehenderit nam. Eaque nihil
-                    voluptatum deleniti.
-                </p>
+                <h4 class="text-xl font-bold mb-4">Data Kesehatan Pribadi</h4>
                 <ul class="list-disc list-inside text-gray-600 mb-6">
-                    <li><strong>Informasi Akun:</strong> Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                        Officiis earum, neque similique sapiente totam necessitatibus at, aliquid eaque temporibus non
-                        ratione recusandae, expedita facere. Illum rerum id dignissimos harum laudantium?</li>
-                    <li><strong>Input Pengguna:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-                        iure corporis eligendi molestias ratione officia accusantium doloribus nesciunt dolorum omnis
-                        voluptatum exercitationem possimus totam, quia, praesentium in aperiam dolorem nam!</li>
-                    <li><strong>Informasi yang Anda Kumpulkan:</strong> Lorem ipsum dolor sit amet consectetur
-                        adipisicing elit. Iste impedit odio vero aspernatur! Totam sit ad voluptate similique natus
-                        nihil minus suscipit animi culpa, eius nemo laborum vitae in tempora?</li>
+                    <li class="mb-2"><strong>Informasi Dasar:</strong> Usia, jenis kelamin, tinggi badan, berat badan, dan riwayat kesehatan umum.</li>
+                    <li class="mb-2"><strong>Riwayat Medis:</strong> Kondisi kesehatan yang ada, alergi, pengobatan yang sedang dijalani, dan riwayat operasi.</li>
+                    <li class="mb-2"><strong>Gejala:</strong> Keluhan kesehatan yang dialami, durasi gejala, dan tingkat keparahan.</li>
                 </ul>
+
+                <h4 class="text-xl font-bold mb-4">Data Penggunaan Layanan</h4>
+                <ul class="list-disc list-inside text-gray-600 mb-6">
+                    <li class="mb-2"><strong>Interaksi Platform:</strong> Riwayat konsultasi, hasil skrining kesehatan, dan rekomendasi yang diterima.</li>
+                    <li class="mb-2"><strong>Data Teknis:</strong> Informasi perangkat, log aktivitas, dan data penggunaan aplikasi untuk peningkatan layanan.</li>
+                    <li class="mb-2"><strong>Feedback:</strong> Masukan dan penilaian Anda terhadap layanan untuk evaluasi dan pengembangan sistem.</li>
+                </ul>
+
+                <p class="text-gray-600 mb-6">
+                    Semua informasi yang dikumpulkan dilindungi dengan standar keamanan tinggi dan hanya digunakan untuk
+                    tujuan yang telah disebutkan dalam kebijakan privasi ini. Kami berkomitmen untuk menjaga kerahasiaan
+                    dan keamanan data kesehatan Anda sesuai dengan regulasi yang berlaku.
+                </p>
             </div>
         </div>
     </main>

@@ -43,61 +43,114 @@
                     <p class="text-gray-600 mb-6 text-lg">Dear users, welcome to Healtisin!</p>
                 </div>
 
-                <h3 class="text-2xl font-bold mb-4">1. Services</h3>
+                <h3 class="text-2xl font-bold mb-4">1. Layanan</h3>
                 <p class="text-gray-600 mb-6">
-                    Healtisin products and services are jointly owned and operated by Healtisin Artificial Intelligence
-                    Co., Ltd. and its affiliates (hereinafter referred to as “Healtisin” or “we”). Before using the
-                    Services, please make sure to carefully read and understand this “Healtisin Terms of Use”
-                    (hereinafter referred to as “these Terms”) as well as other related terms, policies, or guidelines
-                    of this platform. When you use a specific function of the Services, there may be separate terms,
-                    related business rules, etc. (“Specific Terms”) for that specific function. In the event of any
-                    conflict between these Terms and the Specific Terms, the provisions of the Specific Terms shall
-                    prevail. <strong>All the aforementioned terms and rules form an integral part of these Terms
-                        (collectively referred to as “All Terms”), and have the same legal effect as the main text of
-                        these Terms.</strong>
+                    Healtisin merupakan platform kesehatan digital yang dikembangkan dan dioperasikan oleh Healtisin AI 
+                    (selanjutnya disebut "Healtisin" atau "kami"). Sebelum menggunakan layanan kami, mohon membaca dan 
+                    memahami dengan seksama "Syarat Penggunaan Healtisin" ini beserta kebijakan terkait lainnya. 
+                    Penggunaan fitur tertentu mungkin memerlukan persetujuan terhadap syarat khusus tambahan. Dalam hal 
+                    terdapat perbedaan antara Syarat Penggunaan umum dengan syarat khusus, maka syarat khusus yang akan berlaku.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">1.1 Healtisin’s Products and Services</h4>
+                <h4 class="text-xl font-bold mb-4">1.1 Layanan Healtisin</h4>
                 <p class="text-gray-600 mb-6">
-                    Healtisin’s products and services include those provided to you through websites, applications
-                    (which may include different versions), software development kits (SDKs) for third-party websites
-                    and applications, application programming interfaces (APIs), and innovative forms that emerge with
-                    technological development. These encompass platforms with generative artificial intelligence
-                    services at their core, among other functionalities (hereinafter referred to as “the Services”).
+                    Healtisin menyediakan layanan kesehatan digital melalui website, aplikasi mobile, dan interface 
+                    pemrograman (API). Layanan kami mencakup sistem skrining kesehatan berbasis AI, konsultasi digital, 
+                    analisis kondisi medis, dan rekomendasi kesehatan yang dipersonalisasi, dengan fokus utama pada 
+                    keamanan dan privasi data kesehatan pengguna.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">1.2 Generative AI Services</h4>
+                <h4 class="text-xl font-bold mb-4">1.2 Teknologi AI Kesehatan</h4>
                 <p class="text-gray-600 mb-6">
-                    The generative AI products and services provided by Healtisin are based on large language models,
-                    which are built using neural networks, developed through stages of large-scale self-supervised
-                    pre-training and targeted optimization training. These models can predict the next token by encoding
-                    and computing the input information (including text, images, files, and more), thereby possessing
-                    text generation and conversational abilities. They are adept at performing a wide range of text
-                    generation tasks and can be integrated into various downstream systems or applications.
-                    Specifically, within Healtisin’s product services, these models, based on user input information
-                    (referred to as “Inputs”), compute and infer to output corresponding content as a response (referred
-                    to as “Outputs”), including text, tables, and code. Users can evaluate the output, including actions
-                    like liking or disliking, to provide feedback on their opinions about Healtisin’s output
-                    information.
+                    Platform Healtisin ditenagai oleh sistem kecerdasan buatan yang dikembangkan khusus untuk bidang 
+                    kesehatan. Teknologi kami menggunakan model bahasa dan pembelajaran mesin yang dilatih dengan dataset 
+                    medis komprehensif, mampu menganalisis input pengguna (termasuk gejala, riwayat medis, dan informasi 
+                    kesehatan lainnya) untuk memberikan skrining kesehatan awal dan rekomendasi yang akurat. Sistem kami 
+                    terus belajar dan meningkat melalui umpan balik pengguna dan validasi tim medis profesional.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">1.3 Service Updates</h4>
+                <h4 class="text-xl font-bold mb-4">1.3 Pembaruan Layanan</h4>
                 <p class="text-gray-600 mb-6">
-                    As generative artificial intelligence technology, models, and products continue to evolve, along
-                    with changes in laws and regulations, we may add, upgrade, modify, suspend, or terminate services,
-                    or make necessary adjustments to the technology, method, and performance of the services, and may
-                    conduct internal or external testing for new service features.
+                    Seiring perkembangan teknologi AI kesehatan dan perubahan regulasi, Healtisin dapat melakukan 
+                    pembaruan, peningkatan, atau penyesuaian layanan untuk memastikan kualitas dan keamanan optimal. 
+                    Setiap perubahan signifikan akan dikomunikasikan kepada pengguna dan tetap mengutamakan keamanan 
+                    data kesehatan serta kepatuhan terhadap standar medis yang berlaku.
                 </p>
 
-                <h4 class="text-xl font-bold mb-4">1.4 Security and Stability</h4>
+                <h4 class="text-xl font-bold mb-4">1.4 Keamanan dan Stabilitas</h4>
                 <p class="text-gray-600 mb-6">
-                    Healtisin will take necessary measures (not less than industry practices) to ensure the cyber
-                    security and stable operation of the Services. We will also make efforts to enhance and improve
-                    technology to ensure a better user experience. If you have any questions or feedback about our
-                    services, you can contact us through the method described in Section 10.
+                    Healtisin menerapkan standar keamanan tertinggi sesuai regulasi kesehatan digital untuk melindungi 
+                    data medis pengguna. Kami menggunakan enkripsi end-to-end, autentikasi multi-faktor, dan protokol 
+                    keamanan terkini untuk menjaga kerahasiaan informasi kesehatan Anda. Platform kami dirancang dengan 
+                    infrastruktur yang andal untuk menjamin stabilitas dan ketersediaan layanan 24/7.
                 </p>
 
-                <!-- Tambahkan bagian lainnya sesuai kebutuhan -->
+                <h4 class="text-xl font-bold mb-4">1.5 Batasan Penggunaan</h4>
+                <p class="text-gray-600 mb-6">
+                    Layanan Healtisin AI dirancang sebagai alat skrining kesehatan awal dan tidak menggantikan diagnosis 
+                    medis profesional. Pengguna harus memahami bahwa:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Hasil analisis AI bersifat indikatif dan bukan diagnosis final</li>
+                        <li>Dalam kondisi darurat medis, segera hubungi layanan gawat darurat</li>
+                        <li>Rekomendasi yang diberikan perlu dikonsultasikan dengan tenaga medis</li>
+                        <li>Keputusan pengobatan tetap menjadi tanggung jawab pengguna dan tenaga medis</li>
+                    </ul>
+                </p>
+
+                <h4 class="text-xl font-bold mb-4">1.6 Penggunaan Data Medis</h4>
+                <p class="text-gray-600 mb-6">
+                    Healtisin berkomitmen untuk:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Menjaga kerahasiaan data medis sesuai standar HIPAA dan GDPR</li>
+                        <li>Menggunakan data hanya untuk peningkatan layanan dengan persetujuan pengguna</li>
+                        <li>Tidak membagikan informasi medis kepada pihak ketiga tanpa izin</li>
+                        <li>Memberikan kontrol penuh kepada pengguna atas data kesehatannya</li>
+                    </ul>
+                </p>
+
+                <h4 class="text-xl font-bold mb-4">1.7 Hak dan Kewajiban Pengguna</h4>
+                <p class="text-gray-600 mb-6">
+                    Sebagai pengguna Healtisin, Anda memiliki:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Hak untuk mendapatkan layanan skrining kesehatan yang akurat</li>
+                        <li>Hak untuk mengakses dan menghapus data kesehatan pribadi</li>
+                        <li>Kewajiban memberikan informasi kesehatan yang benar dan akurat</li>
+                        <li>Kewajiban tidak menyalahgunakan platform untuk tujuan non-medis</li>
+                    </ul>
+                </p>
+
+                <h4 class="text-xl font-bold mb-4">1.8 Dukungan Pengguna</h4>
+                <p class="text-gray-600 mb-6">
+                    Healtisin menyediakan:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Layanan dukungan teknis 24/7 melalui chat dan email</li>
+                        <li>Panduan penggunaan platform yang komprehensif</li>
+                        <li>FAQ dan artikel bantuan yang reguler diperbarui</li>
+                        <li>Tim support khusus untuk masalah terkait data medis</li>
+                    </ul>
+                </p>
+
+                <h4 class="text-xl font-bold mb-4">1.9 Kebijakan Pembatalan dan Pengembalian</h4>
+                <p class="text-gray-600 mb-6">
+                    Untuk layanan berbayar, Healtisin menerapkan:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Periode trial 7 hari untuk layanan premium</li>
+                        <li>Pembatalan subscription dapat dilakukan kapan saja</li>
+                        <li>Pengembalian dana sesuai kebijakan yang berlaku</li>
+                        <li>Garansi kepuasan pengguna 30 hari</li>
+                    </ul>
+                </p>
+
+                <h4 class="text-xl font-bold mb-4">1.10 Pembaruan Kebijakan</h4>
+                <p class="text-gray-600 mb-6">
+                    Healtisin berhak memperbarui Syarat Penggunaan ini dengan:
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li>Pemberitahuan minimal 30 hari sebelum perubahan berlaku</li>
+                        <li>Notifikasi melalui email dan dalam aplikasi</li>
+                        <li>Rangkuman perubahan yang jelas dan transparan</li>
+                        <li>Opsi untuk menolak perubahan kebijakan major</li>
+                    </ul>
+                </p>
             </div>
         </div>
     </main>

@@ -10,7 +10,8 @@ class Greetings
             ...self::getBasicGreetings(),
             ...self::getFormalGreetings(),
             ...self::getReligiousGreetings(),
-            ...self::getPoliteExpressions()
+            ...self::getPoliteExpressions(),
+            ...self::getHealthcareGreetings()
         ];
     }
 
@@ -56,13 +57,13 @@ class Greetings
         return [
             'selamat datang', 'selamat bertemu', 'selamat berjumpa',
             'selamat pagi bapak', 'selamat pagi ibu', 'selamat pagi dok',
-            'selamat siang bapak', 'selamat siang ibu', 'selamat siang dok', 
+            'selamat siang bapak', 'selamat siang ibu', 'selamat siang dok',
             'selamat sore bapak', 'selamat sore ibu', 'selamat sore dok',
             'selamat malam bapak', 'selamat malam ibu', 'selamat malam dok',
             'dengan bapak', 'dengan ibu', 'dengan dokter',
             'selamat pagi profesor', 'selamat pagi direktur', 'selamat pagi ketua',
             'selamat siang profesor', 'selamat siang direktur', 'selamat siang ketua',
-            'selamat sore profesor', 'selamat sore direktur', 'selamat sore ketua', 
+            'selamat sore profesor', 'selamat sore direktur', 'selamat sore ketua',
             'selamat malam profesor', 'selamat malam direktur', 'selamat malam ketua',
             'dengan profesor', 'dengan direktur', 'dengan ketua',
             'selamat pagi pak', 'selamat pagi bu', 'selamat pagi prof',
@@ -181,6 +182,131 @@ class Greetings
             'mohon petunjuk', 'mohon waktu', 'mohon kesempatan',
             'terima kasih', 'maaf mengganggu', 'maaf menyela',
             'maaf merepotkan', 'maaf mengganggu waktu', 'maaf menginterupsi'
+        ];
+    }
+
+    private static function getHealthcareGreetings(): array
+    {
+        return [
+            // Formal Medical Greetings (25)
+            'selamat pagi dokter spesialis', 'selamat siang dokter konsultan',
+            'selamat sore professor', 'kepada yth dokter ahli',
+            'mohon konsultasi dengan dr', 'izin berkonsultasi dokter',
+            'selamat bertugas tim medis', 'salam sejahtera dokter',
+            'kepada dokter jaga', 'dengan hormat dokter',
+            'salam sehat dokter', 'selamat praktik dokter',
+            'selamat melayani dok', 'izin konsul dokter',
+            'perkenalkan saya pasien', 'mohon bantuan medis',
+            'butuh konsultasi dok', 'perlu pemeriksaan dok',
+            'mau check up dok', 'izin medical check dok',
+            'mohon diagnosa dok', 'butuh saran kesehatan',
+            'perlu rekomendasi dokter', 'izin tanya hasil lab',
+            'mohon info pengobatan',
+
+            // Healthcare Inquiry Phrases (25)
+            'bagaimana kondisi saya dok', 'apa diagnosa dokter',
+            'mohon penjelasan hasil lab', 'butuh second opinion',
+            'bagaimana hasil checkup', 'apa rekomendasi dokter',
+            'mohon saran pengobatan', 'butuh rujukan dokter',
+            'izin tanya efek samping', 'bagaimana progress kesehatan',
+            'apa treatment selanjutnya', 'mohon jadwal kontrol',
+            'kapan follow up dok', 'butuh resep obat',
+            'izin konsul gizi', 'mohon saran diet',
+            'bagaimana pola makan', 'apa pantangan makanan',
+            'butuh vitamin tambahan', 'mohon saran olahraga',
+            'izin tanya lifestyle', 'apa anjuran dokter',
+            'mohon terapi lanjutan', 'bagaimana prognosis',
+            'apa indikasi medis',
+
+            // Digital Healthcare Greetings (25)
+            'konsultasi online dok', 'telemedicine consultation',
+            'virtual checkup dok', 'e-consultation please',
+            'online medical chat', 'digital health consult',
+            'remote diagnosis needed', 'virtual appointment',
+            'teleconsultation please', 'online medical advice',
+            'e-prescription needed', 'digital health check',
+            'remote medical support', 'virtual medical chat',
+            'online doctor consult', 'digital clinic visit',
+            'e-medical assistance', 'remote healthcare help',
+            'virtual medical support', 'online health inquiry',
+            'digital medical consult', 'e-health assistance',
+            'remote doctor visit', 'virtual medical help',
+            'online clinical chat',
+
+            // Health Status Greetings (25)
+            'ada keluhan dok', 'mengalami gejala',
+            'merasakan sakit di', 'ada masalah kesehatan',
+            'kondisi kurang fit', 'butuh pemeriksaan',
+            'ada gangguan kesehatan', 'merasa tidak enak badan',
+            'mengalami demam', 'ada batuk pilek',
+            'tekanan darah tinggi', 'gula darah naik',
+            'kolesterol tinggi', 'asam urat naik',
+            'mengalami alergi', 'ada reaksi obat',
+            'efek samping medication', 'butuh vitamin',
+            'perlu suplemen', 'ada masalah pencernaan',
+            'gangguan tidur', 'stress dan anxiety',
+            'masalah mental health', 'butuh konseling',
+            'ada trauma fisik',
+
+            // Patient Symptoms Expressions (25)
+            'nyeri pada bagian', 'sakit kepala berkelanjutan',
+            'pusing berputar', 'mual dan muntah',
+            'sesak nafas', 'jantung berdebar',
+            'pembengkakan di', 'kesemutan pada',
+            'pandangan kabur', 'telinga berdenging',
+            'sulit menelan', 'nyeri sendi',
+            'kram otot', 'demam tinggi',
+            'batuk berdahak', 'hidung tersumbat',
+            'ruam kulit', 'gatal-gatal',
+            'kehilangan nafsu makan', 'sulit tidur',
+            'mudah lelah', 'berat badan turun',
+            'keringat malam', 'nyeri dada',
+            'sulit berkonsentrasi',
+
+            // Medical History Inquiries (25)
+            'riwayat kesehatan', 'catatan medis sebelumnya',
+            'penyakit keluarga', 'alergi obat',
+            'operasi sebelumnya', 'riwayat vaksinasi',
+            'pengobatan rutin', 'konsumsi obat',
+            'trauma masa lalu', 'kebiasaan merokok',
+            'konsumsi alkohol', 'pola makan',
+            'aktivitas fisik', 'jam tidur',
+            'riwayat kecelakaan', 'kondisi kronis',
+            'pengobatan alternatif', 'supplement rutin',
+            'tekanan darah', 'gula darah',
+            'kolesterol', 'asam urat',
+            'fungsi ginjal', 'fungsi hati',
+            'pemeriksaan jantung',
+
+            // Treatment Follow-up (25)
+            'progres pengobatan', 'perkembangan terapi',
+            'hasil laboratorium', 'efek pengobatan',
+            'respon treatment', 'penyesuaian dosis',
+            'evaluasi tindakan', 'kontrol rutin',
+            'jadwal terapi', 'monitoring kondisi',
+            'keluhan tambahan', 'gejala baru',
+            'perubahan kondisi', 'efek samping',
+            'reaksi obat', 'perbaikan gejala',
+            'jadwal kontrol', 'hasil rontgen',
+            'hasil CT scan', 'hasil MRI',
+            'hasil USG', 'hasil EKG',
+            'hasil biopsi', 'hasil kultur',
+            'hasil patologi',
+
+            // Lifestyle and Prevention (25)
+            'pola hidup sehat', 'diet seimbang',
+            'olahraga teratur', 'manajemen stress',
+            'kualitas tidur', 'asupan nutrisi',
+            'kebutuhan vitamin', 'aktivitas sehari-hari',
+            'pencegahan penyakit', 'gaya hidup aktif',
+            'kontrol berat badan', 'program diet',
+            'rutinitas exercise', 'meditasi',
+            'yoga terapi', 'pijat kesehatan',
+            'terapi relaksasi', 'manajemen waktu',
+            'keseimbangan hidup', 'mindful eating',
+            'detox program', 'wellness routine',
+            'healthy lifestyle', 'daily habits',
+            'self-care practice'
         ];
     }
 }

@@ -25,8 +25,9 @@
                 <div class="text-white">
                     <h1 class="text-5xl font-bold mb-6 animate-fade-in">Tentang Healtisin AI</h1>
                     <p class="text-xl opacity-90 max-w-2xl animate-slide-up">
-                        Menghadirkan revolusi kesehatan digital dengan kecerdasan buatan yang memahami kebutuhan
-                        kesehatan Anda
+                    Menghadirkan transformasi layanan kesehatan digital melalui integrasi AI mutakhir yang
+                    mampu menganalisis 1000+ kondisi medis, memberikan skrining kesehatan real-time, dan
+                    rekomendasi pengobatan yang dipersonalisasi untuk setiap pengguna.
                     </p>
                 </div>
             </div>
@@ -214,10 +215,10 @@
         }
 
     @keyframes float {
-        0% { 
+        0% {
             transform: translateY(0);
         }
-        100% { 
+        100% {
             transform: translateY(-50%);
         }
     }
