@@ -119,4 +119,25 @@ class ProfileController extends Controller
 
         return redirect('/login')->with('success', 'Akun berhasil dihapus');
     }
+
+    public function deletePhoto()
+    {
+        $user = Auth::user();
+        
+        // Hapus file foto dari storage
+        if ($user->profile_photo) {
+            Storage::disk('public')->delete($user->profile_photo);
+            $user->profile_photo = null;
+            $user->save();
+        }
+        
+        if (request()->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Foto profil berhasil dihapus'
+            ]);
+        }
+        
+        return back()->with('success', 'Foto profil berhasil dihapus');
+    }
 }

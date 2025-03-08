@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi OTP</title>
+    @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
     @include('lang.language-modal')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-[800px] flex">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-[800px] flex">
             <!-- Form Section -->
             <div class="w-1/2 p-8">
-                <h2 class="text-2xl font-semibold mb-6">Verifikasi OTP</h2>
-                <p class="text-gray-600 text-sm mb-4">Masukkan kode OTP yang dikirimkan ke email Anda.</p>
+                <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">Verifikasi OTP</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Masukkan kode OTP yang dikirimkan ke email Anda.</p>
 
                 @if (session('error'))
-                    <div class="bg-red-100 text-red-700 px-4 py-2 mb-4 rounded-md">{{ session('error') }}</div>
+                    <div class="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 px-4 py-2 mb-4 rounded-md">{{ session('error') }}</div>
                 @endif
 
                 <form action="{{ route('password.verify.otp') }}" method="POST">
@@ -25,10 +26,10 @@
                     <input type="hidden" name="email" value="{{ old('email', session('email')) }}">
 
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kode OTP</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kode OTP</label>
                         <input type="text" 
                                name="otp" 
-                               class="w-full px-3 py-2 border rounded-md bg-gray-50 text-center tracking-widest text-xl" 
+                               class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-center tracking-widest text-xl" 
                                placeholder="123456" 
                                required>
                     </div>
@@ -42,7 +43,7 @@
                     <form action="{{ route('password.otp.resend') }}" method="POST">
                         @csrf
                         <input type="hidden" name="email" value="{{ old('email', session('email')) }}">
-                        <button type="submit" class="text-gray-600 hover:text-[#24b0ba]">
+                        <button type="submit" class="text-gray-600 dark:text-gray-400 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">
                             Kirim ulang OTP
                         </button>
                     </form>

@@ -179,3 +179,5 @@ Route::post('/chat/regenerate', [ChatController::class, 'regenerate'])->name('ch
 
 // Route untuk edit message
 Route::post('/chat/edit-message', [App\Http\Controllers\ChatController::class, 'editMessage'])->middleware('auth');
+
+Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');

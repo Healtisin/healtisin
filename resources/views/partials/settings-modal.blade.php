@@ -63,11 +63,20 @@
                     <div>
                         <h4 class="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Foto Profil</h4>
                         <div class="flex items-center gap-4">
-                            <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 relative group profile-photo-container">
                                 @if(Auth::user()->profile_photo)
                                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" 
                                          alt="Profile photo" 
                                          class="w-full h-full object-cover">
+                                    <button type="button" 
+                                            onclick="showDeletePhotoConfirmation()"
+                                            class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span class="p-2 text-white hover:text-red-500" title="Hapus Foto">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </span>
+                                    </button>
                                 @else
                                     <div class="w-full h-full bg-[#24b0ba] dark:bg-[#24b0ba]/80 flex items-center justify-center">
                                         <span class="text-2xl text-white font-medium">
@@ -243,6 +252,33 @@
 <!-- Include Delete Account Modal -->
 @include('partials.delete-account-modal')
 
+<!-- Delete Photo Confirmation Modal -->
+<div id="deletePhotoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-[400px] p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100">Konfirmasi Hapus Foto</h4>
+            <button onclick="closeDeletePhotoModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Apakah Anda yakin ingin menghapus foto profil?</p>
+
+        <div class="flex justify-end gap-2">
+            <button onclick="closeDeletePhotoModal()" 
+                    class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                Batal
+            </button>
+            <button onclick="deleteProfilePhoto()" 
+                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
+                Ya, Hapus Foto
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 function validateAndPreviewPhoto(input) {
     const file = input.files[0];
@@ -381,6 +417,52 @@ async function changeLanguage(lang) {
     } catch (error) {
         console.error('Language change error:', error);
         alert('Gagal mengubah bahasa: ' + error.message);
+    }
+}
+
+function showDeletePhotoConfirmation() {
+    document.getElementById('deletePhotoModal').classList.remove('hidden');
+    document.getElementById('deletePhotoModal').classList.add('flex');
+}
+
+function closeDeletePhotoModal() {
+    document.getElementById('deletePhotoModal').classList.add('hidden');
+    document.getElementById('deletePhotoModal').classList.remove('flex');
+}
+
+async function deleteProfilePhoto() {
+    try {
+        const response = await fetch('{{ route('profile.photo.delete') }}', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Terjadi kesalahan saat menghapus foto');
+        }
+
+        // Tampilkan notifikasi sukses
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+        alertDiv.textContent = data.message;
+        document.body.appendChild(alertDiv);
+
+        // Tutup modal
+        closeDeletePhotoModal();
+
+        // Refresh halaman setelah 1 detik
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
     }
 }
 </script>
