@@ -55,8 +55,14 @@ class LoginController extends Controller
                 return redirect()->route('admin.dashboard'); // Redirect ke dashboard admin
             }
     
-            return redirect()->intended(route('home')); // Redirect ke home untuk user
-        }
+            $redirectTo = $request->get('redirect'); // Ambil redirect dari request
+
+            if (!$redirectTo) {
+                $redirectTo = route('home'); // Jika tidak ada redirect, default ke home
+            }
+            
+            return redirect()->to($redirectTo);
+                    }
     
         // Jika login gagal
         return back()->withErrors([
