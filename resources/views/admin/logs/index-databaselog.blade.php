@@ -3,7 +3,7 @@
 @section('title', 'Database Logs')
 
 @section('content')
-@include('components.breadcrumbs', ['route_name' => $route_name ?? 'admin.logs.index'])
+@include('components.breadcrumbs', ['route_name' => $route_name ?? 'admin.log-database.index'])
 
 <div class="p-4 sm:p-6 lg:p-8">
     @if(session('success'))
@@ -22,7 +22,7 @@
             </p>
         </div>
         <div class="mt-4 sm:mt-0">
-            <form id="clearLogsForm" action="{{ route('admin.logs.clear') }}" method="POST" class="inline-block">
+            <form id="clearLogsForm" action="{{ route('admin.log-database.clear') }}" method="POST" class="inline-block">
                 @csrf
                 @method('DELETE')
                 <input type="hidden" name="date" value="{{ $selectedDate->format('Y-m-d') }}">
@@ -57,16 +57,68 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <form action="{{ route('admin.logs.index') }}" method="GET" class="flex items-center space-x-2">
+                    <form action="{{ route('admin.log-database.index') }}" method="GET" class="flex flex-col md:flex-row items-center gap-4 w-full">
                         <input type="hidden" name="sort" value="{{ request('sort', 'created_at') }}">
                         <input type="hidden" name="direction" value="{{ request('direction', 'desc') }}">
                         <input type="hidden" name="log_type" value="database">
-                        <div class="flex items-center gap-4">
-                            <input type="date" name="date" value="{{ $selectedDate->format('Y-m-d') }}" 
+                        
+                        <!-- Filter Tanggal -->
+                        <div class="w-full md:w-auto">
+                            <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
+                            <input type="date" id="date" name="date" value="{{ request('date', $selectedDate->format('Y-m-d')) }}" 
                                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Lihat
+                        </div>
+                        
+                        <!-- Filter Tipe -->
+                        <div class="w-full md:w-auto">
+                            <label for="filter_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipe Log</label>
+                            <select id="filter_type" name="filter_type" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+                                <option value="">Semua Tipe</option>
+                                <option value="error" {{ request('filter_type') == 'error' ? 'selected' : '' }}>Error</option>
+                                <option value="warning" {{ request('filter_type') == 'warning' ? 'selected' : '' }}>Warning</option>
+                                <option value="info" {{ request('filter_type') == 'info' ? 'selected' : '' }}>Info</option>
+                                <option value="audit_success" {{ request('filter_type') == 'audit_success' ? 'selected' : '' }}>Audit Success</option>
+                                <option value="audit_failure" {{ request('filter_type') == 'audit_failure' ? 'selected' : '' }}>Audit Failure</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Filter Segmen -->
+                        <div class="w-full md:w-auto">
+                            <label for="filter_segment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Segmen</label>
+                            <select id="filter_segment" name="filter_segment" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+                                <option value="">Semua Segmen</option>
+                                <option value="transaction" {{ request('filter_segment') == 'transaction' ? 'selected' : '' }}>Transaction</option>
+                                <option value="user" {{ request('filter_segment') == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="api" {{ request('filter_segment') == 'api' ? 'selected' : '' }}>API</option>
+                                <option value="view" {{ request('filter_segment') == 'view' ? 'selected' : '' }}>View</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Pencarian -->
+                        <div class="w-full md:w-auto">
+                            <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Pesan</label>
+                            <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Cari pesan log..." 
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+                        </div>
+                        
+                        <!-- Tombol Filter -->
+                        <div class="w-full md:w-auto md:self-end">
+                            <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                Filter
                             </button>
+                        </div>
+                        
+                        <!-- Tombol Reset -->
+                        <div class="w-full md:w-auto md:self-end">
+                            <a href="{{ route('admin.log-database.index', ['log_type' => 'database']) }}" class="w-full md:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                Reset
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -87,19 +139,18 @@
                     @forelse($logs as $index => $log)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                {{ $logs->total() - (($logs->currentPage() - 1) * $logs->perPage()) - $index }}
+                                {{ ($logs->currentPage() - 1) * $logs->perPage() + $index + 1 }}
                             </td>
                             @include('admin.logs.partials.table-row', ['log' => $log])
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('admin.logs.show', ['id' => $log->id, 'type' => 'database']) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                    <a href="{{ route('admin.log-database.show', ['id' => $log->id]) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                         Detail
                                     </a>
-                                    <form id="deleteLogForm-{{ $log->id }}" action="{{ route('admin.logs.destroy', $log->id) }}" method="POST" class="inline-block">
+                                    <form action="{{ route('admin.log-database.destroy', ['id' => $log->id]) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" onclick="confirmDeleteLog({{ $log->id }})" 
-                                            class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Apakah Anda yakin ingin menghapus log ini?')">
                                             Hapus
                                         </button>
                                     </form>
@@ -117,52 +168,8 @@
             </table>
         </div>
 
-        @if($logs->hasPages())
-        <div class="px-4 py-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 sm:px-6">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    @if($logs->onFirstPage())
-                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
-                            Sebelumnya
-                        </span>
-                    @else
-                        <a href="{{ $logs->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Sebelumnya
-                        </a>
-                    @endif
-
-                    @if($logs->hasMorePages())
-                        <a href="{{ $logs->nextPageUrl() }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Selanjutnya
-                        </a>
-                    @else
-                        <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
-                            Selanjutnya
-                        </span>
-                    @endif
-                </div>
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700 dark:text-gray-300">
-                            Menampilkan
-                            <span class="font-medium">{{ $logs->firstItem() ?? 0 }}</span>
-                            sampai
-                            <span class="font-medium">{{ $logs->lastItem() ?? 0 }}</span>
-                            dari
-                            <span class="font-medium">{{ $logs->total() }}</span>
-                            hasil
-                        </p>
-                    </div>
-                    <div>
-                        {{ $logs->onEachSide(1)->links() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
+        @include('admin.logs.partials.pagination')
     </div>
-
-    @include('admin.logs.partials.date-list')
 </div>
 
 @include('admin.logs.partials.scripts')

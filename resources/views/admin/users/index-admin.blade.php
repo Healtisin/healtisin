@@ -39,11 +39,22 @@
                 </a>
             </div>
 
-            <!-- Pencarian -->
+            <!-- Filter dan Pencarian -->
             <div class="flex flex-grow justify-end ml-4">
-                <form id="search-form" action="{{ route('admin.admins') }}" method="GET" class="flex w-full md:w-auto">
+                <form id="search-form" action="{{ route('admin.admins') }}" method="GET" class="flex flex-col md:flex-row items-center gap-4 w-full">
                     <input type="hidden" name="sort" value="{{ request('sort', 'name') }}">
                     <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
+                    
+                    <!-- Filter Status -->
+                    <div class="w-full md:w-auto">
+                        <select name="status" class="w-full rounded-lg py-2 px-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#24b0ba]">
+                            <option value="">Semua Status</option>
+                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Pencarian -->
                     <div class="relative w-full">
                         <input 
                             type="text" 
@@ -78,6 +89,11 @@
                             </svg>
                         </button>
                     </div>
+                    
+                    <!-- Tombol Filter -->
+                    <button type="submit" class="bg-blue-600 dark:bg-blue-500/80 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600/80 transition duration-300">
+                        Filter
+                    </button>
                 </form>
             </div>
         </div>
@@ -159,7 +175,7 @@
                     <tbody>
                         @forelse($users as $index => $user)
                         <tr>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $users->firstItem() + $index }}</td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $index + 1 }}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                                 @if($user->profile_photo)
                                 <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" class="w-10 h-10 rounded-full">
@@ -222,7 +238,30 @@
                         Menampilkan {{ $users->firstItem() ?? 0 }} sampai {{ $users->lastItem() ?? 0 }} dari {{ $users->total() }} data
                     </div>
                     <div class="inline-flex mt-2 xs:mt-0">
-                        {{ $users->appends(request()->query())->links() }}
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            @if($users->onFirstPage())
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
+                                    Sebelumnya
+                                </span>
+                            @else
+                                <a href="{{ $users->appends(request()->query())->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    Sebelumnya
+                                </a>
+                            @endif
+
+                            @if($users->hasMorePages())
+                                <a href="{{ $users->appends(request()->query())->nextPageUrl() }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    Selanjutnya
+                                </a>
+                            @else
+                                <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
+                                    Selanjutnya
+                                </span>
+                            @endif
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            {{ $users->onEachSide(1)->appends(request()->query())->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

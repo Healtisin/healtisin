@@ -147,11 +147,15 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
 
-    //System Logs
-    Route::get('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'index'])->name('admin.logs.index');
-    Route::get('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'show'])->name('admin.logs.show');
-    Route::delete('/logs/{id}', [App\Http\Controllers\Admin\SystemLogController::class, 'destroy'])->name('admin.logs.destroy');
-    Route::delete('/logs', [App\Http\Controllers\Admin\SystemLogController::class, 'clearByDate'])->name('admin.logs.clear');
+    //System Logs - Database
+    Route::get('/log-database', [App\Http\Controllers\Admin\DatabaseLogController::class, 'index'])->name('admin.log-database.index');
+    Route::get('/log-database/{id}', [App\Http\Controllers\Admin\DatabaseLogController::class, 'show'])->name('admin.log-database.show');
+    Route::delete('/log-database/{id}', [App\Http\Controllers\Admin\DatabaseLogController::class, 'destroy'])->name('admin.log-database.destroy');
+    Route::delete('/log-database', [App\Http\Controllers\Admin\DatabaseLogController::class, 'clearByDate'])->name('admin.log-database.clear');
+
+    //System Logs - File
+    Route::get('/log-file', [App\Http\Controllers\Admin\FileLogController::class, 'index'])->name('admin.log-file.index');
+    Route::get('/log-file/{id}', [App\Http\Controllers\Admin\FileLogController::class, 'show'])->name('admin.log-file.show');
 
     // Route untuk settings
     Route::prefix('settings')->group(function () {

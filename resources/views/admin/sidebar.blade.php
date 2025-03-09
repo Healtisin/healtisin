@@ -200,12 +200,12 @@
                 </button>
 
                 <div id="system-logs-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
-                    <a href="{{ route('admin.logs.index', ['log_type' => 'database']) }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ request('log_type', 'database') === 'database' && Route::is('admin.logs.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.log-database.index') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.log-database.*') ? 'active' : '' }}">
                         Database Log
                     </a>
-                    <a href="{{ route('admin.logs.index', ['log_type' => 'file']) }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ request('log_type') === 'file' && Route::is('admin.logs.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.log-file.index') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.log-file.*') ? 'active' : '' }}">
                         File Log
                     </a>
                 </div>
