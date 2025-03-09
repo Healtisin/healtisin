@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\ChatHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,15 +20,36 @@ class UserController extends Controller
     {
         // Ambil parameter role dari request (jika ada)
         $role = $request->query('role', 'user'); // Default: user
-
-        // Jika role adalah 'user', ambil data dari tabel users
+        $sort = $request->query('sort', 'name'); // Default: sort by name
+        $direction = $request->query('direction', 'asc'); // Default: ascending
+        $search = $request->query('search', ''); // Default: no search
+        $perPage = 10; // Jumlah item per halaman
+        
+        // Buat query builder berdasarkan role
         if ($role === 'user') {
-            $users = User::all();
+            $query = User::query();
+        } elseif ($role === 'admin') {
+            $query = Admin::query();
+        } else {
+            $query = User::query(); // Default jika role tidak valid
         }
-        // Jika role adalah 'admin', ambil data dari tabel admins
-        elseif ($role === 'admin') {
-            $users = Admin::all();
+
+        // Tambahkan pencarian jika ada
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
         }
+
+        // Tambahkan sorting
+        if (in_array($sort, ['name', 'username', 'email', 'is_active'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        // Ambil data dengan paginasi
+        $users = $query->paginate($perPage)->withQueryString();
 
         return view('admin.users.index', compact('users', 'role'));
     }
@@ -43,64 +65,65 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
-            'mobile' => 'required|string|max:20',
+            'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:users',
-            'role' => 'required|in:user,admin', // Tambahkan validasi untuk role
-            'password' => 'nullable|string|min:8', // Password opsional
+            'role' => 'required|in:user,admin',
+            'password' => 'required|string|min:8',
+            'subscription_status' => 'required|string|in:free,premium',
+            'is_active' => 'required|boolean',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Generate password acak jika admin tidak memasukkan password
-        $password = $validated['password'] ?? Str::random(8);
+        // Upload foto profile jika ada
+        $profilePhoto = null;
+        if ($request->hasFile('profile_photo')) {
+            $profilePhoto = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
 
         // Simpan user baru berdasarkan role
         if ($validated['role'] === 'user') {
             $user = User::create([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
-                'mobile' => $validated['mobile'],
+                'phone' => $validated['phone'],
                 'email' => $validated['email'],
-                'password' => Hash::make($password), // Hash password
+                'password' => Hash::make($validated['password']),
+                'profile_photo' => $profilePhoto,
+                'subscription_status' => $validated['subscription_status'],
                 'email_verified_at' => now(), // Langsung terverifikasi
-                'is_active' => true, // Default status inactive
+                'is_active' => $validated['is_active'],
             ]);
-        } elseif ($validated['role'] === 'admin') {
-            $user = Admin::create([
+
+            // Tambahkan log
+            LogHelper::info('user', "User baru dibuat: {$user->name}", [
+                'user_id' => $user->id,
+            ]);
+
+            return redirect()
+                ->route('admin.users')
+                ->with('success', 'Pengguna berhasil ditambahkan!');
+        } else {
+            $admin = Admin::create([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
-                'mobile' => $validated['mobile'],
+                'phone' => $validated['phone'],
                 'email' => $validated['email'],
-                'password' => Hash::make($password), // Hash password
+                'password' => Hash::make($validated['password']),
+                'profile_photo' => $profilePhoto,
+                'subscription_status' => $validated['subscription_status'],
                 'email_verified_at' => now(), // Langsung terverifikasi
-                'is_active' => true, // Default status inactive
+                'is_active' => $validated['is_active'],
             ]);
+
+            // Tambahkan log
+            LogHelper::info('admin', "Admin baru dibuat: {$admin->name}", [
+                'admin_id' => $admin->id,
+            ]);
+
+            return redirect()
+                ->route('admin.users', ['role' => 'admin'])
+                ->with('success', 'Admin berhasil ditambahkan!');
         }
-
-        // Generate URL aktivasi dengan parameter type
-        $activationUrl = route('activate.account', [
-            'id' => $user->id,
-            'type' => $validated['role'], // Tambahkan parameter type
-        ]);
-
-        // Kirim email verifikasi tanpa Mailable class
-        Mail::send('emails.adminverification', [
-            'user' => $user,
-            'password' => $password, // Kirim password ke email
-        ], function ($message) use ($user) {
-            $message->to($user->email) // Email penerima
-                ->subject('Verifikasi Akun Anda'); // Subject email
-        });
-
-        // Tambahkan log
-        LogHelper::info('user', "User baru ditambahkan: {$user->name}", [
-            'user_id' => $user->id,
-            'email' => $user->email
-        ]);
-
-        // Redirect dengan pesan sukses
-        return redirect()
-            ->route('admin.users', ['role' => $validated['role']]) // Redirect ke halaman sesuai role
-            ->with('success', 'User created successfully. Password has been sent to email.')
-            ->with('generated_password', $password); // Password untuk ditampilkan sekali
     }
 
     public function edit(User $user)
@@ -113,21 +136,43 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'mobile' => 'required|string|max:20',
+            'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'is_active' => 'required|boolean',
+            'subscription_status' => 'required|string|in:free,premium',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Jika ada password baru, gunakan bcrypt
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        // Upload foto profile jika ada
+        if ($request->hasFile('profile_photo')) {
+            // Hapus foto lama jika ada
+            if ($user->profile_photo) {
+                Storage::delete('public/' . $user->profile_photo);
+            }
+            
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $validated['profile_photo'] = $path;
+        }
 
         $user->update($validated);
 
         // Tambahkan log
         LogHelper::info('user', "User diperbarui: {$user->name}", [
             'user_id' => $user->id,
-            'changes' => $request->only(['name', 'email', 'status'])
+            'changes' => array_diff_assoc($validated, $user->getOriginal())
         ]);
 
         return redirect()
-            ->route('admin.users')
-            ->with('success', 'User updated successfully.');
+            ->route('admin.users.edit', $user->id)
+            ->with('success', 'Pengguna berhasil diperbarui!');
     }
 
 
@@ -137,15 +182,61 @@ class UserController extends Controller
 
         // Tambahkan log
         LogHelper::info('user', "User dihapus: {$user->name}", [
-            'user_id' => $user->id,
-            'email' => $user->email
+            'user_id' => $user->id
         ]);
 
         return redirect()
             ->route('admin.users')
-            ->with('success', 'User deleted successfully.');
+            ->with('success', 'Pengguna berhasil dihapus!');
     }
 
+    public function deleteUserPhoto(User $user)
+    {
+        if ($user->profile_photo) {
+            // Hapus file foto dari storage
+            Storage::delete('public/' . $user->profile_photo);
+            
+            // Update data user (set profile_photo menjadi null)
+            $user->update(['profile_photo' => null]);
+            
+            // Tambahkan log
+            LogHelper::info('user', "Foto profil dihapus untuk user: {$user->name}", [
+                'user_id' => $user->id
+            ]);
+            
+            return redirect()
+                ->route('admin.users.edit', $user->id)
+                ->with('success', 'Foto profil berhasil dihapus!');
+        }
+        
+        return redirect()
+            ->route('admin.users.edit', $user->id)
+            ->with('error', 'Tidak ada foto profil untuk dihapus.');
+    }
+
+    public function deleteAdminPhoto(Admin $admin)
+    {
+        if ($admin->profile_photo) {
+            // Hapus file foto dari storage
+            Storage::delete('public/' . $admin->profile_photo);
+            
+            // Update data admin (set profile_photo menjadi null)
+            $admin->update(['profile_photo' => null]);
+            
+            // Tambahkan log
+            LogHelper::info('admin', "Foto profil dihapus untuk admin: {$admin->name}", [
+                'admin_id' => $admin->id
+            ]);
+            
+            return redirect()
+                ->route('admin.admins.edit', $admin->id)
+                ->with('success', 'Foto profil berhasil dihapus!');
+        }
+        
+        return redirect()
+            ->route('admin.admins.edit', $admin->id)
+            ->with('error', 'Tidak ada foto profil untuk dihapus.');
+    }
 
     public function editAdmin(Admin $admin)
     {
@@ -156,15 +247,15 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:admins,username,' . $admin->id,
-            'mobile' => 'required|string|max:20',
+            'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:admins,email,' . $admin->id,
         ]);
 
         $admin->update($validated);
 
         return redirect()
-            ->route('admin.users', ['role' => 'admin'])
-            ->with('success', 'Admin updated successfully.');
+            ->route('admin.admins.edit', $admin->id)
+            ->with('success', 'Admin berhasil diperbarui!');
     }
     public function destroyAdmin(Admin $admin)
     {

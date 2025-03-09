@@ -120,11 +120,13 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/users/{user}/delete-photo', [UserController::class, 'deleteUserPhoto'])->name('admin.users.delete-user-photo');
 
     //Admin Punya bro
     Route::get('/admins/{admin}/edit', [UserController::class, 'editAdmin'])->name('admin.admins.edit');
     Route::put('/admins/{admin}', [UserController::class, 'updateAdmin'])->name('admin.admins.update');
     Route::delete('/admins/{admin}', [UserController::class, 'destroyAdmin'])->name('admin.admins.destroy');
+    Route::delete('/admins/{admin}/delete-photo', [UserController::class, 'deleteAdminPhoto'])->name('admin.admins.delete-admin-photo');
     //Transaksi
     Route::get('/transactions', [TransactionController::class, 'index'])->name('admin.transactions');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');
