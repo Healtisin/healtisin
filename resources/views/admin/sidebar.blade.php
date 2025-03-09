@@ -1,11 +1,18 @@
-<aside id="sidebar" class="h-screen w-auto bg-white dark:bg-gray-800 flex flex-col">
-    <div class="p-6 flex items-center justify-start bg-white dark:bg-gray-800">
+<aside id="sidebar" class="h-screen w-auto bg-white dark:bg-gray-800 flex flex-col transition-all duration-300">
+    <div class="p-4 flex items-center justify-between bg-white dark:bg-gray-800">
+        <!-- Logo -->
         <a href="/" class="flex items-center">
             <img id="logoImage" src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 transition-all duration-300">
         </a>
+
+        <!-- Ikon Collapse -->
+        <button id="collapseButton"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
+            <img src="{{ asset('images/collapse.svg') }}" alt="Collapse" class="h-6 w-6">
+        </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4 scrollbar-hide" style="max-height: calc(100vh - 96px);">
+    <div id="sidebarContent" class="flex-1 overflow-y-auto p-4 scrollbar-hide" style="max-height: calc(100vh - 96px);">
         <ul class="space-y-3">
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
@@ -79,7 +86,8 @@
                             </svg>
                         </span>
                         <div class="flex-1 min-w-0 sidebar-text">
-                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Website Information</p>
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Website Information
+                            </p>
                         </div>
                         <svg id="website-info-arrow" class="w-4 h-4 transition-transform duration-200"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -90,8 +98,8 @@
                 </button>
 
                 <div id="website-info-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                    <a href="#"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
                         Description
                     </a>
                     <a href="#"
@@ -322,6 +330,44 @@
             isUsersOpen = true;
         }
     });
+
+    let isCollapsed = false;
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const logoImage = document.getElementById('logoImage');
+        const collapseButton = document.getElementById('collapseButton');
+
+        isCollapsed = !isCollapsed;
+
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+        } else {
+            sidebar.classList.remove('collapsed');
+        }
+
+        // Adjust dropdown positions
+        adjustDropdownPositions();
+    }
+
+    function adjustDropdownPositions() {
+        const dropdowns = document.querySelectorAll(
+            '.collapsed #users-dropdown, .collapsed #website-info-dropdown, .collapsed #system-logs-dropdown');
+        dropdowns.forEach(dropdown => {
+            if (isCollapsed) {
+                dropdown.style.left = '60px'; // Sesuaikan dengan lebar sidebar saat collapse
+            } else {
+                dropdown.style.left = 'auto';
+            }
+        });
+    }
+
+    document.getElementById('collapseButton').addEventListener('click', toggleSidebar);
+    document.getElementById('logoContainer').addEventListener('click', function() {
+        if (isCollapsed) {
+            toggleSidebar();
+        }
+    });
 </script>
 
 <style>
@@ -347,11 +393,11 @@
     }
 
     .sidebar-text p {
-        @apply text-gray-700 dark:text-gray-200;
+        @apply text-gray-700 dark: text-gray-200;
     }
 
     svg path {
-        @apply fill-gray-700 dark:fill-gray-200;
+        @apply fill-gray-700 dark: fill-gray-200;
     }
 
     .active svg path {
@@ -359,10 +405,63 @@
     }
 
     #website-info-arrow {
-        @apply text-gray-700 dark:text-gray-200;
+        @apply text-gray-700 dark: text-gray-200;
     }
 
     #system-logs-arrow {
-        @apply text-gray-700 dark:text-gray-200;
+        @apply text-gray-700 dark: text-gray-200;
+    }
+
+    .collapsed {
+        width: 60px;
+    }
+
+    .collapsed #logoImage {
+        content: url("{{ asset('images/animasi2.png') }}");
+        height: 24px;
+        margin-right: 0;
+    }
+
+    .collapsed #collapseButton {
+        display: none;
+    }
+
+    .collapsed .sidebar-text {
+        display: none;
+    }
+
+    .collapsed #sidebarContent {
+        padding: 0.5rem;
+    }
+
+    .collapsed li {
+        justify-content: center;
+    }
+
+    .collapsed li a {
+        gap: 0;
+    }
+
+    .collapsed #users-dropdown,
+    .collapsed #website-info-dropdown,
+    .collapsed #system-logs-dropdown {
+        position: absolute;
+        left: 60px;
+        /* Sesuaikan dengan lebar sidebar saat collapse */
+        top: 0;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        padding: 0.5rem;
+        min-width: 160px;
+        /* Sesuaikan dengan lebar dropdown yang diinginkan */
+    }
+
+    .collapsed #users-dropdown a,
+    .collapsed #website-info-dropdown a,
+    .collapsed #system-logs-dropdown a {
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
     }
 </style>

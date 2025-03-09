@@ -41,57 +41,30 @@
         </button>
     </div>
 
-<<<<<<< Updated upstream
     <div class="min-h-screen flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-[800px] flex flex-col lg:flex-row">
-=======
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-[800px] flex">
->>>>>>> Stashed changes
             <!-- Form Section -->
             <div class="w-full lg:w-1/2 p-6 md:p-8">
                 <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">Sign In</h2>
 
                 @if (session('success'))
-<<<<<<< Updated upstream
-                    <div class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-200 p-4 mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4 mb-4">
-                        {{ session('error') }}
-                    </div>
-=======
                 <div
-                    class="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-200 px-4 py-3 rounded mb-4">
+                    class="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-200 p-4 mb-4">
                     {{ session('success') }}
                 </div>
                 @endif
 
                 @if (session('error'))
                 <div
-                    class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
+                    class="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4 mb-4">
                     {{ session('error') }}
                 </div>
->>>>>>> Stashed changes
                 @endif
 
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
                     <input type="hidden" name="redirect" value="{{ request('redirect') }}">
                     <div class="mb-4">
-<<<<<<< Updated upstream
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">USERNAME / EMAIL</label>
-                        <input type="text" 
-                               name="login" 
-                               value="{{ old('login') }}"
-                               class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
-                               placeholder="Masukkan username atau email">
-                        @error('login')
-                            <span class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</span>
-=======
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">USERNAME /
                             EMAIL</label>
                         <input type="text" name="login" value="{{ old('login') }}"
@@ -99,35 +72,19 @@
                             placeholder="Masukkan username atau email">
                         @error('login')
                         <span class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</span>
->>>>>>> Stashed changes
                         @enderror
                     </div>
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PASSWORD</label>
-<<<<<<< Updated upstream
-                        <input type="password" 
-                               name="password" 
-                               class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
-                               placeholder="Masukkan password">
-                        @error('password')
-                            <span class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</span>
-=======
                         <input type="password" name="password"
                             class="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                             placeholder="Masukkan password">
                         @error('password')
                         <span class="text-red-600 dark:text-red-400 text-sm">{{ $message }}</span>
->>>>>>> Stashed changes
                         @enderror
                     </div>
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center">
-<<<<<<< Updated upstream
-                            <input type="checkbox" name="remember" class="text-[#24b0ba] dark:bg-gray-700 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Remember Me</span>
-                        </div>
-                        <a href="{{ route('password.request') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">Forgot Password</a>
-=======
                             <input type="checkbox" name="remember"
                                 class="text-[#24b0ba] dark:bg-gray-700 dark:border-gray-600">
                             <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Remember Me</span>
@@ -135,7 +92,6 @@
                         <a href="{{ route('password.request') }}"
                             class="text-sm text-gray-600 dark:text-gray-400 hover:text-[#24b0ba] dark:hover:text-[#73c7e3]">Forgot
                             Password</a>
->>>>>>> Stashed changes
                     </div>
                     <button type="submit" class="w-full py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#1d8f98]">
                         Sign In
@@ -147,23 +103,14 @@
                             <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-<<<<<<< Updated upstream
-                            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
-=======
                             <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue
                                 with</span>
->>>>>>> Stashed changes
                         </div>
                     </div>
 
                     <div class="mt-4">
-<<<<<<< Updated upstream
-                        <a href="{{ route('google.login') }}" 
-                           class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-=======
                         <a href="{{ route('google.login') }}"
                             class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
->>>>>>> Stashed changes
                             <img src="https://www.google.com/favicon.ico" alt="Google" class="h-5 w-5 mr-2">
                             Continue with Google
                         </a>
