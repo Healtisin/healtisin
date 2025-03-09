@@ -114,6 +114,8 @@ Route::get('/payment/error', [PaymentController::class, 'paymentError'])->name('
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
     // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // User routes
     Route::get('/users', [UserController::class, 'index'])->name('admin.users');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
@@ -122,11 +124,15 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::delete('/users/{user}/delete-photo', [UserController::class, 'deleteUserPhoto'])->name('admin.users.delete-user-photo');
 
-    //Admin Punya bro
+    // Admin routes
+    Route::get('/admins', [UserController::class, 'adminIndex'])->name('admin.admins');
+    Route::get('/admins/create', [UserController::class, 'createAdmin'])->name('admin.admins.create');
+    Route::post('/admins', [UserController::class, 'storeAdmin'])->name('admin.admins.store');
     Route::get('/admins/{admin}/edit', [UserController::class, 'editAdmin'])->name('admin.admins.edit');
     Route::put('/admins/{admin}', [UserController::class, 'updateAdmin'])->name('admin.admins.update');
     Route::delete('/admins/{admin}', [UserController::class, 'destroyAdmin'])->name('admin.admins.destroy');
     Route::delete('/admins/{admin}/delete-photo', [UserController::class, 'deleteAdminPhoto'])->name('admin.admins.delete-admin-photo');
+    
     //Transaksi
     Route::get('/transactions', [TransactionController::class, 'index'])->name('admin.transactions');
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');

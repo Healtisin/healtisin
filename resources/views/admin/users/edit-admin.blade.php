@@ -6,8 +6,8 @@
 <div class="container mx-auto px-4 sm:px-8">
     <div class="py-8">
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-semibold leading-tight text-gray-900 dark:text-gray-100">Edit Pengguna</h2>
-            <a href="{{ route('admin.users') }}" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300 flex items-center">
+            <h2 class="text-2xl font-semibold leading-tight text-gray-900 dark:text-gray-100">Edit Admin</h2>
+            <a href="{{ route('admin.admins') }}" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -34,7 +34,7 @@
         @endif
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
-            <form action="{{ isset($user) ? route('admin.users.update', $user->id) : route('admin.admins.update', $admin->id) }}" method="POST" enctype="multipart/form-data" id="edit-form">
+            <form action="{{ route('admin.admins.update', $admin->id) }}" method="POST" enctype="multipart/form-data" id="edit-form">
                 @csrf
                 @method('PUT')
                 
@@ -43,9 +43,7 @@
                     <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-4">Foto Profil</label>
                     <div class="flex items-center space-x-6">
                         <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700" id="profile-photo-container">
-                            @if(isset($user) && $user->profile_photo)
-                                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Foto Profil" class="w-full h-full object-cover" id="current-photo">
-                            @elseif(isset($admin) && $admin->profile_photo)
+                            @if($admin->profile_photo)
                                 <img src="{{ asset('storage/' . $admin->profile_photo) }}" alt="Foto Profil" class="w-full h-full object-cover" id="current-photo">
                             @else
                                 <div class="w-full h-full flex items-center justify-center" id="no-photo">
@@ -64,7 +62,7 @@
                             </label>
                             <p class="text-sm text-gray-500 dark:text-gray-400">JPG, PNG atau GIF (Maks. 2MB)</p>
                             
-                            @if((isset($user) && $user->profile_photo) || (isset($admin) && $admin->profile_photo))
+                            @if($admin->profile_photo)
                                 <div class="mt-2">
                                     <button type="button" onclick="document.getElementById('delete_photo_form').submit();" class="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-4 py-2 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/40 transition duration-300 flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +94,7 @@
                         <label for="name" class="block text-base font-medium text-gray-700 dark:text-gray-300">Nama Lengkap</label>
                         <input type="text" name="name" id="name"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
-                            value="{{ isset($user) ? $user->name : $admin->name }}" placeholder="Masukkan nama lengkap">
+                            value="{{ $admin->name }}" placeholder="Masukkan nama lengkap">
                         @error('name')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -107,7 +105,7 @@
                         <label for="username" class="block text-base font-medium text-gray-700 dark:text-gray-300">Nama Pengguna</label>
                         <input type="text" name="username" id="username"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
-                            value="{{ isset($user) ? $user->username : $admin->username }}" placeholder="Masukkan nama pengguna">
+                            value="{{ $admin->username }}" placeholder="Masukkan nama pengguna">
                         @error('username')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -118,7 +116,7 @@
                         <label for="email" class="block text-base font-medium text-gray-700 dark:text-gray-300">Email</label>
                         <input type="email" name="email" id="email"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
-                            value="{{ isset($user) ? $user->email : $admin->email }}" placeholder="Masukkan alamat email">
+                            value="{{ $admin->email }}" placeholder="Masukkan alamat email">
                         @error('email')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -129,7 +127,7 @@
                         <label for="phone" class="block text-base font-medium text-gray-700 dark:text-gray-300">Nomor Telepon</label>
                         <input type="text" name="phone" id="phone"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
-                            value="{{ isset($user) ? $user->phone : $admin->phone }}" placeholder="Masukkan nomor telepon">
+                            value="{{ $admin->phone }}" placeholder="Masukkan nomor telepon">
                         @error('phone')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -151,8 +149,8 @@
                         <label for="subscription_status" class="block text-base font-medium text-gray-700 dark:text-gray-300">Status Langganan</label>
                         <select name="subscription_status" id="subscription_status"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4">
-                            <option value="free" {{ (isset($user) && $user->subscription_status == 'free') || (isset($admin) && $admin->subscription_status == 'free') ? 'selected' : '' }}>Gratis</option>
-                            <option value="premium" {{ (isset($user) && $user->subscription_status == 'premium') || (isset($admin) && $admin->subscription_status == 'premium') ? 'selected' : '' }}>Premium</option>
+                            <option value="free" {{ $admin->subscription_status == 'free' ? 'selected' : '' }}>Gratis</option>
+                            <option value="premium" {{ $admin->subscription_status == 'premium' ? 'selected' : '' }}>Premium</option>
                         </select>
                         @error('subscription_status')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -164,8 +162,8 @@
                         <label for="is_active" class="block text-base font-medium text-gray-700 dark:text-gray-300">Status</label>
                         <select name="is_active" id="is_active"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4">
-                            <option value="1" {{ (isset($user) && $user->is_active) || (isset($admin) && $admin->is_active) ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ (isset($user) && !$user->is_active) || (isset($admin) && !$admin->is_active) ? 'selected' : '' }}>Tidak Aktif</option>
+                            <option value="1" {{ $admin->is_active ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ !$admin->is_active ? 'selected' : '' }}>Tidak Aktif</option>
                         </select>
                         @error('is_active')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -179,7 +177,7 @@
                         class="bg-[#24b0ba] dark:bg-[#24b0ba]/80 text-white px-8 py-3 rounded-lg hover:bg-[#73c7e3] dark:hover:bg-[#73c7e3]/80 transition duration-300 text-base font-medium">
                         Simpan Perubahan
                     </button>
-                    <a href="{{ route('admin.users') }}"
+                    <a href="{{ route('admin.admins') }}"
                         class="bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-8 py-3 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-300 text-base font-medium">
                         Batal
                     </a>
@@ -187,17 +185,10 @@
             </form>
 
             <!-- Form Hapus Foto Profile -->
-            @if(isset($user))
-                <form id="delete_photo_form" action="{{ route('admin.users.delete-user-photo', $user->id) }}" method="POST" class="hidden">
-                    @csrf
-                    @method('DELETE')
-                </form>
-            @elseif(isset($admin))
-                <form id="delete_photo_form" action="{{ route('admin.admins.delete-admin-photo', $admin->id) }}" method="POST" class="hidden">
-                    @csrf
-                    @method('DELETE')
-                </form>
-            @endif
+            <form id="delete_photo_form" action="{{ route('admin.admins.delete-admin-photo', $admin->id) }}" method="POST" class="hidden">
+                @csrf
+                @method('DELETE')
+            </form>
         </div>
     </div>
 </div>
@@ -250,11 +241,11 @@
             // Sembunyikan preview
             photoPreview.classList.add('hidden');
             
-            // Tampilkan kembali foto asli atau ikon no photo
+            // Tampilkan kembali foto asli atau ikon no-photo
             if (hasPhoto) {
                 currentPhoto.classList.remove('hidden');
             } else {
-                if (noPhoto) noPhoto.classList.remove('hidden');
+                noPhoto.classList.remove('hidden');
             }
             
             // Sembunyikan tombol batal
@@ -262,4 +253,4 @@
         });
     });
 </script>
-@endsection
+@endsection 

@@ -18,21 +18,14 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil parameter role dari request (jika ada)
-        $role = $request->query('role', 'user'); // Default: user
+        // Ambil parameter dari request
         $sort = $request->query('sort', 'name'); // Default: sort by name
         $direction = $request->query('direction', 'asc'); // Default: ascending
         $search = $request->query('search', ''); // Default: no search
         $perPage = 10; // Jumlah item per halaman
         
-        // Buat query builder berdasarkan role
-        if ($role === 'user') {
-            $query = User::query();
-        } elseif ($role === 'admin') {
-            $query = Admin::query();
-        } else {
-            $query = User::query(); // Default jika role tidak valid
-        }
+        // Buat query builder untuk User
+        $query = User::query();
 
         // Tambahkan pencarian jika ada
         if (!empty($search)) {
@@ -51,12 +44,48 @@ class UserController extends Controller
         // Ambil data dengan paginasi
         $users = $query->paginate($perPage)->withQueryString();
 
-        return view('admin.users.index', compact('users', 'role'));
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function adminIndex(Request $request)
+    {
+        // Ambil parameter dari request
+        $sort = $request->query('sort', 'name'); // Default: sort by name
+        $direction = $request->query('direction', 'asc'); // Default: ascending
+        $search = $request->query('search', ''); // Default: no search
+        $perPage = 10; // Jumlah item per halaman
+        
+        // Buat query builder untuk Admin
+        $query = Admin::query();
+
+        // Tambahkan pencarian jika ada
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        // Tambahkan sorting
+        if (in_array($sort, ['name', 'username', 'email', 'is_active'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        // Ambil data dengan paginasi
+        $users = $query->paginate($perPage)->withQueryString();
+
+        return view('admin.users.index-admin', compact('users'));
     }
 
     public function create()
     {
         return view('admin.users.create');
+    }
+
+    public function createAdmin()
+    {
+        return view('admin.users.create-admin');
     }
 
     public function store(Request $request)
@@ -67,7 +96,6 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:users',
-            'role' => 'required|in:user,admin',
             'password' => 'required|string|min:8',
             'subscription_status' => 'required|string|in:free,premium',
             'is_active' => 'required|boolean',
@@ -80,50 +108,70 @@ class UserController extends Controller
             $profilePhoto = $request->file('profile_photo')->store('profile-photos', 'public');
         }
 
-        // Simpan user baru berdasarkan role
-        if ($validated['role'] === 'user') {
-            $user = User::create([
-                'name' => $validated['name'],
-                'username' => $validated['username'],
-                'phone' => $validated['phone'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'profile_photo' => $profilePhoto,
-                'subscription_status' => $validated['subscription_status'],
-                'email_verified_at' => now(), // Langsung terverifikasi
-                'is_active' => $validated['is_active'],
-            ]);
+        // Simpan user baru
+        $user = User::create([
+            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'profile_photo' => $profilePhoto,
+            'subscription_status' => $validated['subscription_status'],
+            'email_verified_at' => now(), // Langsung terverifikasi
+            'is_active' => $validated['is_active'],
+        ]);
 
-            // Tambahkan log
-            LogHelper::info('user', "User baru dibuat: {$user->name}", [
-                'user_id' => $user->id,
-            ]);
+        // Tambahkan log
+        LogHelper::info('user', "User baru dibuat: {$user->name}", [
+            'user_id' => $user->id,
+        ]);
 
-            return redirect()
-                ->route('admin.users')
-                ->with('success', 'Pengguna berhasil ditambahkan!');
-        } else {
-            $admin = Admin::create([
-                'name' => $validated['name'],
-                'username' => $validated['username'],
-                'phone' => $validated['phone'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'profile_photo' => $profilePhoto,
-                'subscription_status' => $validated['subscription_status'],
-                'email_verified_at' => now(), // Langsung terverifikasi
-                'is_active' => $validated['is_active'],
-            ]);
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'Pengguna berhasil ditambahkan!');
+    }
 
-            // Tambahkan log
-            LogHelper::info('admin', "Admin baru dibuat: {$admin->name}", [
-                'admin_id' => $admin->id,
-            ]);
+    public function storeAdmin(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:admins',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|unique:admins',
+            'password' => 'required|string|min:8',
+            'subscription_status' => 'required|string|in:free,premium',
+            'is_active' => 'required|boolean',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-            return redirect()
-                ->route('admin.users', ['role' => 'admin'])
-                ->with('success', 'Admin berhasil ditambahkan!');
+        // Upload foto profile jika ada
+        $profilePhoto = null;
+        if ($request->hasFile('profile_photo')) {
+            $profilePhoto = $request->file('profile_photo')->store('profile-photos', 'public');
         }
+
+        // Simpan admin baru
+        $admin = Admin::create([
+            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'profile_photo' => $profilePhoto,
+            'subscription_status' => $validated['subscription_status'],
+            'email_verified_at' => now(), // Langsung terverifikasi
+            'is_active' => $validated['is_active'],
+        ]);
+
+        // Tambahkan log
+        LogHelper::info('admin', "Admin baru dibuat: {$admin->name}", [
+            'admin_id' => $admin->id,
+        ]);
+
+        return redirect()
+            ->route('admin.admins')
+            ->with('success', 'Admin berhasil ditambahkan!');
     }
 
     public function edit(User $user)
