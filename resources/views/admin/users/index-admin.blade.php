@@ -45,15 +45,6 @@
                     <input type="hidden" name="sort" value="{{ request('sort', 'name') }}">
                     <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
                     
-                    <!-- Filter Status -->
-                    <div class="w-full md:w-auto">
-                        <select name="status" class="w-full rounded-lg py-2 px-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#24b0ba]">
-                            <option value="">Semua Status</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
-                        </select>
-                    </div>
-                    
                     <!-- Pencarian -->
                     <div class="relative w-full">
                         <input 
@@ -61,7 +52,7 @@
                             id="search-input"
                             name="search" 
                             value="{{ request('search') }}" 
-                            placeholder="Cari nama, username, atau email..."
+                            placeholder="Cari nama, username, email, atau nomor telepon..."
                             class="w-full rounded-lg py-2 px-4 pr-10 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#24b0ba]"
                         >
                         <!-- Search Icon -->
@@ -89,11 +80,6 @@
                             </svg>
                         </button>
                     </div>
-                    
-                    <!-- Tombol Filter -->
-                    <button type="submit" class="bg-blue-600 dark:bg-blue-500/80 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600/80 transition duration-300">
-                        Filter
-                    </button>
                 </form>
             </div>
         </div>
@@ -154,6 +140,22 @@
                                 </a>
                             </th>
                             <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                <a href="{{ route('admin.admins', ['sort' => 'subscription_status', 'direction' => request('sort') === 'subscription_status' && request('direction') === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}" class="flex items-center">
+                                    Status Langganan
+                                    @if(request('sort') === 'subscription_status')
+                                        @if(request('direction') === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                                 <a href="{{ route('admin.admins', ['sort' => 'is_active', 'direction' => request('sort') === 'is_active' && request('direction') === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}" class="flex items-center">
                                     Status
                                     @if(request('sort') === 'is_active')
@@ -175,15 +177,14 @@
                     <tbody>
                         @forelse($users as $index => $user)
                         <tr>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $index + 1 }}</td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                                 @if($user->profile_photo)
-                                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" class="w-10 h-10 rounded-full">
+                                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" class="w-10 h-10 rounded-full object-cover">
                                 @else
                                 <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-gray-400">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 21a8 8 0 10-16 0" />
+                                    <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                     </svg>
                                 </div>
                                 @endif
@@ -192,6 +193,11 @@
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $user->username }}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $user->phone ?? 'N/A' }}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100">{{ $user->email }}</td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $user->subscription_status === 'PRO' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
+                                    {{ $user->subscription_status }}
+                                </span>
+                            </td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                                 @if($user->is_active)
                                 <span class="px-2 py-1 text-sm font-semibold text-green-800 dark:text-green-200 bg-green-200 dark:bg-green-800/30 rounded-full">Aktif</span>
@@ -233,37 +239,7 @@
                 </table>
                 
                 <!-- Pagination -->
-                <div class="px-5 py-5 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex flex-col xs:flex-row items-center xs:justify-between">
-                    <div class="text-xs xs:text-sm text-gray-600 dark:text-gray-400">
-                        Menampilkan {{ $users->firstItem() ?? 0 }} sampai {{ $users->lastItem() ?? 0 }} dari {{ $users->total() }} data
-                    </div>
-                    <div class="inline-flex mt-2 xs:mt-0">
-                        <div class="flex-1 flex justify-between sm:hidden">
-                            @if($users->onFirstPage())
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
-                                    Sebelumnya
-                                </span>
-                            @else
-                                <a href="{{ $users->appends(request()->query())->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                    Sebelumnya
-                                </a>
-                            @endif
-
-                            @if($users->hasMorePages())
-                                <a href="{{ $users->appends(request()->query())->nextPageUrl() }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                    Selanjutnya
-                                </a>
-                            @else
-                                <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-gray-100 cursor-not-allowed">
-                                    Selanjutnya
-                                </span>
-                            @endif
-                        </div>
-                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                            {{ $users->onEachSide(1)->appends(request()->query())->links() }}
-                        </div>
-                    </div>
-                </div>
+                @include('admin.users.partials.pagination', ['items' => $users])
             </div>
         </div>
     </div>

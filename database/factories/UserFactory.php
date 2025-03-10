@@ -27,9 +27,13 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+            'profile_photo' => '',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'is_active' => fake()->boolean(),
+            'subscription_status' => fake()->randomElement(['free', 'PRO']),
         ];
     }
 
@@ -40,6 +44,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is active.
+     */
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Indicate that the user has pro subscription.
+     */
+    public function proSubscription(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'subscription_status' => 'PRO',
         ]);
     }
 }

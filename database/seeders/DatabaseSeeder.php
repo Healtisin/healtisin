@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,13 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
+        // Data default/tetap
         User::factory()->create([
             'name' => 'admin',
             'email' => 'healtisin@gmail.com',
@@ -29,9 +22,51 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Panggil seeder untuk admin
-        $this->call(AdminSeeder::class);
+        $this->call([
+            AdminSeeder::class, // Admin default
+        ]);
 
-        \App\Models\News::factory(10)->create();
+        // Data dummy menggunakan factory
+        if (app()->environment('local', 'development')) {
+            // Generate users dengan berbagai status
+            \App\Models\User::factory()
+                ->count(20)
+                ->unverified()
+                ->create();
+
+            \App\Models\User::factory()
+                ->count(20)
+                ->active()
+                ->create();
+
+            \App\Models\User::factory()
+                ->count(20)
+                ->active()
+                ->proSubscription()
+                ->create();
+
+            // Generate berita dummy
+            \App\Models\News::factory(10)->create();
+
+            // Generate transaksi dummy
+            \App\Models\Payment::factory()
+                ->count(30)
+                ->create();
+
+            \App\Models\Payment::factory()
+                ->count(10)
+                ->paid()
+                ->create();
+
+            \App\Models\Payment::factory()
+                ->count(5)
+                ->expired()
+                ->create();
+
+            \App\Models\Payment::factory()
+                ->count(5)
+                ->failed()
+                ->create();
+        }
     }
 }

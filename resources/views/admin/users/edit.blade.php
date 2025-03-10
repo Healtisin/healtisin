@@ -126,7 +126,7 @@
 
                     <!-- Field: Phone -->
                     <div class="space-y-4">
-                        <label for="phone" class="block text-base font-medium text-gray-700 dark:text-gray-300">Nomor Telepon</label>
+                        <label for="phone" class="block text-base font-medium text-gray-700 dark:text-gray-300">Nomor Telepon (Opsional)</label>
                         <input type="text" name="phone" id="phone"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4"
                             value="{{ isset($user) ? $user->phone : $admin->phone }}" placeholder="Masukkan nomor telepon">
@@ -152,7 +152,7 @@
                         <select name="subscription_status" id="subscription_status"
                             class="mt-2 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-12 px-4">
                             <option value="free" {{ (isset($user) && $user->subscription_status == 'free') || (isset($admin) && $admin->subscription_status == 'free') ? 'selected' : '' }}>Gratis</option>
-                            <option value="premium" {{ (isset($user) && $user->subscription_status == 'premium') || (isset($admin) && $admin->subscription_status == 'premium') ? 'selected' : '' }}>Premium</option>
+                            <option value="PRO" {{ (isset($user) && $user->subscription_status == 'PRO') || (isset($admin) && $admin->subscription_status == 'PRO') ? 'selected' : '' }}>PRO</option>
                         </select>
                         @error('subscription_status')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

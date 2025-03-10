@@ -32,12 +32,13 @@ class UserController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%");
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
         // Tambahkan sorting
-        if (in_array($sort, ['name', 'username', 'email', 'is_active'])) {
+        if (in_array($sort, ['name', 'username', 'email', 'is_active', 'subscription_status'])) {
             $query->orderBy($sort, $direction);
         }
 
@@ -63,12 +64,13 @@ class UserController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%");
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
         // Tambahkan sorting
-        if (in_array($sort, ['name', 'username', 'email', 'is_active'])) {
+        if (in_array($sort, ['name', 'username', 'email', 'is_active', 'subscription_status'])) {
             $query->orderBy($sort, $direction);
         }
 
@@ -184,12 +186,19 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
             'is_active' => 'required|boolean',
-            'subscription_status' => 'required|string|in:free,premium',
+            'subscription_status' => 'required|string|in:free,PRO',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Debug log untuk melihat data yang akan diupdate
+        \Log::info('Data yang akan diupdate:', [
+            'user_id' => $user->id,
+            'validated_data' => $validated,
+            'subscription_status' => $request->subscription_status
         ]);
 
         // Jika ada password baru, gunakan bcrypt
@@ -210,7 +219,15 @@ class UserController extends Controller
             $validated['profile_photo'] = $path;
         }
 
-        $user->update($validated);
+        // Update user dengan data yang sudah divalidasi
+        $user->fill($validated);
+        $user->save();
+
+        // Debug log setelah update
+        \Log::info('Data setelah update:', [
+            'user_id' => $user->id,
+            'subscription_status' => $user->fresh()->subscription_status
+        ]);
 
         // Tambahkan log
         LogHelper::info('user', "User diperbarui: {$user->name}", [
@@ -295,11 +312,41 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:admins,username,' . $admin->id,
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'password' => 'nullable|string|min:8',
+            'is_active' => 'required|boolean',
+            'subscription_status' => 'required|string|in:free,PRO',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $admin->update($validated);
+        // Jika ada password baru, gunakan bcrypt
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        // Upload foto profile jika ada
+        if ($request->hasFile('profile_photo')) {
+            // Hapus foto lama jika ada
+            if ($admin->profile_photo) {
+                Storage::delete('public/' . $admin->profile_photo);
+            }
+            
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $validated['profile_photo'] = $path;
+        }
+
+        // Update admin dengan data yang sudah divalidasi
+        $admin->fill($validated);
+        $admin->save();
+
+        // Tambahkan log
+        LogHelper::info('admin', "Admin diperbarui: {$admin->name}", [
+            'admin_id' => $admin->id,
+            'changes' => array_diff_assoc($validated, $admin->getOriginal())
+        ]);
 
         return redirect()
             ->route('admin.admins.edit', $admin->id)
