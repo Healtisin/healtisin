@@ -18,6 +18,9 @@ $breadcrumbs = [
 'admin.news' => ['Home', 'Berita'],
 'admin.logs.index' => ['Home', 'Log Sistem'],
 'admin.logs.show' => ['Home', 'Log Sistem', 'Detail Log'],
+'admin.prompt-engineering' => ['Home', 'AI Training', 'Prompt Engineering'],
+'admin.fine-tuning' => ['Home', 'AI Training', 'Fine-tuning'],
+'admin.keywords-patterns' => ['Home', 'AI Training', 'Keywords dan Patterns'],
 ];
 
 // Get breadcrumbs untuk route saat ini
@@ -27,6 +30,7 @@ $breadcrumbRoutes = [
 'Home' => 'admin.dashboard',
 'Pengguna' => 'admin.users',
 'Log Sistem' => 'admin.logs.index',
+'AI Training' => 'admin.prompt-engineering',
 ];
 
 @endphp

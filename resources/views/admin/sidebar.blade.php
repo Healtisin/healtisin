@@ -116,19 +116,41 @@
                     </a>
                 </div>
             </li>
-            <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                <a href="#" class="flex items-center gap-4">
+            <li class="w-full text-left rounded-lg">
+                <button onclick="toggleAITraining()"
+                    class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
+                    <div class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path
-                                d="M248 106.6c18.9-9 32-28.3 32-50.6c0-30.9-25.1-56-56-56s-56 25.1-56 56c0 22.3 13.1 41.6 32 50.6l0 98.8c-2.8 1.3-5.5 2.9-8 4.7l-80.1-45.8c1.6-20.8-8.6-41.6-27.9-52.8C57.2 96 23 105.2 7.5 132S1.2 193 28 208.5c1.3 .8 2.6 1.5 4 2.1l0 90.8c-1.3 .6-2.7 1.3-4 2.1C1.2 319-8 353.2 7.5 380S57.2 416 84 400.5c19.3-11.1 29.4-32 27.8-52.8l50.5-28.9c-11.5-11.2-19.9-25.6-23.8-41.7L88 306.1c-2.6-1.8-5.2-3.3-8-4.7l0-90.8c2.8-1.3 5.5-2.9 8-4.7l80.1 45.8c-.1 1.4-.2 2.8-.2 4.3c0 22.3 13.1 41.6 32 50.6l0 98.8c-18.9 9-32 28.3-32 50.6c0 30.9 25.1 56 56 56s56-25.1 56-56c0-22.3-13.1-41.6-32-50.6l0-98.8c2.8-1.3 5.5-2.9 8-4.7l80.1 45.8c-1.6 20.8 8.6 41.6 27.8 52.8c26.8 15.5 61 6.3 76.5-20.5s6.3-61-20.5-76.5c-1.3-.8-2.7-1.5-4-2.1l0-90.8c1.4-.6 2.7-1.3 4-2.1c26.8-15.5 36-49.7 20.5-76.5S390.8 96 364 111.5c-19.3 11.1-29.4 32-27.8 52.8l-50.6 28.9c11.5 11.2 19.9 25.6 23.8 41.7L360 205.9c2.6 1.8 5.2 3.3 8 4.7l0 90.8c-2.8 1.3-5.5 2.9-8 4.6l-80.1-45.8c.1-1.4 .2-2.8 .2-4.3c0-22.3-13.1-41.6-32-50.6l0-98.8z" />
+                                    d="M248 0h80c13.3 0 24 10.7 24 24V64H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64H224V24c0-13.3 10.7-24 24-24zM64 384c0 17.7 14.3 32 32 32H352c17.7 0 32-14.3 32-32V128c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32V384zM208 272c0 44.2 35.8 80 80 80s80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80zm208-64c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24zm0 96c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24z"/>
                         </svg>
                     </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">API</p>
+                    <div class="min-w-0 sidebar-text">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">AI Training</p>
+                        </div>
+                        <svg id="ai-training-arrow" class="w-4 h-4 transition-transform duration-200"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
                     </div>
-                </a>
+                </button>
+
+                <div id="ai-training-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
+                    <a href="{{ route('admin.prompt-engineering') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.prompt-engineering') ? 'active' : '' }}">
+                        Prompt Engineering
+                    </a>
+                    <a href="{{ route('admin.fine-tuning') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.fine-tuning') ? 'active' : '' }}">
+                        Fine-tuning
+                    </a>
+                    <a href="{{ route('admin.keywords-patterns') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.keywords-patterns') ? 'active' : '' }}">
+                        Keywords dan Patterns
+                    </a>
+                </div>
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.payments') ? 'active' : '' }}">
@@ -226,6 +248,7 @@
     let isWebsiteInfoOpen = false;
     let isSystemLogsOpen = false;
     let isUsersOpen = false;
+    let isAITrainingOpen = false;
 
     function toggleWebsiteInfo() {
         const dropdown = document.getElementById('website-info-dropdown');
@@ -264,6 +287,21 @@
         isUsersOpen = !isUsersOpen;
 
         if (isUsersOpen) {
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+        } else {
+            dropdown.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    }
+
+    function toggleAITraining() {
+        const dropdown = document.getElementById('ai-training-dropdown');
+        const arrow = document.getElementById('ai-training-arrow');
+
+        isAITrainingOpen = !isAITrainingOpen;
+
+        if (isAITrainingOpen) {
             dropdown.classList.remove('hidden');
             arrow.classList.add('rotate-180');
         } else {
@@ -329,6 +367,25 @@
             arrow.classList.add('rotate-180');
             isUsersOpen = true;
         }
+
+        // AI Training dropdown
+        const aiTrainingItems = document.querySelectorAll('#ai-training-dropdown a');
+        let isAnyAITrainingActive = false;
+
+        aiTrainingItems.forEach(item => {
+            if (item.classList.contains('active')) {
+                isAnyAITrainingActive = true;
+            }
+        });
+
+        if (isAnyAITrainingActive) {
+            const dropdown = document.getElementById('ai-training-dropdown');
+            const arrow = document.getElementById('ai-training-arrow');
+
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+            isAITrainingOpen = true;
+        }
     });
 
     let isCollapsed = false;
@@ -352,7 +409,7 @@
 
     function adjustDropdownPositions() {
         const dropdowns = document.querySelectorAll(
-            '.collapsed #users-dropdown, .collapsed #website-info-dropdown, .collapsed #system-logs-dropdown');
+            '.collapsed #users-dropdown, .collapsed #website-info-dropdown, .collapsed #system-logs-dropdown, .collapsed #ai-training-dropdown');
         dropdowns.forEach(dropdown => {
             if (isCollapsed) {
                 dropdown.style.left = '60px'; // Sesuaikan dengan lebar sidebar saat collapse
@@ -444,7 +501,8 @@
 
     .collapsed #users-dropdown,
     .collapsed #website-info-dropdown,
-    .collapsed #system-logs-dropdown {
+    .collapsed #system-logs-dropdown,
+    .collapsed #ai-training-dropdown {
         position: absolute;
         left: 60px;
         /* Sesuaikan dengan lebar sidebar saat collapse */
@@ -460,7 +518,8 @@
 
     .collapsed #users-dropdown a,
     .collapsed #website-info-dropdown a,
-    .collapsed #system-logs-dropdown a {
+    .collapsed #system-logs-dropdown a,
+    .collapsed #ai-training-dropdown a {
         padding: 0.5rem 1rem;
         white-space: nowrap;
     }

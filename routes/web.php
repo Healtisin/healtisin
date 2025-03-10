@@ -157,6 +157,19 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/log-file', [App\Http\Controllers\Admin\FileLogController::class, 'index'])->name('admin.log-file.index');
     Route::get('/log-file/{id}', [App\Http\Controllers\Admin\FileLogController::class, 'show'])->name('admin.log-file.show');
 
+    // AI Training routes
+    Route::get('/prompt-engineering', [App\Http\Controllers\Admin\AITrainingController::class, 'promptEngineering'])->name('admin.prompt-engineering');
+    Route::post('/prompt-engineering', [App\Http\Controllers\Admin\AITrainingController::class, 'savePrompt'])->name('admin.prompt-engineering.save');
+    Route::get('/fine-tuning', [App\Http\Controllers\Admin\AITrainingController::class, 'fineTuning'])->name('admin.fine-tuning');
+    Route::post('/fine-tuning/upload', [App\Http\Controllers\Admin\AITrainingController::class, 'uploadDataset'])->name('admin.fine-tuning.upload');
+    Route::post('/fine-tuning/start', [App\Http\Controllers\Admin\AITrainingController::class, 'startFineTuning'])->name('admin.fine-tuning.start');
+    Route::get('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'keywordsPatterns'])->name('admin.keywords-patterns');
+    Route::get('/keywords-patterns/greetings', [App\Http\Controllers\Admin\AITrainingController::class, 'greetings'])->name('admin.keywords-patterns.greetings');
+    Route::get('/keywords-patterns/health-keywords', [App\Http\Controllers\Admin\AITrainingController::class, 'healthKeywords'])->name('admin.keywords-patterns.health-keywords');
+    Route::get('/keywords-patterns/question-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'questionPatterns'])->name('admin.keywords-patterns.question-patterns');
+    Route::post('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'saveKeywordsPatterns'])->name('admin.keywords-patterns.save');
+    Route::delete('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'deleteKeywordPattern'])->name('admin.keywords-patterns.delete');
+
     // Route untuk settings
     Route::prefix('settings')->group(function () {
         Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('settings.updateProfile');

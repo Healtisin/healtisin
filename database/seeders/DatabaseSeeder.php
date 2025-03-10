@@ -29,17 +29,17 @@ class DatabaseSeeder extends Seeder
         // Data dummy menggunakan factory
         if (app()->environment('local', 'development')) {
             // Generate users dengan berbagai status
-            \App\Models\User::factory()
+            User::factory()
                 ->count(20)
                 ->unverified()
                 ->create();
 
-            \App\Models\User::factory()
+            User::factory()
                 ->count(20)
                 ->active()
                 ->create();
 
-            \App\Models\User::factory()
+            User::factory()
                 ->count(20)
                 ->active()
                 ->proSubscription()
