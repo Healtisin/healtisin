@@ -21,7 +21,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    Kembali
+                    <span class="hidden sm:inline">Kembali</span>
                 </a>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleLanguage()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" title="Ganti Bahasa">
@@ -42,11 +42,11 @@
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 pt-20">
-            <div class="max-w-4xl mx-auto px-4 py-12">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold mb-4 dark:text-gray-100">Tingkatkan ke Pro</h1>
-                    <p class="text-xl text-gray-600 dark:text-gray-400">Nikmati layanan kesehatan yang lebih lengkap dengan Healtisin Pro</p>
+        <main class="flex-1 pt-16 sm:pt-20">
+            <div class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+                <div class="text-center mb-8 sm:mb-12">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 dark:text-gray-100">Tingkatkan ke Pro</h1>
+                    <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400">Nikmati layanan kesehatan yang lebih lengkap dengan Healtisin Pro</p>
                 </div>
 
                 <!-- Perbandingan Fitur -->
@@ -56,19 +56,19 @@
                 @include('pricing.partials.price-comparison', ['packages' => $packages])
 
                 <!-- Tombol Lanjutkan -->
-                <div class="mt-8 text-center">
+                <div class="mt-6 sm:mt-8 text-center">
                     @auth
                         <a href="{{ route('pricing.select-package') }}" 
-                           class="inline-block px-8 py-3 bg-[#24b0ba] text-white rounded-full 
-                                  hover:bg-[#73c7e3] text-lg font-semibold">
+                           class="inline-block px-6 sm:px-8 py-2.5 sm:py-3 bg-[#24b0ba] text-white rounded-full 
+                                  hover:bg-[#73c7e3] text-base sm:text-lg font-semibold w-full sm:w-auto">
                             Lanjutkan Berlangganan
                         </a>
                     @else
-                        <div class="space-y-4">
-                            <p class="text-gray-600 dark:text-gray-400">Silakan login terlebih dahulu untuk melanjutkan</p>
+                        <div class="space-y-3 sm:space-y-4">
+                            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Silakan login terlebih dahulu untuk melanjutkan</p>
                             <a href="{{ route('login', ['redirect' => route('pricing.select-package')]) }}" 
-                               class="inline-block px-8 py-3 bg-[#24b0ba] text-white rounded-full 
-                                      hover:bg-[#73c7e3] text-lg font-semibold">
+                               class="inline-block px-6 sm:px-8 py-2.5 sm:py-3 bg-[#24b0ba] text-white rounded-full 
+                                      hover:bg-[#73c7e3] text-base sm:text-lg font-semibold w-full sm:w-auto">
                                 Login untuk Melanjutkan
                             </a>
                         </div>
@@ -79,7 +79,7 @@
 
         <!-- Footer -->
         <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700">
-            <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:py-6 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 <p>&copy; {{ date('Y') }} Healtisin AI. Hak Cipta Dilindungi.</p>
             </div>
         </footer>

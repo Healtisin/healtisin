@@ -21,7 +21,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                               d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    Kembali
+                    <span class="hidden sm:inline">Kembali</span>
                 </a>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleLanguage()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" title="Ganti Bahasa">
@@ -41,70 +41,70 @@
             </div>
         </header>
 
-        <main class="flex-1 pt-20">
-            <div class="max-w-3xl mx-auto px-4 py-12">
+        <main class="flex-1 pt-16 sm:pt-20">
+            <div class="max-w-3xl mx-auto px-4 py-8 sm:py-12">
                 <!-- Progress Steps -->
-                <div class="flex items-center justify-center mb-12">
+                <div class="flex items-center justify-center mb-8 sm:mb-12">
                     <div class="flex items-center">
-                        <div class="w-8 h-8 bg-[#24b0ba] text-white rounded-full flex items-center justify-center">1</div>
-                        <div class="h-1 w-16 bg-[#24b0ba]"></div>
-                        <div class="w-8 h-8 bg-[#24b0ba] text-white rounded-full flex items-center justify-center">2</div>
-                        <div class="h-1 w-16 bg-[#24b0ba]"></div>
-                        <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full flex items-center justify-center">3</div>
+                        <div class="w-6 sm:w-8 h-6 sm:h-8 bg-[#24b0ba] text-white rounded-full flex items-center justify-center text-sm sm:text-base">1</div>
+                        <div class="h-1 w-12 sm:w-16 bg-[#24b0ba]"></div>
+                        <div class="w-6 sm:w-8 h-6 sm:h-8 bg-[#24b0ba] text-white rounded-full flex items-center justify-center text-sm sm:text-base">2</div>
+                        <div class="h-1 w-12 sm:w-16 bg-[#24b0ba]"></div>
+                        <div class="w-6 sm:w-8 h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full flex items-center justify-center text-sm sm:text-base">3</div>
                     </div>
                 </div>
 
-                <form action="{{ route('pricing.process-payment') }}" method="POST" class="space-y-8">
+                <form action="{{ route('pricing.process-payment') }}" method="POST" class="space-y-6 sm:space-y-8">
                     @csrf
                     <input type="hidden" name="package_id" value="{{ $package['id'] }}">
                     <input type="hidden" name="payment_method" value="{{ $payment_method }}">
 
                     <!-- Detail Informasi -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                        <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
+                        <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
                                 <input type="text" name="full_name" required
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                       class="w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                                        value="{{ auth()->user()->name }}">
                             </div>
                             
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                                 <input type="email" name="email" required
-                                       class="w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" 
+                                       class="w-full px-3 sm:px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base" 
                                        value="{{ auth()->user()->email }}" readonly>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor HP</label>
                                 <input type="tel" name="phone" required
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                       class="w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                                        placeholder="Contoh: 08123456789">
                             </div>
 
                             @if($payment_method === 'credit_card')
                             <div class="space-y-4 pt-4 border-t dark:border-gray-700">
-                                <h4 class="font-medium dark:text-gray-200">Detail Kartu Kredit</h4>
+                                <h4 class="font-medium text-base sm:text-lg dark:text-gray-200">Detail Kartu Kredit</h4>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor Kartu</label>
                                     <input type="text" name="card_number" required
-                                           class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                           class="w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                                            placeholder="1234 5678 9012 3456">
                                 </div>
                                 
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Kadaluarsa</label>
                                         <input type="text" name="expiry_date" required
-                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                               class="w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                                                placeholder="MM/YY">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVV</label>
                                         <input type="text" name="cvv" required maxlength="3"
-                                               class="w-full px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                               class="w-full px-3 sm:px-4 py-2 border rounded-lg focus:ring-[#24b0ba] focus:border-[#24b0ba] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 text-sm sm:text-base"
                                                placeholder="123">
                                     </div>
                                 </div>
@@ -114,22 +114,22 @@
                     </div>
 
                     <!-- Ringkasan Pembayaran -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                        <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Ringkasan Pembayaran</h3>
-                        <div class="space-y-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
+                        <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100">Ringkasan Pembayaran</h3>
+                        <div class="space-y-3 sm:space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600 dark:text-gray-400">Paket Pro {{ $package['name'] }}</span>
-                                <span class="font-medium dark:text-gray-200">Rp {{ number_format($package['total'], 0, ',', '.') }}</span>
+                                <span class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Paket Pro {{ $package['name'] }}</span>
+                                <span class="text-sm sm:text-base font-medium dark:text-gray-200">Rp {{ number_format($package['total'], 0, ',', '.') }}</span>
                             </div>
                             @if($package['discount'] > 0)
                             <div class="flex justify-between items-center text-green-600 dark:text-green-400">
-                                <span>Hemat {{ $package['discount'] }}%</span>
-                                <span>-Rp {{ number_format($package['savings'], 0, ',', '.') }}</span>
+                                <span class="text-sm sm:text-base">Hemat {{ $package['discount'] }}%</span>
+                                <span class="text-sm sm:text-base">-Rp {{ number_format($package['savings'], 0, ',', '.') }}</span>
                             </div>
                             @endif
-                            <div class="flex justify-between items-center pt-4 border-t dark:border-gray-700 font-bold">
-                                <span class="dark:text-gray-200">Total Pembayaran</span>
-                                <span class="text-xl text-[#24b0ba] dark:text-[#73c7e3]">
+                            <div class="flex justify-between items-center pt-3 sm:pt-4 border-t dark:border-gray-700 font-bold">
+                                <span class="text-sm sm:text-base dark:text-gray-200">Total Pembayaran</span>
+                                <span class="text-lg sm:text-xl text-[#24b0ba] dark:text-[#73c7e3]">
                                     Rp {{ number_format($package['final_total'], 0, ',', '.') }}
                                 </span>
                             </div>
@@ -137,8 +137,8 @@
                     </div>
 
                     <button type="submit" 
-                            class="w-full bg-[#24b0ba] text-white py-4 rounded-full hover:bg-[#73c7e3] 
-                                   transition-colors text-lg font-semibold">
+                            class="w-full bg-[#24b0ba] text-white py-3 sm:py-4 rounded-full hover:bg-[#73c7e3] 
+                                   transition-colors text-base sm:text-lg font-semibold">
                         Bayar Sekarang
                     </button>
                 </form>

@@ -20,7 +20,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
-                    Kembali ke Beranda
+                    <span class="hidden sm:inline">Kembali ke Beranda</span>
                 </a>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleLanguage()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" title="Ganti Bahasa">
@@ -40,42 +40,42 @@
             </div>
         </header>
 
-        <main class="flex-1 pt-20">
-            <div class="max-w-3xl mx-auto px-4 py-12">
+        <main class="flex-1 pt-16 sm:pt-20">
+            <div class="max-w-3xl mx-auto px-4 py-8 sm:py-12">
                 <!-- Status Pembayaran -->
-                <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full mb-4">
-                        <svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="text-center mb-6 sm:mb-8">
+                    <div class="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full mb-3 sm:mb-4">
+                        <svg class="w-6 sm:w-8 h-6 sm:h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h1 class="text-2xl font-bold mb-2 dark:text-gray-100">Menunggu Pembayaran</h1>
-                    <p class="text-gray-600 dark:text-gray-400">Selesaikan pembayaran sebelum</p>
-                    <p class="text-lg font-semibold text-[#24b0ba] dark:text-[#73c7e3]">{{ $payment->expired_at->format('d M Y H:i') }} WIB</p>
+                    <h1 class="text-xl sm:text-2xl font-bold mb-2 dark:text-gray-100">Menunggu Pembayaran</h1>
+                    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Selesaikan pembayaran sebelum</p>
+                    <p class="text-base sm:text-lg font-semibold text-[#24b0ba] dark:text-[#73c7e3]">{{ $payment->expired_at->format('d M Y H:i') }} WIB</p>
                 </div>
 
                 <!-- Informasi Pembayaran -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
-                    <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
-                    <div class="space-y-4">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-6 sm:mb-8">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100">Informasi Pembayaran</h3>
+                    <div class="space-y-3 sm:space-y-4">
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">ID Pembayaran</span>
-                            <span class="font-medium dark:text-gray-200">{{ $payment->id }}</span>
+                            <span class="text-sm sm:text-base text-gray-600 dark:text-gray-400">ID Pembayaran</span>
+                            <span class="text-sm sm:text-base font-medium dark:text-gray-200">{{ $payment->id }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Total Pembayaran</span>
-                            <span class="font-bold text-[#24b0ba] dark:text-[#73c7e3]">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
+                            <span class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Total Pembayaran</span>
+                            <span class="text-base sm:text-lg font-bold text-[#24b0ba] dark:text-[#73c7e3]">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600 dark:text-gray-400">Metode Pembayaran</span>
-                            <span class="font-medium dark:text-gray-200">{{ strtoupper($payment->payment_method) }}</span>
+                            <span class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Metode Pembayaran</span>
+                            <span class="text-sm sm:text-base font-medium dark:text-gray-200">{{ strtoupper($payment->payment_method) }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Instruksi Pembayaran -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                    <h3 class="text-xl font-semibold mb-6 dark:text-gray-100">Cara Pembayaran</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100">Cara Pembayaran</h3>
                     @if($payment->payment_method === 'paypal')
                     @include('pricing.partials.paypal-instructions')
                     @elseif($payment->payment_method === 'cc')
