@@ -1,27 +1,27 @@
-<div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-lg w-[900px]">
+<div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl p-4">
         <!-- Modal Header -->
-        <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Perincian akun</h3>
+        <div class="flex items-center justify-between p-3 border-b dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Perincian akun</h3>
             <button onclick="closeSettingsModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
 
         <!-- Modal Content -->
-        <div class="p-6">
-            <div class="grid grid-cols-2 gap-12 relative">
+        <div class="p-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
                 <!-- Left Column -->
-                <div class="space-y-6 px-4">
+                <div class="space-y-4">
                     <div>
-                        <h4 class="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Perincian untuk masuk dan nama</h4>
+                        <h4 class="text-base font-medium mb-3 text-gray-900 dark:text-gray-100">Perincian untuk masuk dan nama</h4>
                         
                         <!-- Email -->
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Email</label>
-                            <input type="email" value="{{ Auth::user()->email }}" class="w-full px-3 py-2 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
+                            <input type="email" value="{{ Auth::user()->email }}" class="w-full px-3 py-2 text-sm border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
                         </div>
 
                         <!-- Password -->
@@ -30,40 +30,40 @@
                             <div class="relative">
                                 <input type="password" 
                                        value="••••••••" 
-                                       class="w-full px-3 py-2 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" 
+                                       class="w-full px-3 py-2 text-sm border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" 
                                        readonly>
                             </div>
-                            <button onclick="showChangePasswordModal()" class="text-blue-500 dark:text-blue-400 text-sm mt-1 hover:underline">Ubah</button>
+                            <button onclick="showChangePasswordModal()" class="text-sm text-blue-500 dark:text-blue-400 mt-1 hover:underline">Ubah</button>
                         </div>
 
                         <!-- Display Name -->
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Nama yang ditampilkan</label>
-                            <input type="text" value="{{ Auth::user()->name }}" class="w-full px-3 py-2 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
-                            <button onclick="showChangeNameModal()" class="text-blue-500 dark:text-blue-400 text-sm mt-1 hover:underline">Ubah</button>
+                            <input type="text" value="{{ Auth::user()->name }}" class="w-full px-3 py-2 text-sm border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
+                            <button onclick="showChangeNameModal()" class="text-sm text-blue-500 dark:text-blue-400 mt-1 hover:underline">Ubah</button>
                         </div>
 
                         <!-- Phone Number -->
                         <div class="mb-4">
                             <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Nomor Telepon</label>
-                            <input type="tel" value="{{ Auth::user()->phone ?? '' }}" class="w-full px-3 py-2 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
-                            <button onclick="showChangePhoneModal()" class="text-blue-500 dark:text-blue-400 text-sm mt-1 hover:underline">Ubah</button>
+                            <input type="tel" value="{{ Auth::user()->phone ?? '' }}" class="w-full px-3 py-2 text-sm border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" readonly data-no-translate>
+                            <button onclick="showChangePhoneModal()" class="text-sm text-blue-500 dark:text-blue-400 mt-1 hover:underline">Ubah</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Vertical Divider -->
-                <div class="absolute left-1/2 top-0 bottom-0 -ml-px">
+                <div class="hidden lg:block absolute left-1/2 top-0 bottom-0 -ml-px">
                     <div class="w-[1px] h-full bg-gray-200 dark:bg-gray-700"></div>
                 </div>
 
                 <!-- Right Column -->
-                <div class="space-y-6 px-4">
+                <div class="space-y-4">
                     <!-- Profile Photo -->
                     <div>
-                        <h4 class="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Foto Profil</h4>
-                        <div class="flex items-center gap-4">
-                            <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 relative group profile-photo-container">
+                        <h4 class="text-base font-medium mb-3 text-gray-900 dark:text-gray-100">Foto Profil</h4>
+                        <div class="flex items-center gap-3">
+                            <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 relative group profile-photo-container">
                                 @if(Auth::user()->profile_photo)
                                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" 
                                          alt="Profile photo" 
@@ -71,15 +71,15 @@
                                     <button type="button" 
                                             onclick="showDeletePhotoConfirmation()"
                                             class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span class="p-2 text-white hover:text-red-500" title="Hapus Foto">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <span class="p-1.5 text-white hover:text-red-500" title="Hapus Foto">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </span>
                                     </button>
                                 @else
                                     <div class="w-full h-full bg-[#24b0ba] dark:bg-[#24b0ba]/80 flex items-center justify-center">
-                                        <span class="text-2xl text-white font-medium">
+                                        <span class="text-xl text-white font-medium">
                                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                         </span>
                                     </div>
@@ -99,7 +99,7 @@
                                            onchange="validateAndPreviewPhoto(this)">
                                     <button type="button" 
                                             onclick="document.getElementById('photoInput').click()" 
-                                            class="text-blue-500 dark:text-blue-400 hover:underline">
+                                            class="text-sm text-blue-500 dark:text-blue-400 hover:underline">
                                         Ubah foto
                                     </button>
                                 </form>
@@ -114,10 +114,10 @@
                             <input type="text" 
                                    id="current-language-display"
                                    value="{{ config('app.available_languages')[App::getLocale()]['native'] }}"
-                                   class="w-full px-3 py-2 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" 
+                                   class="w-full px-3 py-2 text-sm border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-gray-200" 
                                    readonly>
                             <button onclick="showLanguageModal()" 
-                                    class="text-blue-500 dark:text-blue-400 text-sm mt-1 hover:underline">
+                                    class="text-sm text-blue-500 dark:text-blue-400 mt-1 hover:underline">
                                 Ubah
                             </button>
                         </div>
@@ -125,22 +125,22 @@
 
                     <!-- Account Upgrade -->
                     <div>
-                        <h4 class="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Status Akun</h4>
+                        <h4 class="text-base font-medium mb-3 text-gray-900 dark:text-gray-100">Status Akun</h4>
                         @if(Auth::user()->subscription_status == 'free')
-                            <div class="space-y-4">
+                            <div class="space-y-3">
                                 <p class="text-sm text-gray-600 dark:text-gray-400">
                                     Tingkatkan ke Healtisin Pro untuk mendapatkan fitur premium lainnya.
                                 </p>
                                 <a href="{{ route('pricing.pro') }}" 
-                                   class="inline-block px-4 py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3] dark:bg-[#24b0ba]/80 dark:hover:bg-[#73c7e3]/80 transition-colors duration-200">
+                                   class="inline-block px-3 py-2 text-sm bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3] dark:bg-[#24b0ba]/80 dark:hover:bg-[#73c7e3]/80 transition-colors duration-200">
                                     Tingkatkan paket langganan
                                 </a>
                             </div>
                         @elseif(Auth::user()->subscription_status == 'pro')
-                            <div class="space-y-4">
+                            <div class="space-y-3">
                                 <div class="flex items-center gap-2">
                                     <span class="text-sm font-medium text-[#24b0ba] dark:text-[#73c7e3]">Pro Member</span>
-                                    <svg class="w-5 h-5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
@@ -149,19 +149,19 @@
                                 </p>
                                 <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                                     <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                         Konsultasi tanpa batas dengan dokter spesialis
                                     </li>
                                     <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                         Akses prioritas 24/7
                                     </li>
                                     <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                         Riwayat medis lengkap dan terorganisir
@@ -174,38 +174,38 @@
             </div>
 
             <!-- Delete Account -->
-            <div class="mt-8 pt-6 border-t dark:border-gray-700 px-4">
-                <button onclick="showDeleteAccountModal()" class="text-red-500 dark:text-red-400 text-sm hover:underline">Hapus akun</button>
+            <div class="mt-6 pt-4 border-t dark:border-gray-700">
+                <button onclick="showDeleteAccountModal()" class="text-sm text-red-500 dark:text-red-400 hover:underline">Hapus akun</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Tambahkan setelah modal settings -->
-<div id="photoConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
-    <div class="bg-white dark:bg-gray-800 rounded-lg w-[400px] p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100">Konfirmasi Perubahan Foto</h4>
+<div id="photoConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60] p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-[400px] p-4 sm:p-6">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <h4 class="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100">Konfirmasi Perubahan Foto</h4>
             <button onclick="closePhotoConfirmationModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
         
-        <div class="mb-4">
-            <img id="previewImage" class="w-32 h-32 rounded-full mx-auto object-cover" src="" alt="Preview">
+        <div class="mb-3 sm:mb-4">
+            <img id="previewImage" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto object-cover" src="" alt="Preview">
         </div>
 
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Apakah Anda yakin ingin mengubah foto profil?</p>
+        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">Apakah Anda yakin ingin mengubah foto profil?</p>
 
         <div class="flex justify-end gap-2">
             <button onclick="closePhotoConfirmationModal()" 
-                    class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                 Batal
             </button>
             <button onclick="submitPhotoChange()" 
-                    class="px-4 py-2 bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3] dark:bg-[#24b0ba]/80 dark:hover:bg-[#73c7e3]/80">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3] dark:bg-[#24b0ba]/80 dark:hover:bg-[#73c7e3]/80">
                 Ya, Ubah Foto
             </button>
         </div>
@@ -213,30 +213,30 @@
 </div>
 
 <!-- Language Modal -->
-<div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-lg w-80">
+<div id="languageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-[320px]">
         <!-- Modal Header -->
-        <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Pilih Bahasa</h3>
+        <div class="flex items-center justify-between p-3 sm:p-4 border-b dark:border-gray-700">
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Pilih Bahasa</h3>
             <button onclick="closeLanguageModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
 
         <!-- Modal Content -->
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             @foreach(config('app.available_languages') as $code => $lang)
                 <button onclick="changeLanguage('{{ $code }}')"
-                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-between mb-2"
+                        class="w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-between mb-2"
                         data-lang-code="{{ $code }}">
                     <div>
-                        <span class="text-sm text-gray-900 dark:text-gray-100">{{ $lang['native'] }}</span>
+                        <span class="text-xs sm:text-sm text-gray-900 dark:text-gray-100">{{ $lang['native'] }}</span>
                         <span class="text-xs text-gray-500 dark:text-gray-400" data-no-translate>({{ $lang['name'] }})</span>
                     </div>
                     <span class="language-check-mark {{ App::getLocale() == $code ? '' : 'hidden' }}">
-                        <svg class="w-5 h-5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#24b0ba] dark:text-[#73c7e3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                     </span>
@@ -253,26 +253,26 @@
 @include('partials.delete-account-modal')
 
 <!-- Delete Photo Confirmation Modal -->
-<div id="deletePhotoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60]">
-    <div class="bg-white dark:bg-gray-800 rounded-lg w-[400px] p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100">Konfirmasi Hapus Foto</h4>
+<div id="deletePhotoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[60] p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-[400px] p-4 sm:p-6">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <h4 class="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100">Konfirmasi Hapus Foto</h4>
             <button onclick="closeDeletePhotoModal()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
         
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Apakah Anda yakin ingin menghapus foto profil?</p>
+        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">Apakah Anda yakin ingin menghapus foto profil?</p>
 
         <div class="flex justify-end gap-2">
             <button onclick="closeDeletePhotoModal()" 
-                    class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
                 Batal
             </button>
             <button onclick="deleteProfilePhoto()" 
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-red-500 text-white rounded-md hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                 Ya, Hapus Foto
             </button>
         </div>
@@ -337,7 +337,7 @@ async function submitPhotoChange() {
         
         // Tampilkan notifikasi sukses
         const alertDiv = document.createElement('div');
-        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded z-50 text-xs sm:text-sm';
         alertDiv.textContent = data.message;
         document.body.appendChild(alertDiv);
         
@@ -448,7 +448,7 @@ async function deleteProfilePhoto() {
 
         // Tampilkan notifikasi sukses
         const alertDiv = document.createElement('div');
-        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+        alertDiv.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded z-50 text-xs sm:text-sm';
         alertDiv.textContent = data.message;
         document.body.appendChild(alertDiv);
 
