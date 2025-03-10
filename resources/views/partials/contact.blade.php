@@ -52,7 +52,7 @@
                                 </svg>
                                 <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">Phone
                                 </p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">+62 892-829-891</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">+62 878-7156-3112</p>
                             </div>
                             <!-- WhatsApp -->
                             <div
@@ -64,7 +64,7 @@
                                 </svg>
                                 <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">
                                     Whatsapp</p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">085292811199</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">087871563112</p>
                             </div>
                             <!-- Email -->
                             <div
