@@ -10,6 +10,7 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
 use Illuminate\Support\Facades\Log;
+
 class PaymentController extends Controller
 {
     public function index()
@@ -124,9 +125,7 @@ class PaymentController extends Controller
         $ewallets = [
             ['code' => 'gopay', 'name' => 'GoPay', 'icon' => 'images/payments/gopay.png'],
             ['code' => 'ovo', 'name' => 'OVO', 'icon' => 'images/payments/ovo.jpg'],
-            ['code' => 'dana', 'name' => 'DANA', 'icon' => 'images/payments/dana.jpeg'],
             ['code' => 'shopeepay', 'name' => 'Shoppeepay', 'icon' => 'images/payments/shopeepay.png'],
-            ['code' => 'paypal', 'name' => 'PayPal', 'icon' => 'images/payments/paypal.png'],
             ['code' => 'qris', 'name' => 'QRIS', 'icon' => 'images/payments/qris.png']
         ];
 
@@ -212,8 +211,6 @@ class PaymentController extends Controller
                 return 'GOPAY' . strtoupper(Str::random(8));
             case 'ovo':
                 return 'OVO' . strtoupper(Str::random(8));
-            case 'dana':
-                return 'DANA' . strtoupper(Str::random(8));
             case 'bca':
                 return '8277' . str_pad(Auth::id(), 6, '0', STR_PAD_LEFT) . rand(100, 999);
             case 'mandiri':
@@ -235,21 +232,21 @@ class PaymentController extends Controller
             'email' => 'required|email',
             'phone' => 'required|string|max:20'
         ]);
-    
+
         // Cek apakah sudah ada pembayaran yang belum selesai
         $existingPayment = Payment::where('user_id', Auth::id())
             ->where('status', 'unpaid')
             ->where('expired_at', '>', now())
             ->first();
-    
+
         if ($existingPayment) {
             return redirect()->route('pricing.payment-confirmation', $existingPayment->id)
                 ->with('error', 'Anda memiliki pembayaran yang belum diselesaikan');
         }
-    
+
         // Ambil detail paket
         $package = $this->getPackageDetails($request->package_id);
-    
+
         // Buat pembayaran baru
         $payment = Payment::create([
             'user_id' => Auth::id(),
@@ -262,32 +259,32 @@ class PaymentController extends Controller
             'customer_phone' => $request->phone,
             'expired_at' => now()->addHours(24),
         ]);
-    
+
         // Setup konfigurasi Midtrans
         Config::$serverKey = config('services.midtrans.server_key');
         Config::$isProduction = config('services.midtrans.is_production');
         Config::$isSanitized = true;
         Config::$is3ds = true;
-    
+
         // Buat parameter transaksi Midtrans
         $transactionDetails = [
             'order_id' => $payment->id, // ID pembayaran
             'gross_amount' => $payment->amount, // Jumlah pembayaran
         ];
-    
+
         $customerDetails = [
             'first_name' => $payment->customer_name,
             'email' => $payment->customer_email,
             'phone' => $payment->customer_phone,
         ];
-    
+
         // Tentukan metode pembayaran yang diaktifkan
         $enabledPayments = [];
         $specificParams = [];
-    
+
         // Jika metode pembayaran adalah e-wallet, arahkan ke QRIS
-        if (in_array($request->payment_method, ['gopay', 'ovo', 'dana', 'shopeepay', 'qris'])) {
-            $enabledPayments = ['qris', 'gopay', 'shopeepay', 'dana', 'ovo'];
+        if (in_array($request->payment_method, ['gopay', 'ovo', 'shopeepay', 'qris'])) {
+            $enabledPayments = ['qris', 'gopay', 'shopeepay', 'ovo'];
         } elseif (in_array($request->payment_method, ['bca', 'mandiri', 'bni'])) {
             $enabledPayments = ['bank_transfer']; // Hanya aktifkan transfer bank
             $specificParams['bank_transfer'] = [
@@ -298,19 +295,19 @@ class PaymentController extends Controller
         } else {
             return redirect()->back()->with('error', 'Metode pembayaran tidak valid.');
         }
-    
+
         // Gabungkan parameter transaksi
         $params = [
             'transaction_details' => $transactionDetails,
             'customer_details' => $customerDetails,
             'enabled_payments' => $enabledPayments, // Batasi metode pembayaran
         ];
-    
+
         // Tambahkan parameter khusus jika ada
         if (!empty($specificParams)) {
             $params = array_merge($params, $specificParams);
         }
-    
+
         // Generate Snap Token
         try {
             $snapToken = Snap::getSnapToken($params);
@@ -319,109 +316,115 @@ class PaymentController extends Controller
             Log::error('Gagal generate Snap Token:', ['error' => $e->getMessage()]); // Log error
             return redirect()->back()->with('error', 'Gagal memproses pembayaran. Silakan coba lagi.');
         }
-    
+
         // Simpan Snap Token ke database
         $payment->update(['snap_token' => $snapToken]);
-    
+
+
         // Redirect ke halaman konfirmasi pembayaran
         return redirect()->route('pricing.payment-confirmation', $payment->id);
     }
 
-public function paymentConfirmation($id)
-{
-    $payment = Payment::findOrFail($id);
+    public function paymentConfirmation($id)
+    {
+        $payment = Payment::findOrFail($id);
 
-    // Cek kepemilikan payment
-    if ($payment->user_id !== Auth::id()) {
-        return redirect()->route('home');
-    }
-
-    // Cek status kadaluarsa
-    if ($payment->expired_at < now()) {
-        $payment->update(['status' => 'expired']);
-        return redirect()->route('pricing.pro')
-            ->with('error', 'Pembayaran telah kadaluarsa. Silakan melakukan pemesanan ulang.');
-    }
-
-    return view('pricing.payment-confirmation', compact('payment'));
-}
-public function handleNotification(Request $request)
-{
-    // Buat instance Notification dari Midtrans
-    $notification = new Notification();
-
-    // Ambil data notifikasi
-    $transactionStatus = $notification->transaction_status;
-    $orderId = $notification->order_id;
-    $fraudStatus = $notification->fraud_status;
-
-    // Cari pembayaran berdasarkan order_id
-    $payment = Payment::find($orderId);
-
-    if (!$payment) {
-        return response()->json(['status' => 'error', 'message' => 'Payment not found'], 404);
-    }
-
-    // Update status pembayaran berdasarkan notifikasi
-    if ($transactionStatus == 'capture') {
-        if ($fraudStatus == 'accept') {
-            $payment->status = 'paid';
+        // Cek kepemilikan payment
+        if ($payment->user_id !== Auth::id()) {
+            return redirect()->route('home');
         }
-    } elseif ($transactionStatus == 'settlement') {
-        $payment->status = 'paid';
-    } elseif ($transactionStatus == 'pending') {
-        $payment->status = 'pending';
-    } elseif ($transactionStatus == 'deny' || $transactionStatus == 'expire' || $transactionStatus == 'cancel') {
-        $payment->status = 'failed';
+
+        // Cek status kadaluarsa
+        if ($payment->expired_at < now()) {
+            $payment->update(['status' => 'expired']);
+            return redirect()->route('pricing.pro')
+                ->with('error', 'Pembayaran telah kadaluarsa. Silakan melakukan pemesanan ulang.');
+        }
+
+        return view('pricing.payment-confirmation', compact('payment'));
+    }
+    public function handleNotification(Request $request)
+    {
+        Log::info('Midtrans Notification Received:', $request->all());
+    
+        $serverKey = config('services.midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+    
+        if ($hashed !== $request->signature_key) {
+            Log::error('Invalid Signature Key!', [
+                'expected' => $hashed,
+                'received' => $request->signature_key,
+            ]);
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+    
+        $payment = Payment::find($request->order_id);
+        if (!$payment) {
+            Log::error('Payment Not Found!', ['order_id' => $request->order_id]);
+            return response()->json(['message' => 'Payment not found'], 404);
+        }
+    
+        Log::info('Transaction Status:', [
+            'order_id' => $payment->id,
+            'transaction_status' => $request->transaction_status,
+            'fraud_status' => $request->fraud_status
+        ]);
+    
+        if (in_array($request->transaction_status, ['capture', 'settlement'])) {
+            $payment->status = 'paid';
+        } elseif (in_array($request->transaction_status, ['pending'])) {
+            $payment->status = 'unpaid';
+        } elseif (in_array($request->transaction_status, ['cancel', 'expire', 'deny'])) {
+            $payment->status = 'expired';
+        }
+    
+        $payment->save();
+        return response()->json(['message' => 'Notification processed']);
+    }
+    
+    
+
+    /**
+     * Redirect ke home setelah pembayaran sukses.
+     */
+    public function paymentSuccess()
+    {
+        return redirect()->route('home')->with('success', 'Pembayaran berhasil diproses.');
     }
 
-    // Simpan perubahan status
-    $payment->save();
+    /**
+     * Redirect ke home setelah pembayaran tertunda.
+     */
+    public function paymentPending()
+    {
+        return redirect()->route('home')->with('warning', 'Pembayaran Anda sedang diproses.');
+    }
 
-    // Berikan response ke Midtrans
-    return response()->json(['status' => 'success']);
-}
-
-/**
- * Redirect ke home setelah pembayaran sukses.
- */
-public function paymentSuccess()
-{
-    return redirect()->route('home')->with('success', 'Pembayaran berhasil diproses.');
-}
-
-/**
- * Redirect ke home setelah pembayaran tertunda.
- */
-public function paymentPending()
-{
-    return redirect()->route('home')->with('warning', 'Pembayaran Anda sedang diproses.');
-}
-
-/**
- * Redirect ke home setelah pembayaran gagal.
- */
-public function paymentError()
-{
-    return redirect()->route('home')->with('error', 'Pembayaran gagal diproses. Silakan coba lagi.');
-}
+    /**
+     * Redirect ke home setelah pembayaran gagal.
+     */
+    public function paymentError()
+    {
+        return redirect()->route('home')->with('error', 'Pembayaran gagal diproses. Silakan coba lagi.');
+    }
 
     public function checkPaymentStatus($id)
     {
         $payment = Payment::findOrFail($id);
-
-        // Jika metode pembayaran adalah bank, cek status VA
-        if (in_array($payment->payment_method, ['bca', 'mandiri', 'bni'])) {
-            $this->checkVAPayment($payment);
+    
+        // Cek status pembayaran menggunakan Snap API
+        try {
+            $status = \Midtrans\Transaction::status($payment->id);
+            Log::info('Midtrans Payment Status:', (array) $status); // Log status pembayaran
+    
+            if ($status['transaction_status'] == 'settlement' || $status['transaction_status'] == 'capture') {
+                $payment->update(['status' => 'paid']);
+                return response()->json(['status' => 'success', 'redirect' => route('home')]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error checking payment status:', ['error' => $e->getMessage()]);
         }
-
-        if ($payment->status === 'paid') {
-            return response()->json([
-                'status' => 'success',
-                'redirect' => route('home')
-            ]);
-        }
-
+    
         return response()->json(['status' => $payment->status]);
     }
 
@@ -450,41 +453,4 @@ public function paymentError()
         return false;
     }
 
-    private function processCreditCardPayment($payment, $cardDetails)
-    {
-        // Implementasi integrasi dengan payment gateway
-        // Contoh simulasi:
-        $payment->update([
-            'status' => 'paid',
-            'paid_at' => now()
-        ]);
-
-        $payment->user->update([
-            'is_pro' => true,
-            'pro_until' => now()->addMonths($payment->duration)
-        ]);
-
-        return true;
-    }
-
-    public function processPayPal(Request $request, $orderId, $paymentId)
-    {
-        $payment = Payment::findOrFail($paymentId);
-
-        // Verifikasi pembayaran dengan API PayPal
-        // Implementasi verifikasi order_id
-
-        $payment->update([
-            'status' => 'paid',
-            'paid_at' => now(),
-            'payment_code' => $orderId
-        ]);
-
-        $payment->user->update([
-            'is_pro' => true,
-            'pro_until' => now()->addMonths($payment->duration)
-        ]);
-
-        return response()->json(['status' => 'success']);
-    }
 }
