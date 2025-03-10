@@ -76,9 +76,7 @@
                 <!-- Instruksi Pembayaran -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
                     <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100">Cara Pembayaran</h3>
-                    @if($payment->payment_method === 'paypal')
-                    @include('pricing.partials.paypal-instructions')
-                    @elseif($payment->payment_method === 'cc')
+                    @if($payment->payment_method === 'cc')
                     @include('pricing.partials.credit-card-form')
                     @elseif(in_array($payment->payment_method, ['bca', 'mandiri', 'bni']))
                     @include('pricing.partials.va-instructions', ['bank' => $payment->payment_method])
@@ -86,40 +84,6 @@
                     @include('pricing.partials.ewallet-instructions', ['method' => $payment->payment_method])
                     @endif
                 </div>
-
-                @if($payment->payment_method === 'paypal')
-                <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=IDR"></script>
-                <script>
-                    paypal.Buttons({
-                        createOrder: function(data, actions) {
-                            return actions.order.create({
-                                purchase_units: [{
-                                    amount: {
-                                        value: '{{ number_format($payment->amount / 15000, 2) }}' // Konversi ke USD
-                                    },
-                                    description: 'Pro Subscription - {{ $payment->duration }} Month(s)'
-                                }]
-                            });
-                        },
-                        onApprove: async function(data, actions) {
-                            const order = await actions.order.capture();
-
-                            // Update status pembayaran
-                            const response = await fetch(`/payment/process-paypal/${order.id}/{{ $payment->id }}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            });
-
-                            if (response.ok) {
-                                window.location.href = '{{ route("home") }}';
-                            }
-                        }
-                    }).render('#paypal-button-container');
-                </script>
-                @endif
             </div>
             <!-- Debugging: Tampilkan Snap Token -->
             <div class="hidden">
