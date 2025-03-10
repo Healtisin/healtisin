@@ -21,7 +21,7 @@
 
         <!-- Main Content -->
         <main class="flex-1">
-            <div class="max-w-4xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+            <div class="max-w-4xl mx-auto px-2 sm:px-4 py-4 sm:py-8 md:pt-4 pt-16">
                 <!-- Chat Interface -->
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->

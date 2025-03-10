@@ -149,7 +149,7 @@
 <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
 <!-- Mobile Sidebar Toggle Button (Visible only on mobile) -->
-<button id="mobileSidebarToggle" class="fixed bottom-4 right-4 z-50 bg-[#24b0ba] text-white p-3 rounded-full shadow-lg md:hidden">
+<button id="mobileSidebarToggle" class="fixed top-4 left-4 z-50 bg-[#24b0ba] text-white p-3 rounded-full shadow-lg md:hidden">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
@@ -209,8 +209,6 @@
 </style>
 
 <script>
-// ... existing JavaScript code remains unchanged ...
-
 document.addEventListener('DOMContentLoaded', function() {
     const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
     const closeSidebar = document.getElementById('closeSidebar');
@@ -221,20 +219,24 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.classList.add('open');
         sidebarOverlay.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
+        // Sembunyikan tombol toggle
+        mobileSidebarToggle.classList.add('hidden');
     });
     
     closeSidebar.addEventListener('click', function() {
         sidebar.classList.remove('open');
         sidebarOverlay.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
+        // Tampilkan kembali tombol toggle
+        mobileSidebarToggle.classList.remove('hidden');
     });
     
     sidebarOverlay.addEventListener('click', function() {
         sidebar.classList.remove('open');
         sidebarOverlay.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
+        // Tampilkan kembali tombol toggle
+        mobileSidebarToggle.classList.remove('hidden');
     });
-    
-    // ... existing JavaScript code remains unchanged ...
 });
 </script>
