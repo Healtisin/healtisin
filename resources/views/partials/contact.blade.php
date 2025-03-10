@@ -99,7 +99,7 @@
                         <div
                             class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d894.3444645936045!2d110.33814651071343!3d-7.775908361247276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59d56d1052a5%3A0xd840db058e6e4e44!2sKontrakan%20The%20Raid!5e1!3m2!1sid!2sid!4v1739989828006!5m2!1sid!2sid"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3577.4427338793816!2d110.33130657455364!3d-7.768295577053469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5903b50524bd%3A0x9fa31ba154293dc1!2sUNISA%3A%20Gedung%20Siti%20Walidah!5e1!3m2!1sid!2sid!4v1741616874091!5m2!1sid!2sid"
                                 width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                         </div>
                     </div>
