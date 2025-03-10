@@ -1,8 +1,15 @@
-<aside id="sidebar" class="bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col transition-all duration-300 w-80 relative">
+<aside id="sidebar" class="bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col transition-all duration-300 w-80 fixed md:relative h-full z-40 transform -translate-x-full md:translate-x-0">
     <!-- Toggle Button -->
-    <button id="sidebarToggle" class="absolute -right-3 top-6 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 z-10">
+    <button id="sidebarToggle" class="absolute -right-3 top-6 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 z-10 hidden md:block">
         <svg id="toggleIcon" class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+
+    <!-- Close Button (Visible only on mobile) -->
+    <button id="closeSidebar" class="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 md:hidden">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
     </button>
 
@@ -134,9 +141,14 @@
     </div>
 </aside>
 
-<script>
-// ... existing JavaScript code remains unchanged ...
-</script>
+<div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+<!-- Mobile Sidebar Toggle Button (Visible only on mobile) -->
+<button id="mobileSidebarToggle" class="fixed bottom-4 right-4 z-50 bg-[#24b0ba] text-white p-3 rounded-full shadow-lg md:hidden">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+</button>
 
 <style>
 .rotate-180 {
@@ -177,4 +189,47 @@
 .dark .active {
     background-color: rgba(36, 176, 186, 0.8) !important;
 }
+
+/* Mobile sidebar styles */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 85%;
+        max-width: 300px;
+    }
+    
+    #sidebar.open {
+        transform: translateX(0);
+    }
+}
 </style>
+
+<script>
+// ... existing JavaScript code remains unchanged ...
+
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    mobileSidebarToggle.addEventListener('click', function() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    });
+    
+    closeSidebar.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    });
+    
+    sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    });
+    
+    // ... existing JavaScript code remains unchanged ...
+});
+</script>

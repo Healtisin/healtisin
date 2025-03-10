@@ -14,9 +14,9 @@
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     @include('partials.header')
 
-    <main class="pt-18 pb-16">
+    <main class="pt-16 sm:pt-18 pb-16">
         <!-- Hero Section dengan Animasi Paralaks -->
-        <div class="relative h-[300px] md:h-[500px] overflow-hidden">
+        <div class="relative h-[250px] sm:h-[300px] md:h-[500px] overflow-hidden">
             <div
                 class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] dark:from-[#1a8a91] dark:to-[#5ba5bd]">
                 <div class="absolute inset-0 opacity-20">
@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center py-8 md:py-0">
-                <div class="text-white text-center md:text-left">
-                    <h1 class="text-3xl md:text-5xl font-bold mb-4 animate-fade-in">Tentang Healtisin AI</h1>
-                    <p class="text-base md:text-xl opacity-90 max-w-2xl animate-slide-up">
+                <div class="text-white text-center md:text-left w-full">
+                    <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 animate-fade-in">Tentang Healtisin AI</h1>
+                    <p class="text-sm sm:text-base md:text-xl opacity-90 max-w-2xl mx-auto md:mx-0 animate-slide-up">
                         Menghadirkan transformasi layanan kesehatan digital melalui integrasi AI mutakhir yang
                         mampu menganalisis 1000+ kondisi medis, memberikan skrining kesehatan real-time, dan
                         rekomendasi pengobatan yang dipersonalisasi untuk setiap pengguna.
@@ -36,8 +36,8 @@
         </div>
 
         <!-- Fitur Inovatif Section dengan Card 3D -->
-        <div class="max-w-6xl mx-auto px-4 -mt-20 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="max-w-6xl mx-auto px-4 -mt-10 sm:-mt-16 md:-mt-20 relative z-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
                 <div
                     class="bg-white p-6 md:p-8 rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl">
                     <div
@@ -86,9 +86,9 @@
         </div>
 
         <!-- Inovasi Section dengan Animasi Scroll -->
-        <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
+        <div class="max-w-6xl mx-auto px-4 py-12 sm:py-16 md:py-24">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-                <div class="space-y-8">
+                <div class="space-y-6 sm:space-y-8">
                     <div class="reveal-on-scroll">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4">Teknologi AI Mutakhir</h2>
                         <p class="text-sm md:text-base text-gray-600">Menggunakan model bahasa terbaru yang dilatih
@@ -113,9 +113,9 @@
         </div>
 
         <!-- Visi & Misi Section -->
-        <div class="bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] py-16 md:py-24">
+        <div class="bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] py-12 sm:py-16 md:py-24">
             <div class="max-w-6xl mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-16">
                     <div
                         class="reveal-on-scroll bg-gradient-to-br from-gray-50 to-white p-6 md:p-8 rounded-xl shadow-lg card-hover">
                         <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gradient">Visi Kami</h2>
@@ -167,9 +167,9 @@
         </div>
 
         <!-- Teknologi Section -->
-        <div class="py-16 md:py-24 bg-gray-50">
+        <div class="py-12 sm:py-16 md:py-24 bg-gray-50">
             <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Teknologi Kami</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12">Teknologi Kami</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
                     <div class="order-1">
                         <img src="{{ asset('images/robot1.png') }}" alt="Technology Illustration"
@@ -199,15 +199,15 @@
         </div>
 
         <!-- Komitmen Section -->
-        <div class="bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] py-16 md:py-24 text-white mb-[-64px]">
+        <div class="bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] py-12 sm:py-16 md:py-24 text-white mb-[-64px]">
             <div class="max-w-6xl mx-auto px-4">
                 <div class="text-center max-w-3xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Komitmen Kami</h2>
-                    <p class="text-base md:text-xl mb-8 opacity-90">Kami berkomitmen untuk terus berinovasi dan
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Komitmen Kami</h2>
+                    <p class="text-sm sm:text-base md:text-xl mb-6 sm:mb-8 opacity-90">Kami berkomitmen untuk terus berinovasi dan
                         mengembangkan solusi kesehatan digital yang aman, akurat, dan dapat diakses oleh semua lapisan
                         masyarakat Indonesia.</p>
                     <a href="/contact"
-                        class="inline-block bg-white text-[#24b0ba] px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-base md:text-lg hover:bg-gray-100 transition-all duration-300 contact-button">
+                        class="inline-block bg-white text-[#24b0ba] px-5 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full font-bold text-sm sm:text-base md:text-lg hover:bg-gray-100 transition-all duration-300 contact-button">
                         Hubungi Kami
                     </a>
                 </div>
@@ -322,6 +322,21 @@
 
         .contact-button:hover {
             transform: scale(1.05);
+        }
+
+        /* Additional responsive styles */
+        @media (max-width: 640px) {
+            .floating-dots {
+                background-size: 20px 20px;
+            }
+            
+            .card-hover:hover {
+                transform: none;
+            }
+            
+            .icon-pulse {
+                animation: none;
+            }
         }
     </style>
 

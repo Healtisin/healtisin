@@ -15,29 +15,29 @@
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
-    <div class="flex min-h-screen">
+    <div class="flex flex-col md:flex-row min-h-screen">
         <!-- Include Sidebar -->
         @include('partials.sidebar')
 
         <!-- Main Content -->
         <main class="flex-1">
-            <div class="max-w-4xl mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
                 <!-- Chat Interface -->
                 <div class="flex flex-col h-[calc(100vh-4rem)]">
                     <!-- Chat Messages -->
-                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 pr-2 dark:bg-gray-800/50 rounded-lg" id="chatMessages">
+                    <div class="flex-1 overflow-y-auto mb-4 space-y-4 p-2 sm:p-4 pr-2 dark:bg-gray-800/50 rounded-lg" id="chatMessages">
                         <!-- Welcome Message Template (hidden) -->
                         <div id="welcomeMessageTemplate" class="hidden">
                             <div class="flex flex-col gap-2 mb-4">
                                 <div class="flex justify-start gap-2 items-start">
-                                    <div class="w-10 h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-8 sm:w-10 h-8 sm:h-10 bg-[#24b0ba] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 sm:w-5 h-4 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                                         </svg>
                                     </div>
-                                    <div class="flex flex-col max-w-[75%]">
-                                        <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-2 inline-block shadow-sm">
-                                            <div class="text-gray-800 dark:text-gray-200 break-words">
+                                    <div class="flex flex-col max-w-[85%] sm:max-w-[75%]">
+                                        <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-3 sm:px-4 py-2 inline-block shadow-sm">
+                                            <div class="text-gray-800 dark:text-gray-200 break-words text-sm sm:text-base">
                                                 <p><span data-translate="welcome-greeting">Hai {{ Auth::user()->name }}, saya Healtisin 👋</span></p>
                                                 <p><span data-translate="welcome-intro">Saya adalah asisten AI kesehatan yang siap membantu Anda dengan informasi kesehatan umum.</span></p><br>
                                                 <p><span data-translate="welcome-capabilities">⚕️ Saya dapat membantu Anda dengan:</span></p>
@@ -70,30 +70,30 @@
                     <!-- Chat Input -->
                     <div class="relative flex items-center gap-2">
                         <textarea id="chatInput"
-                            class="w-full px-6 py-3 pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400"
+                            class="w-full px-4 sm:px-6 py-2 sm:py-3 pr-[120px] sm:pr-[148px] rounded-full border border-gray-300 focus:outline-none focus:border-[#24b0ba] resize-none bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 text-sm sm:text-base"
                             placeholder="Ketik pertanyaan Anda" rows="1"></textarea>
 
-                        <div class="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                            <button class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 flex items-center gap-1 sm:gap-2">
+                            <button class="p-1 sm:p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                 </svg>
                             </button>
-                            <button id="start-record-btn" class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button id="start-record-btn" class="p-1 sm:p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>
                             </button>
                             <button id="sendButton"
-                                class="p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors"
+                                class="p-1 sm:p-2 rounded-full bg-[#24b0ba] text-white hover:bg-[#1d8f98] transition-colors"
                                 onclick="handleSendButtonClick()">
-                                <svg id="sendIcon" class="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg id="sendIcon" class="w-4 sm:w-5 h-4 sm:h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                 </svg>
-                                <svg id="cancelIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg id="cancelIcon" class="w-4 sm:w-5 h-4 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>

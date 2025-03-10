@@ -14,9 +14,9 @@
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
     @include('partials.header')
 
-    <main class="pt-18 pb-16">
+    <main class="pt-16 sm:pt-18 pb-16">
         <!-- Hero Section dengan Animasi Paralaks -->
-        <div class="relative h-[300px] md:h-[500px] overflow-hidden">
+        <div class="relative h-[250px] sm:h-[300px] md:h-[500px] overflow-hidden">
             <div
                 class="absolute inset-0 bg-gradient-to-r from-[#24b0ba] to-[#73c7e3] dark:from-[#1a8a91] dark:to-[#5ba5bd]">
                 <div class="absolute inset-0 opacity-20">
@@ -24,10 +24,10 @@
                 </div>
             </div>
             <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center mt-[22px]">
-                <div class="text-white text-center md:text-left">
-                    <h1 class="text-3xl md:text-5xl font-bold mb-4 md:mb-6 animate-fade-in">Pertanyaan yang Sering
+                <div class="text-white text-center md:text-left w-full">
+                    <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 md:mb-6 animate-fade-in">Pertanyaan yang Sering
                         Diajukan</h1>
-                    <p class="text-lg md:text-xl opacity-90 max-w-2xl animate-slide-up">
+                    <p class="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto md:mx-0 animate-slide-up">
                         Temukan jawaban untuk pertanyaan umum tentang Healtisin AI
                     </p>
                 </div>
@@ -35,7 +35,7 @@
         </div>
 
         <!-- FAQ Content -->
-        <div class="max-w-4xl mx-auto px-4 mt-8 md:mt-14 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 mt-6 sm:mt-8 md:mt-14 relative z-10">
             @include('partials.faq-items')
         </div>
     </main>
@@ -176,6 +176,10 @@
 
             .mt-14 {
                 margin-top: 1rem;
+            }
+            
+            .floating-dots {
+                background-size: 20px 20px;
             }
         }
     </style>
