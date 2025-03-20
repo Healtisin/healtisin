@@ -1,8 +1,10 @@
 @extends('admin.app')
 
-@section('title', 'Informasi Website')
+@section('title', 'Informasi Website - Admin Panel')
 
 @section('content')
+<x-breadcrumbs :route_name="'admin.information.index'" />
+
 <div class="p-8">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         

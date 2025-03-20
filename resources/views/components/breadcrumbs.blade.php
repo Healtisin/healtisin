@@ -16,8 +16,12 @@ $breadcrumbs = [
 'admin.pricing' => ['Home', 'Pricing'],
 'admin.messages' => ['Home', 'Messages'],
 'admin.news' => ['Home', 'Berita'],
-'admin.logs.index' => ['Home', 'Log Sistem'],
+'admin.log-database.index' => ['Home', 'Log Sistem'],
 'admin.logs.show' => ['Home', 'Log Sistem', 'Detail Log'],
+'admin.log-database.index' => ['Home', 'Log Sistem', 'Database Log'],
+'admin.log-database.show' => ['Home', 'Log Sistem', 'Database Log', 'Detail'],
+'admin.log-file.index' => ['Home', 'Log Sistem', 'File Log'],
+'admin.log-file.show' => ['Home', 'Log Sistem', 'File Log', 'Detail'],
 'admin.prompt-engineering' => ['Home', 'AI Training', 'Prompt Engineering'],
 'admin.fine-tuning' => ['Home', 'AI Training', 'Fine-tuning'],
 'admin.keywords-patterns' => ['Home', 'AI Training', 'Keywords dan Patterns'],
@@ -33,9 +37,12 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
 $breadcrumbRoutes = [
 'Home' => 'admin.dashboard',
 'Pengguna' => 'admin.users',
-'Log Sistem' => 'admin.logs.index',
+'Log Sistem' => 'admin.log-database.index',
+'Database Log' => 'admin.log-database.index',
+'File Log' => 'admin.log-file.index',
 'AI Training' => 'admin.prompt-engineering',
 'Website Information' => 'javascript:void(0)',
+'Informasi' => 'admin.information.index',
 ];
 
 @endphp
