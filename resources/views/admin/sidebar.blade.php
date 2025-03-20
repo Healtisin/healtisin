@@ -98,9 +98,9 @@
                 </button>
 
                 <div id="website-info-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
-                    <a href="#"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                        Description
+                    <a href="{{ route('admin.information.index') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.information.index') ? 'active' : '' }}">
+                        Informasi
                     </a>
                     <a href="{{ route('admin.footer.index') }}"
                         class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.footer.index') ? 'active' : '' }}">

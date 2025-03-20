@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ubah Password - Healtisin AI</title>
+    @include('partials.title', ['segment' => 'Ubah Password'])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')

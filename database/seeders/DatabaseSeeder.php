@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AdminSeeder::class, // Admin default
+            InformationSeeder::class, // Data informasi website dan produk
         ]);
 
         // Data dummy menggunakan factory

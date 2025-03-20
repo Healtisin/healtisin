@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Akun Anda Telah Dibuat</title>
+    <title>Akun Anda Telah Dibuat - {{ App\Helpers\InformationHelper::getProductName() }}</title>
 </head>
 <body>
     <h1>Halo, {{ $user->name }}!</h1>
@@ -15,6 +15,6 @@
     <p>Jika Anda merasa tidak pernah meminta akun ini, harap abaikan email ini.</p>
     <br>
     <p>Salam,</p>
-    <p><strong>Administrator Healtisin</strong></p>
+    <p><strong>Administrator {{ App\Helpers\InformationHelper::getProductName() }}</strong></p>
 </body>
 </html>

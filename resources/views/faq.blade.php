@@ -2,9 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FAQ - Healtisin AI</title>
+    @include('partials.meta-tags', ['customMeta' => [
+        'title' => 'FAQ - ' . App\Helpers\InformationHelper::getProductName(),
+        'description' => 'Pertanyaan yang sering diajukan tentang ' . App\Helpers\InformationHelper::getProductName()
+    ]])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
@@ -28,7 +29,7 @@
                     <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 md:mb-6 animate-fade-in">Pertanyaan yang Sering
                         Diajukan</h1>
                     <p class="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto md:mx-0 animate-slide-up">
-                        Temukan jawaban untuk pertanyaan umum tentang Healtisin AI
+                        Temukan jawaban untuk pertanyaan umum tentang {{ App\Helpers\InformationHelper::getProductName() }}
                     </p>
                 </div>
             </div>

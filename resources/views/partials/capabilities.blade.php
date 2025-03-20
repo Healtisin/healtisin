@@ -1,8 +1,11 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
 <div class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-    <div class="text-center mb-8 md:mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 dark:text-gray-100">Kemampuan Healtisin</h2>
-        <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 md:mb-16">
-            Healtisin hadir dengan berbagai fitur untuk membantu kesehatan Anda
+    <div class="text-center mb-10 md:mb-16">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 dark:text-gray-100">Kemampuan {{ InformationHelper::getProductName() }}</h2>
+        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {{ InformationHelper::getProductName() }} hadir dengan berbagai fitur untuk membantu kesehatan Anda
         </p>
     </div>
 

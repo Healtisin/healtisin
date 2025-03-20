@@ -131,6 +131,10 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::delete('/users/{user}/delete-photo', [UserController::class, 'deleteUserPhoto'])->name('admin.users.delete-user-photo');
 
+    // Information routes
+    Route::get('/information', [InformationController::class, 'index'])->name('admin.information.index');
+    Route::put('/information', [InformationController::class, 'update'])->name('admin.information.update');
+
     // Meta Data routes
     Route::get('/meta-data', [MetaDataController::class, 'index'])->name('admin.meta-data.index');
     Route::post('/meta-data', [MetaDataController::class, 'update'])->name('admin.meta-data.update');

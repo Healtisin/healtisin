@@ -2,9 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tentang Kami - Healtisin AI</title>
+    @include('partials.meta-tags', ['customMeta' => [
+        'title' => 'Tentang Kami - ' . App\Helpers\InformationHelper::getProductName(),
+        'description' => App\Helpers\InformationHelper::getProductDescription()
+    ]])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
@@ -25,11 +26,9 @@
             </div>
             <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center py-8 md:py-0">
                 <div class="text-white text-center md:text-left w-full">
-                    <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 animate-fade-in">Tentang Healtisin AI</h1>
+                    <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 sm:mb-4 animate-fade-in">Tentang {{ App\Helpers\InformationHelper::getProductName() }}</h1>
                     <p class="text-sm sm:text-base md:text-xl opacity-90 max-w-2xl mx-auto md:mx-0 animate-slide-up">
-                        Menghadirkan transformasi layanan kesehatan digital melalui integrasi AI mutakhir yang
-                        mampu menganalisis 1000+ kondisi medis, memberikan skrining kesehatan real-time, dan
-                        rekomendasi pengobatan yang dipersonalisasi untuk setiap pengguna.
+                        {{ App\Helpers\InformationHelper::getProductDescription() }}
                     </p>
                 </div>
             </div>

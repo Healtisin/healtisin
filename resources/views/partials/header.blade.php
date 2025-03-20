@@ -1,3 +1,7 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
+
 <header
     class="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 z-50 p-4 transition-shadow transition-colors duration-300"
     id="navbar">
@@ -38,7 +42,7 @@
                         <div class="py-1">
                             <a href="{{ route('about') }}"
                                 class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-[#24b0ba] hover:bg-gray-50 dark:hover:bg-gray-700">Tentang
-                                Healtisin</a>
+                                {{ InformationHelper::getWebsiteName() }}</a>
                             <a href="{{ route('faq') }}"
                                 class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-[#24b0ba] hover:bg-gray-50 dark:hover:bg-gray-700">FAQ</a>
                             <a href="/bantuan"
@@ -50,7 +54,7 @@
                 <a href="{{ route('contact') }}" class="hover:text-[#24b0ba]">Kontak</a>
                 <a href="{{ route('login') }}"
                     class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
-                    Cobalah Healtisin
+                    Cobalah {{ InformationHelper::getWebsiteName() }}
                 </a>
                 <!-- Language and Theme Group -->
                 <div class="flex items-center gap-2">
@@ -127,7 +131,7 @@
                         <div class="py-1">
                             <a href="{{ route('about') }}"
                                 class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-[#24b0ba] hover:text-white">Tentang
-                                Healtisin</a>
+                                {{ InformationHelper::getWebsiteName() }}</a>
                             <a href="{{ route('faq') }}"
                                 class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-[#24b0ba] hover:text-white">FAQ</a>
                             <a href="/bantuan"
@@ -139,7 +143,7 @@
                 <a href="{{ route('contact') }}" class="hover:text-[#24b0ba]">Kontak</a>
                 <a href="{{ route('login') }}"
                     class="px-4 py-2 text-white bg-[#24b0ba] rounded-full hover:bg-[#73c7e3]">
-                    Cobalah Healtisin
+                    Cobalah {{ InformationHelper::getWebsiteName() }}
                 </a>
                 <!-- Language & Theme Settings for Mobile -->
                 <div class="flex justify-center items-center mt-2">

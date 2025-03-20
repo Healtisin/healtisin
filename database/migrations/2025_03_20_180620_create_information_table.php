@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('information', function (Blueprint $table) {
             $table->id();
+            $table->string('website_name')->default('Healtisin');
+            $table->string('product_name')->default('Healtisin AI');
+            $table->text('website_description')->nullable();
+            $table->text('product_description')->nullable();
             $table->timestamps();
         });
     }

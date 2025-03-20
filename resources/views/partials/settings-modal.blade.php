@@ -1,3 +1,7 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
+
 <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
     <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl p-4">
         <!-- Modal Header -->
@@ -129,7 +133,7 @@
                         @if(Auth::user()->subscription_status == 'free')
                             <div class="space-y-3">
                                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    Tingkatkan ke Healtisin Pro untuk mendapatkan fitur premium lainnya.
+                                    Tingkatkan ke {{ InformationHelper::getProductName() }} untuk mendapatkan fitur premium lainnya.
                                 </p>
                                 <a href="{{ route('pricing.pro') }}" 
                                    class="inline-block px-3 py-2 text-sm bg-[#24b0ba] text-white rounded-md hover:bg-[#73c7e3] dark:bg-[#24b0ba]/80 dark:hover:bg-[#73c7e3]/80 transition-colors duration-200">
@@ -145,7 +149,7 @@
                                     </svg>
                                 </div>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    Selamat! Anda telah menjadi bagian dari Healtisin Pro. Nikmati akses penuh ke semua fitur premium kami:
+                                    Selamat! Anda telah menjadi bagian dari {{ InformationHelper::getProductName() }}. Nikmati akses penuh ke semua fitur premium kami:
                                 </p>
                                 <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                                     <li class="flex items-center gap-2">

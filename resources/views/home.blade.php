@@ -1,10 +1,14 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home - Healtisin AI</title>
+    @include('partials.meta-tags', ['customMeta' => [
+        'title' => 'Home - ' . App\Helpers\InformationHelper::getProductName(),
+        'description' => App\Helpers\InformationHelper::getWebsiteDescription()
+    ]])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
@@ -38,7 +42,7 @@
                                     <div class="flex flex-col max-w-[85%] sm:max-w-[75%]">
                                         <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-2xl px-3 sm:px-4 py-2 inline-block shadow-sm">
                                             <div class="text-gray-800 dark:text-gray-200 break-words text-sm sm:text-base">
-                                                <p><span data-translate="welcome-greeting">Hai {{ Auth::user()->name }}, saya Healtisin 👋</span></p>
+                                                <p><span data-translate="welcome-greeting">Hai {{ Auth::user()->name }}, saya {{ InformationHelper::getProductName() }} 👋</span></p>
                                                 <p><span data-translate="welcome-intro">Saya adalah asisten AI kesehatan yang siap membantu Anda dengan informasi kesehatan umum.</span></p><br>
                                                 <p><span data-translate="welcome-capabilities">⚕️ Saya dapat membantu Anda dengan:</span></p>
                                                 <ul class="list-disc pl-5 space-y-0">
@@ -797,7 +801,7 @@
             });
 
             const isWelcomeMessage = (message.content || message)?.includes('Hai') && 
-                                    (message.content || message)?.includes('saya Healtisin') && 
+                                    (message.content || message)?.includes('saya {{ InformationHelper::getProductName() }}') && 
                                     (message.content || message)?.includes('Saya dapat membantu Anda dengan:');
             
             return `
@@ -1192,7 +1196,7 @@
         // Tambahkan fungsi copyMessage untuk menyalin pesan
         function copyMessage(text) {
             // Tambahkan footer pesan
-            const textToCopy = text + "\n\nDibuat oleh: Healtisin";
+            const textToCopy = text + "\n\nDibuat oleh: {{ InformationHelper::getWebsiteName() }}";
             
             // Gunakan Clipboard API untuk menyalin teks
             navigator.clipboard.writeText(textToCopy)

@@ -1,10 +1,13 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Privacy Policy - Healtisin AI</title>
+    @include('partials.title', ['segment' => 'Privacy Policy'])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
@@ -25,9 +28,9 @@
             </div>
             <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center py-8 md:py-0">
                 <div class="text-white text-center md:text-left">
-                    <h1 class="text-3xl md:text-5xl font-bold mb-4 animate-fade-in">Healtisin Privacy Policy</h1>
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4 animate-fade-in">{{ InformationHelper::getWebsiteName() }} Privacy Policy</h1>
                     <p class="text-base md:text-xl opacity-90 max-w-2xl animate-slide-up">
-                        Selamat datang di Healtisin! Kami siap membantu Anda dengan pertanyaan atau kebutuhan Anda.
+                        Selamat datang di {{ InformationHelper::getWebsiteName() }}! Kami siap membantu Anda dengan pertanyaan atau kebutuhan Anda.
                         Jangan ragu untuk menghubungi kami melalui informasi kontak di bawah ini.
                     </p>
                 </div>
@@ -37,26 +40,24 @@
         <!-- Konten Privacy Policy -->
         <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
             <div class="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-md">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 dark:text-gray-100">Healtisin Privacy Policy</h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-6 dark:text-gray-100">{{ InformationHelper::getWebsiteName() }} Privacy Policy</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm font-semibold uppercase tracking-widest">Last
                     Update: February 14, 2025</p>
-                <p class="text-gray-600 dark:text-gray-400 mb-6">Selamat datang di Healtisin!</p>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Selamat datang di {{ InformationHelper::getWebsiteName() }}!</p>
 
                 <h3 class="text-xl md:text-2xl font-bold mb-4 dark:text-gray-100">Introduction</h3>
                 <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Kebijakan privasi ("Privacy Policy") ini berlaku untuk informasi pribadi yang diproses oleh
-                    Healtisin dalam kaitannya dengan aplikasi, situs web, perangkat lunak, dan layanan terkait
+                    {{ InformationHelper::getWebsiteName() }} dalam kaitannya dengan aplikasi, situs web, perangkat lunak, dan layanan terkait
                     (misalnya, "Layanan") yang merujuk atau terhubung ke Kebijakan Privasi ini. Layanan memungkinkan
                     Anda untuk membuat dan berinteraksi dengan chatbot.
                 </p>
 
                 <h3 class="text-xl md:text-2xl font-bold mb-4 dark:text-gray-100">Informasi yang Kami Kumpulkan</h3>
                 <p class="text-gray-600 dark:text-gray-400 mb-6">
-                    Dalam upaya memberikan layanan kesehatan digital yang optimal, Healtisin AI mengumpulkan beberapa
-                    jenis informasi
-                    penting dengan persetujuan pengguna. Informasi ini diperlukan untuk memberikan analisis kesehatan
-                    yang akurat,
-                    rekomendasi yang tepat, dan pengalaman yang dipersonalisasi sesuai kebutuhan kesehatan Anda.
+                    Dalam upaya memberikan layanan kesehatan digital yang optimal, {{ InformationHelper::getProductName() }} mengumpulkan beberapa
+                    jenis data dari pengguna. Data ini diperlukan untuk memastikan pengalaman yang aman, efektif, dan
+                    personal.
                 </p>
 
                 <h4 class="text-lg md:text-xl font-bold mb-4 dark:text-gray-100">Data Kesehatan Pribadi</h4>

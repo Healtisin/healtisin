@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Helpers\InformationHelper;
+use App\Models\Otp;
 
 class OtpService
 {
@@ -59,8 +61,8 @@ class OtpService
             : 'emails.reset-password-otp';
 
         $subject = $type === 'email_verification'
-            ? 'Kode OTP Verifikasi - Healtisin AI'
-            : 'Kode OTP Reset Password - Healtisin AI';
+            ? 'Kode OTP Verifikasi - ' . InformationHelper::getProductName()
+            : 'Kode OTP Reset Password - ' . InformationHelper::getProductName();
 
         Mail::send($view, ['otp' => $otp], function($message) use ($email, $subject) {
             $message->to($email)->subject($subject);

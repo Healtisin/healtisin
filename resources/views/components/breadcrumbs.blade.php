@@ -24,6 +24,7 @@ $breadcrumbs = [
 'admin.meta-data.index' => ['Home', 'Website Information', 'Meta Data'],
 'admin.logo.index' => ['Home', 'Website Information', 'Logo'],
 'admin.footer.index' => ['Home', 'Website Information', 'Footer'],
+'admin.information.index' => ['Home', 'Website Information', 'Informasi'],
 ];
 
 // Get breadcrumbs untuk route saat ini

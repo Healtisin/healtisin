@@ -4,7 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Healtisin AI Admin')</title>
+    @php
+        $title = View::hasSection('title') ? trim(View::getSection('title')) : 'Admin';
+    @endphp
+    @include('partials.title', ['segment' => $title])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')

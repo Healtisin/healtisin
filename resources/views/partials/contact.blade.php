@@ -1,10 +1,13 @@
+@php
+use App\Helpers\InformationHelper;
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hubungi Kami - Healtisin AI</title>
+    @include('partials.title', ['segment' => 'Hubungi Kami'])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
@@ -109,7 +112,7 @@
                 <div class="reveal-on-scroll">
                     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold dark:text-gray-100">Kirim Pesan</h2>
                     <p class="my-3 sm:my-4 md:my-6 text-sm sm:text-base dark:text-gray-400">
-                        Kami siap membantu Anda dengan berbagai pertanyaan seputar layanan kesehatan digital Healtisin.
+                        Kami siap membantu Anda dengan berbagai pertanyaan seputar layanan kesehatan digital {{ InformationHelper::getWebsiteName() }}.
                         Tim support kami tersedia 24/7 untuk memberikan bantuan teknis, informasi layanan, atau
                         menjawab kekhawatiran Anda tentang kesehatan. Silakan isi formulir di bawah ini, dan kami
                         akan merespons secepat mungkin untuk memastikan pengalaman terbaik Anda menggunakan platform

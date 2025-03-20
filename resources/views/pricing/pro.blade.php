@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Paket Pro - Healtisin AI</title>
+    @include('partials.title', ['segment' => 'Paket Pro'])
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')
@@ -46,7 +46,7 @@
             <div class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
                 <div class="text-center mb-8 sm:mb-12">
                     <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 dark:text-gray-100">Tingkatkan ke Pro</h1>
-                    <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400">Nikmati layanan kesehatan yang lebih lengkap dengan Healtisin Pro</p>
+                    <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400">Nikmati layanan kesehatan yang lebih lengkap dengan {{ App\Helpers\InformationHelper::getProductName() }} Pro</p>
                 </div>
 
                 <!-- Perbandingan Fitur -->
@@ -80,7 +80,7 @@
         <!-- Footer -->
         <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700">
             <div class="max-w-7xl mx-auto px-4 py-4 sm:py-6 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                <p>&copy; {{ date('Y') }} Healtisin AI. Hak Cipta Dilindungi.</p>
+                <p>&copy; {{ date('Y') }} {{ App\Helpers\InformationHelper::getProductName() }}. Hak Cipta Dilindungi.</p>
             </div>
         </footer>
     </div>
