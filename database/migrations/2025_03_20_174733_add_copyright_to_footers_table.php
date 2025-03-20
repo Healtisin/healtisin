@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('footers', function (Blueprint $table) {
-            //
+            $table->string('copyright')->nullable()->after('twitter_link');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('footers', function (Blueprint $table) {
-            //
+            $table->dropColumn('copyright');
         });
     }
 };

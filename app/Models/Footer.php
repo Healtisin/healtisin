@@ -15,6 +15,7 @@ class Footer extends Model
         'email',
         'location',
         'github_link',
-        'twitter_link'
+        'twitter_link',
+        'copyright'
     ];
 }

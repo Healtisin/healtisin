@@ -35,49 +35,25 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Deskripsi -->
+                <!-- Copyright -->
                 <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Deskripsi Website</label>
-                    <textarea id="description" name="description" rows="4" 
-                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('description') border-red-500 @enderror"
-                        placeholder="Masukkan deskripsi singkat tentang Healtisin">{{ old('description', $footer->description ?? '') }}</textarea>
-                    @error('description')
+                    <label for="copyright" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Copyright</label>
+                    <input type="text" id="copyright" name="copyright" value="{{ old('copyright', $footer->copyright ?? '© 2025 Healtisin. All rights reserved.') }}"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('copyright') border-red-500 @enderror"
+                        placeholder="© 2025 Healtisin. All rights reserved.">
+                    @error('copyright')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Informasi Kontak -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nomor Telepon -->
-                    <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nomor Telepon</label>
-                        <input type="text" id="phone" name="phone" value="{{ old('phone', $footer->phone ?? '') }}"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('phone') border-red-500 @enderror"
-                            placeholder="+62 878-7156-3112">
-                        @error('phone')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email', $footer->email ?? '') }}"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('email') border-red-500 @enderror"
-                            placeholder="healtisin@gmail.com">
-                        @error('email')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Lokasi -->
+                <!-- Deskripsi -->
                 <div>
-                    <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lokasi</label>
-                    <input type="text" id="location" name="location" value="{{ old('location', $footer->location ?? '') }}"
-                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('location') border-red-500 @enderror"
-                        placeholder="Daerah Istimewa Yogyakarta">
-                    @error('location')
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Deskripsi Website</label>
+                    <textarea id="description" name="description" rows="6" 
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('description') border-red-500 @enderror"
+                        placeholder="Healtisin, asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7.&#10;&#10;Dapatkan skrining kesehatan yang cepat dan akurat dengan teknologi AI mutakhir kami.">{{ old('description', $footer->description ?? "Healtisin, asisten AI kesehatan terdepan siap menjaga kesehatan Anda 24/7.\n\nDapatkan skrining kesehatan yang cepat dan akurat dengan teknologi AI mutakhir kami.") }}</textarea>
+                    <p class="mt-1 text-xs text-gray-500">Deskripsi akan ditampilkan di bawah copyright pada footer website. Tekan Enter untuk membuat baris baru.</p>
+                    @error('description')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -87,7 +63,7 @@
                     <!-- GitHub -->
                     <div>
                         <label for="github_link" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Link GitHub</label>
-                        <input type="url" id="github_link" name="github_link" value="{{ old('github_link', $footer->github_link ?? '') }}"
+                        <input type="url" id="github_link" name="github_link" value="{{ old('github_link', $footer->github_link ?? 'https://github.com/Healtisin') }}"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('github_link') border-red-500 @enderror"
                             placeholder="https://github.com/Healtisin">
                         @error('github_link')
@@ -95,13 +71,53 @@
                         @enderror
                     </div>
 
-                    <!-- Twitter -->
+                    <!-- Twitter/X -->
                     <div>
-                        <label for="twitter_link" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Link Twitter</label>
+                        <label for="twitter_link" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Link Twitter/X</label>
                         <input type="url" id="twitter_link" name="twitter_link" value="{{ old('twitter_link', $footer->twitter_link ?? '') }}"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('twitter_link') border-red-500 @enderror"
                             placeholder="https://twitter.com/Healtisin">
                         @error('twitter_link')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Informasi Kontak -->
+                <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <h3 class="text-md font-medium text-gray-800 dark:text-white mb-4">Informasi Kontak</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <!-- Nomor Telepon -->
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nomor Telepon</label>
+                            <input type="text" id="phone" name="phone" value="{{ old('phone', $footer->phone ?? '+62 878-7156-3112') }}"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('phone') border-red-500 @enderror"
+                                placeholder="+62 878-7156-3112">
+                            @error('phone')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                            <input type="email" id="email" name="email" value="{{ old('email', $footer->email ?? 'healtisin@gmail.com') }}"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('email') border-red-500 @enderror"
+                                placeholder="healtisin@gmail.com">
+                            @error('email')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Lokasi -->
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lokasi</label>
+                        <input type="text" id="location" name="location" value="{{ old('location', $footer->location ?? 'Daerah Istimewa Yogyakarta') }}"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('location') border-red-500 @enderror"
+                            placeholder="Daerah Istimewa Yogyakarta">
+                        @error('location')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>

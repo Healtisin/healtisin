@@ -24,6 +24,7 @@ class FooterController extends Controller
             'location' => 'required|string|max:255',
             'github_link' => 'nullable|url|max:255',
             'twitter_link' => 'nullable|url|max:255',
+            'copyright' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
