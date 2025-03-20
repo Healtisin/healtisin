@@ -12,6 +12,11 @@ class Information extends Model
         'website_name',
         'product_name',
         'website_description',
-        'product_description'
+        'product_description',
+        'phone',
+        'whatsapp',
+        'email',
+        'address',
+        'map_coordinates'
     ];
 }

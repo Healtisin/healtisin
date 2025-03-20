@@ -53,9 +53,9 @@ use App\Helpers\InformationHelper;
                                     <path
                                         d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
                                 </svg>
-                                <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">Phone
+                                <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">Nomor Telpon
                                 </p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">+62 878-7156-3112</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">{{ InformationHelper::getPhone() }}</p>
                             </div>
                             <!-- WhatsApp -->
                             <div
@@ -67,7 +67,7 @@ use App\Helpers\InformationHelper;
                                 </svg>
                                 <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">
                                     Whatsapp</p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">087871563112</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">{{ InformationHelper::getWhatsapp() }}</p>
                             </div>
                             <!-- Email -->
                             <div
@@ -79,7 +79,7 @@ use App\Helpers\InformationHelper;
                                 </svg>
                                 <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">Email
                                 </p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">healtisin@gmail.com</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">{{ InformationHelper::getEmail() }}</p>
                             </div>
                             <!-- Address -->
                             <div
@@ -90,9 +90,8 @@ use App\Helpers\InformationHelper;
                                         d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152l0 270.8c0 9.8-6 18.6-15.1 22.3L416 503l0-302.6zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6l0 251.4L32.9 502.7C17.1 509 0 497.4 0 480.4L0 209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77l0 249.3L192 449.4 192 255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
                                 </svg>
                                 <p class="text-base sm:text-lg font-medium mb-1 text-gray-800 dark:text-gray-200">
-                                    Address</p>
-                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Daerah Istimewa
-                                    Yogyakarta</p>
+                                    Alamat</p>
+                                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">{{ InformationHelper::getAddress() }}</p>
                             </div>
                         </div>
                     </div>
@@ -102,7 +101,7 @@ use App\Helpers\InformationHelper;
                         <div
                             class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3577.4427338793816!2d110.33130657455364!3d-7.768295577053469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5903b50524bd%3A0x9fa31ba154293dc1!2sUNISA%3A%20Gedung%20Siti%20Walidah!5e1!3m2!1sid!2sid!4v1741616874091!5m2!1sid!2sid"
+                                src="{{ InformationHelper::getMapCoordinates() }}"
                                 width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                         </div>
                     </div>
