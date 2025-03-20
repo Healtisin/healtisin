@@ -21,6 +21,9 @@ $breadcrumbs = [
 'admin.prompt-engineering' => ['Home', 'AI Training', 'Prompt Engineering'],
 'admin.fine-tuning' => ['Home', 'AI Training', 'Fine-tuning'],
 'admin.keywords-patterns' => ['Home', 'AI Training', 'Keywords dan Patterns'],
+'admin.meta-data.index' => ['Home', 'Website Information', 'Meta Data'],
+'admin.logo.index' => ['Home', 'Website Information', 'Logo'],
+'admin.footer.index' => ['Home', 'Website Information', 'Footer'],
 ];
 
 // Get breadcrumbs untuk route saat ini
@@ -31,6 +34,7 @@ $breadcrumbRoutes = [
 'Pengguna' => 'admin.users',
 'Log Sistem' => 'admin.logs.index',
 'AI Training' => 'admin.prompt-engineering',
+'Website Information' => 'javascript:void(0)',
 ];
 
 @endphp
@@ -58,10 +62,19 @@ $breadcrumbRoutes = [
                             clip-rule="evenodd" />
                     </svg>
                     @if(isset($breadcrumbRoutes[$breadcrumb]))
-                    <a href="{{ route($breadcrumbRoutes[$breadcrumb]) }}"
-                        class="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
-                        {{ $breadcrumb }}
-                    </a>
+                        @if(strpos($breadcrumbRoutes[$breadcrumb], 'javascript:') === 0)
+                        <!-- Javascript URL dirender sebagai link tanpa route() -->
+                        <a href="{{ $breadcrumbRoutes[$breadcrumb] }}"
+                            class="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+                            {{ $breadcrumb }}
+                        </a>
+                        @else
+                        <!-- Nama route normal -->
+                        <a href="{{ route($breadcrumbRoutes[$breadcrumb]) }}"
+                            class="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+                            {{ $breadcrumb }}
+                        </a>
+                        @endif
                     @else
                     <span class="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300">{{ $breadcrumb }}</span>
                     @endif

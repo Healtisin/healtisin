@@ -20,6 +20,13 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsOfUseController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Admin\InformationController;
+use App\Http\Controllers\Admin\MetaDataController;
+use App\Http\Controllers\Admin\LogoController;
+use App\Http\Controllers\Admin\FooterController;
+use App\Http\Controllers\Admin\DatabaseLogController;
+use App\Http\Controllers\Admin\FileLogController;
+use App\Http\Controllers\Admin\AITrainingController;
 use App\Helpers\LogHelper;
 
 Route::get('/', function () {
@@ -124,6 +131,18 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::delete('/users/{user}/delete-photo', [UserController::class, 'deleteUserPhoto'])->name('admin.users.delete-user-photo');
 
+    // Meta Data routes
+    Route::get('/meta-data', [MetaDataController::class, 'index'])->name('admin.meta-data.index');
+    Route::post('/meta-data', [MetaDataController::class, 'update'])->name('admin.meta-data.update');
+    
+    // Logo routes
+    Route::get('/logo', [LogoController::class, 'index'])->name('admin.logo.index');
+    Route::post('/logo', [LogoController::class, 'update'])->name('admin.logo.update');
+    
+    // Footer routes
+    Route::get('/footer', [FooterController::class, 'index'])->name('admin.footer.index');
+    Route::put('/footer', [FooterController::class, 'update'])->name('admin.footer.update');
+    
     // Admin routes
     Route::get('/admins', [UserController::class, 'adminIndex'])->name('admin.admins');
     Route::get('/admins/create', [UserController::class, 'createAdmin'])->name('admin.admins.create');
@@ -148,27 +167,27 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
 
     //System Logs - Database
-    Route::get('/log-database', [App\Http\Controllers\Admin\DatabaseLogController::class, 'index'])->name('admin.log-database.index');
-    Route::get('/log-database/{id}', [App\Http\Controllers\Admin\DatabaseLogController::class, 'show'])->name('admin.log-database.show');
-    Route::delete('/log-database/{id}', [App\Http\Controllers\Admin\DatabaseLogController::class, 'destroy'])->name('admin.log-database.destroy');
-    Route::delete('/log-database', [App\Http\Controllers\Admin\DatabaseLogController::class, 'clearByDate'])->name('admin.log-database.clear');
+    Route::get('/log-database', [DatabaseLogController::class, 'index'])->name('admin.log-database.index');
+    Route::get('/log-database/{id}', [DatabaseLogController::class, 'show'])->name('admin.log-database.show');
+    Route::delete('/log-database/{id}', [DatabaseLogController::class, 'destroy'])->name('admin.log-database.destroy');
+    Route::delete('/log-database', [DatabaseLogController::class, 'clearByDate'])->name('admin.log-database.clear');
 
     //System Logs - File
-    Route::get('/log-file', [App\Http\Controllers\Admin\FileLogController::class, 'index'])->name('admin.log-file.index');
-    Route::get('/log-file/{id}', [App\Http\Controllers\Admin\FileLogController::class, 'show'])->name('admin.log-file.show');
+    Route::get('/log-file', [FileLogController::class, 'index'])->name('admin.log-file.index');
+    Route::get('/log-file/{id}', [FileLogController::class, 'show'])->name('admin.log-file.show');
 
     // AI Training routes
-    Route::get('/prompt-engineering', [App\Http\Controllers\Admin\AITrainingController::class, 'promptEngineering'])->name('admin.prompt-engineering');
-    Route::post('/prompt-engineering', [App\Http\Controllers\Admin\AITrainingController::class, 'savePrompt'])->name('admin.prompt-engineering.save');
-    Route::get('/fine-tuning', [App\Http\Controllers\Admin\AITrainingController::class, 'fineTuning'])->name('admin.fine-tuning');
-    Route::post('/fine-tuning/upload', [App\Http\Controllers\Admin\AITrainingController::class, 'uploadDataset'])->name('admin.fine-tuning.upload');
-    Route::post('/fine-tuning/start', [App\Http\Controllers\Admin\AITrainingController::class, 'startFineTuning'])->name('admin.fine-tuning.start');
-    Route::get('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'keywordsPatterns'])->name('admin.keywords-patterns');
-    Route::get('/keywords-patterns/greetings', [App\Http\Controllers\Admin\AITrainingController::class, 'greetings'])->name('admin.keywords-patterns.greetings');
-    Route::get('/keywords-patterns/health-keywords', [App\Http\Controllers\Admin\AITrainingController::class, 'healthKeywords'])->name('admin.keywords-patterns.health-keywords');
-    Route::get('/keywords-patterns/question-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'questionPatterns'])->name('admin.keywords-patterns.question-patterns');
-    Route::post('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'saveKeywordsPatterns'])->name('admin.keywords-patterns.save');
-    Route::delete('/keywords-patterns', [App\Http\Controllers\Admin\AITrainingController::class, 'deleteKeywordPattern'])->name('admin.keywords-patterns.delete');
+    Route::get('/prompt-engineering', [AITrainingController::class, 'promptEngineering'])->name('admin.prompt-engineering');
+    Route::post('/prompt-engineering', [AITrainingController::class, 'savePrompt'])->name('admin.prompt-engineering.save');
+    Route::get('/fine-tuning', [AITrainingController::class, 'fineTuning'])->name('admin.fine-tuning');
+    Route::post('/fine-tuning/upload', [AITrainingController::class, 'uploadDataset'])->name('admin.fine-tuning.upload');
+    Route::post('/fine-tuning/start', [AITrainingController::class, 'startFineTuning'])->name('admin.fine-tuning.start');
+    Route::get('/keywords-patterns', [AITrainingController::class, 'keywordsPatterns'])->name('admin.keywords-patterns');
+    Route::get('/keywords-patterns/greetings', [AITrainingController::class, 'greetings'])->name('admin.keywords-patterns.greetings');
+    Route::get('/keywords-patterns/health-keywords', [AITrainingController::class, 'healthKeywords'])->name('admin.keywords-patterns.health-keywords');
+    Route::get('/keywords-patterns/question-patterns', [AITrainingController::class, 'questionPatterns'])->name('admin.keywords-patterns.question-patterns');
+    Route::post('/keywords-patterns', [AITrainingController::class, 'saveKeywordsPatterns'])->name('admin.keywords-patterns.save');
+    Route::delete('/keywords-patterns', [AITrainingController::class, 'deleteKeywordPattern'])->name('admin.keywords-patterns.delete');
 
     // Route untuk settings
     Route::prefix('settings')->group(function () {
