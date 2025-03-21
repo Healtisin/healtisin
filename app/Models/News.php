@@ -15,6 +15,8 @@ class News extends Model
         'content',
         'image',
         'category',
+        'meta_description',
+        'meta_keywords',
         'published_at'
     ];
 

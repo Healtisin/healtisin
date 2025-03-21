@@ -22,14 +22,20 @@ class MessageController extends Controller
     public function store(StoreMessageRequest $request)
     {
         Message::create($request->validated());
+        return redirect()->back()->with('success', 'Pesan berhasil dikirim! Kami akan menghubungi Anda segera.');
+    }
 
-        return redirect()->back()->with('success', 'Pesan Anda telah berhasil dikirim!');
+    public function show($id)
+    {
+        $message = Message::findOrFail($id);
+        return response()->json($message);
     }
 
     public function destroy($id)
     {
         $message = Message::findOrFail($id);
         $message->delete();
-        return redirect()->route('admin.messages')->with('success', 'Pesan berhasil dihapus!');
+        
+        return redirect()->route('admin.messages')->with('success', 'Pesan berhasil dihapus.');
     }
 }

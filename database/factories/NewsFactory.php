@@ -24,6 +24,8 @@ class NewsFactory extends Factory
             'content' => $this->faker->paragraphs(5, true),
             'image' => 'news/news-' . $this->faker->numberBetween(1, 5) . '.jpg',
             'category' => $this->faker->randomElement(['Kesehatan', 'Teknologi', 'Gaya Hidup', 'Medis']),
+            'meta_description' => $this->faker->sentence(10),
+            'meta_keywords' => implode(', ', $this->faker->words(5)),
             'published_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
         ];
     }

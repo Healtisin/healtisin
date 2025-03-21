@@ -170,7 +170,17 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     //Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');
+    Route::get('/messages/{id}', [MessageController::class, 'show'])->name('admin.messages.show');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('admin.messages.destroy');
+
+    //News
+    Route::get('/news', [App\Http\Controllers\Admin\NewsController::class, 'index'])->name('admin.news.index');
+    Route::get('/news/create', [App\Http\Controllers\Admin\NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/news', [App\Http\Controllers\Admin\NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/news/{news}', [App\Http\Controllers\Admin\NewsController::class, 'show'])->name('admin.news.show');
+    Route::get('/news/{news}/edit', [App\Http\Controllers\Admin\NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/news/{news}', [App\Http\Controllers\Admin\NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/news/{news}', [App\Http\Controllers\Admin\NewsController::class, 'destroy'])->name('admin.news.destroy');
 
     //System Logs - Database
     Route::get('/log-database', [DatabaseLogController::class, 'index'])->name('admin.log-database.index');

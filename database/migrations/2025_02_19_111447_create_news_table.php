@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('content');
             $table->string('image')->nullable();
             $table->string('category');
+            $table->text('meta_description')->nullable();
+            $table->string('meta_keywords')->nullable();
             $table->timestamp('published_at');
             $table->timestamps();
         });

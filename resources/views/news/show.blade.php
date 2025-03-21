@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('partials.title', ['segment' => $news->title])
+    @if($news->meta_description)
+    <meta name="description" content="{{ $news->meta_description }}">
+    @endif
+    @if($news->meta_keywords)
+    <meta name="keywords" content="{{ $news->meta_keywords }}">
+    @endif
     @include('partials.dark-mode-init')
     @vite('resources/css/app.css')
     @vite('resources/js/translate.js')

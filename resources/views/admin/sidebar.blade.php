@@ -195,8 +195,8 @@
                 </a>
             </li>
             <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('#') ? 'active' : '' }}">
-                <a href="#" class="flex items-center gap-4">
+                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.news.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.news.index') }}" class="flex items-center gap-4">
                     <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
