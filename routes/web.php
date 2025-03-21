@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\DatabaseLogController;
 use App\Http\Controllers\Admin\FileLogController;
 use App\Http\Controllers\Admin\AITrainingController;
+use App\Http\Controllers\Admin\PricingConfigController;
 use App\Helpers\LogHelper;
 
 Route::get('/', function () {
@@ -164,7 +165,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments');
 
     //Pricing
-    Route::get('/pricing', [PricingController::class, 'index'])->name('admin.pricing');
+    Route::get('/pricing', [PricingConfigController::class, 'index'])->name('admin.pricing');
+    Route::put('/pricing/config/{id}', [PricingConfigController::class, 'update'])->name('admin.pricing.config.update');
 
     //Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('admin.messages');

@@ -1,3 +1,14 @@
+@php
+    // Ambil konfigurasi harga dari database
+    $pricingConfig = App\Models\PricingConfig::where('is_active', true)->first();
+    if (!$pricingConfig) {
+        $pricingConfig = App\Models\PricingConfig::first();
+    }
+    
+    // Jika tidak ada konfigurasi, gunakan default
+    $monthlyPrice = $pricingConfig ? $pricingConfig->monthly_price : 99000;
+@endphp
+
 <div class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
     <div class="text-center mb-6 sm:mb-8 md:mb-16">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 dark:text-gray-100">Paket</h2>
@@ -60,7 +71,7 @@
                     Untuk layanan kesehatan yang lebih lengkap
                 </p>
                 <div class="text-2xl sm:text-3xl md:text-4xl font-bold dark:text-gray-100">
-                    Rp 99.000<span class="text-xs sm:text-sm md:text-base font-normal dark:text-gray-400">/bulan</span>
+                    Rp {{ number_format($monthlyPrice, 0, ',', '.') }}<span class="text-xs sm:text-sm md:text-base font-normal dark:text-gray-400">/bulan</span>
                 </div>
             </div>
 
