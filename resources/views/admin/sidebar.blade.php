@@ -42,7 +42,7 @@
                         <div class="min-w-0 sidebar-text">
                             <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">User</p>
                         </div>
-                        <svg id="users-arrow" class="w-4 h-4 transition-transform duration-200"
+                        <svg id="users-arrow" class="w-4 h-4 transition-transform duration-200 ml-auto"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -61,20 +61,6 @@
                     </a>
                 </div>
             </li>
-            <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.transactions') ? 'active' : '' }}">
-                <a href="{{ route('admin.transactions') }}" class="flex items-center gap-4">
-                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                            <path
-                                d="M535 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l64 64c4.5 4.5 7 10.6 7 17s-2.5 12.5-7 17l-64 64c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l23-23L384 112c-13.3 0-24-10.7-24-24s10.7-24 24-24l174.1 0L535 41zM105 377l-23 23L256 400c13.3 0 24 10.7 24 24s-10.7 24-24 24L81.9 448l23 23c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L7 441c-4.5-4.5-7-10.6-7-17s2.5-12.5 7-17l64-64c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zM96 64l241.9 0c-3.7 7.2-5.9 15.3-5.9 24c0 28.7 23.3 52 52 52l117.4 0c-4 17 .6 35.5 13.8 48.8c20.3 20.3 53.2 20.3 73.5 0L608 169.5 608 384c0 35.3-28.7 64-64 64l-241.9 0c3.7-7.2 5.9-15.3 5.9-24c0-28.7-23.3-52-52-52l-117.4 0c4-17-.6-35.5-13.8-48.8c-20.3-20.3-53.2-20.3-73.5 0L32 342.5 32 128c0-35.3 28.7-64 64-64zm64 64l-64 0 0 64c35.3 0 64-28.7 64-64zM544 320c-35.3 0-64 28.7-64 64l64 0 0-64zM320 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192z" />
-                        </svg>
-                    </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Transaction</p>
-                    </div>
-                </a>
-            </li>
             <li class="w-full text-left rounded-lg">
                 <button onclick="toggleWebsiteInfo()"
                     class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
@@ -86,10 +72,10 @@
                             </svg>
                         </span>
                         <div class="flex-1 min-w-0 sidebar-text">
-                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Website Information
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Website Setting
                             </p>
                         </div>
-                        <svg id="website-info-arrow" class="w-4 h-4 transition-transform duration-200"
+                        <svg id="website-info-arrow" class="w-4 h-4 transition-transform duration-200 ml-auto"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -117,19 +103,18 @@
                 </div>
             </li>
             <li class="w-full text-left rounded-lg">
-                <button onclick="toggleAITraining()"
+                <button onclick="toggleFinance()"
                     class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
                     <div class="flex items-center gap-4">
-                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                        <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                            <path
-                                    d="M248 0h80c13.3 0 24 10.7 24 24V64H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64H224V24c0-13.3 10.7-24 24-24zM64 384c0 17.7 14.3 32 32 32H352c17.7 0 32-14.3 32-32V128c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32V384zM208 272c0 44.2 35.8 80 80 80s80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80zm208-64c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24zm0 96c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24z"/>
-                        </svg>
-                    </span>
-                    <div class="min-w-0 sidebar-text">
-                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">AI Training</p>
+                                <path d="M64 32C28.7 32 0 60.7 0 96v32H576V96c0-35.3-28.7-64-64-64H64zM576 224H0V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V224zM112 352h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm128 0H368c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+                            </svg>
+                        </span>
+                        <div class="min-w-0 sidebar-text">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Keuangan</p>
                         </div>
-                        <svg id="ai-training-arrow" class="w-4 h-4 transition-transform duration-200"
+                        <svg id="finance-arrow" class="w-4 h-4 transition-transform duration-200 ml-auto"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -137,48 +122,16 @@
                     </div>
                 </button>
 
-                <div id="ai-training-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
-                    <a href="{{ route('admin.prompt-engineering') }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.prompt-engineering') ? 'active' : '' }}">
-                        Prompt Engineering
+                <div id="finance-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
+                    <a href="{{ route('admin.transactions') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.transactions') ? 'active' : '' }}">
+                        Transaksi
                     </a>
-                    <a href="{{ route('admin.fine-tuning') }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.fine-tuning') ? 'active' : '' }}">
-                        Fine-tuning
-                    </a>
-                    <a href="{{ route('admin.keywords-patterns') }}"
-                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.keywords-patterns') ? 'active' : '' }}">
-                        Keywords dan Patterns
+                    <a href="{{ route('admin.pricing') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.pricing') ? 'active' : '' }}">
+                        Pembayaran
                     </a>
                 </div>
-            </li>
-            <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.payments') ? 'active' : '' }}">
-                <a href="{{ route('admin.payments') }}" class="flex items-center gap-4">
-                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                d="M470.7 9.4c3 3.1 5.3 6.6 6.9 10.3s2.4 7.8 2.4 12.2c0 0 0 .1 0 .1c0 0 0 0 0 0l0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-18.7L310.6 214.6c-11.8 11.8-30.8 12.6-43.5 1.7L176 138.1 84.8 216.3c-13.4 11.5-33.6 9.9-45.1-3.5s-9.9-33.6 3.5-45.1l112-96c12-10.3 29.7-10.3 41.7 0l89.5 76.7L370.7 64 352 64c-17.7 0-32-14.3-32-32s14.3-32 32-32l96 0s0 0 0 0c8.8 0 16.8 3.6 22.6 9.3l.1 .1zM0 304c0-26.5 21.5-48 48-48l416 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 304zM48 416l0 48 48 0c0-26.5-21.5-48-48-48zM96 304l-48 0 0 48c26.5 0 48-21.5 48-48zM464 416c-26.5 0-48 21.5-48 48l48 0 0-48zM416 304c0 26.5 21.5 48 48 48l0-48-48 0zm-96 80a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z" />
-                        </svg>
-                    </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Payment</p>
-                    </div>
-                </a>
-            </li>
-            <li
-                class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.pricing') ? 'active' : '' }}">
-                <a href="{{ route('admin.pricing') }}" class="flex items-center gap-4">
-                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                            <path
-                                d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zM272 192l224 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-224 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zM256 304c0-8.8 7.2-16 16-16l224 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-224 0c-8.8 0-16-7.2-16-16zM164 152l0 13.9c7.5 1.2 14.6 2.9 21.1 4.7c10.7 2.8 17 13.8 14.2 24.5s-13.8 17-24.5 14.2c-11-2.9-21.6-5-31.2-5.2c-7.9-.1-16 1.8-21.5 5c-4.8 2.8-6.2 5.6-6.2 9.3c0 1.8 .1 3.5 5.3 6.7c6.3 3.8 15.5 6.7 28.3 10.5l.7 .2c11.2 3.4 25.6 7.7 37.1 15c12.9 8.1 24.3 21.3 24.6 41.6c.3 20.9-10.5 36.1-24.8 45c-7.2 4.5-15.2 7.3-23.2 9l0 13.8c0 11-9 20-20 20s-20-9-20-20l0-14.6c-10.3-2.2-20-5.5-28.2-8.4c0 0 0 0 0 0s0 0 0 0c-2.1-.7-4.1-1.4-6.1-2.1c-10.5-3.5-16.1-14.8-12.6-25.3s14.8-16.1 25.3-12.6c2.5 .8 4.9 1.7 7.2 2.4c13.6 4.6 24 8.1 35.1 8.5c8.6 .3 16.5-1.6 21.4-4.7c4.1-2.5 6-5.5 5.9-10.5c0-2.9-.8-5-5.9-8.2c-6.3-4-15.4-6.9-28-10.7l-1.7-.5c-10.9-3.3-24.6-7.4-35.6-14c-12.7-7.7-24.6-20.5-24.7-40.7c-.1-21.1 11.8-35.7 25.8-43.9c6.9-4.1 14.5-6.8 22.2-8.5l0-14c0-11 9-20 20-20s20 9 20 20z" />
-                        </svg>
-                    </span>
-                    <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Pricing</p>
-                    </div>
-                </a>
             </li>
             <li
                 class="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ Route::is('admin.messages') ? 'active' : '' }}">
@@ -190,7 +143,7 @@
                         </svg>
                     </span>
                     <div class="flex-1 min-w-0 sidebar-text">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Messages</p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Pesan</p>
                     </div>
                 </a>
             </li>
@@ -209,6 +162,42 @@
                 </a>
             </li>
             <li class="w-full text-left rounded-lg">
+                <button onclick="toggleAITraining()"
+                    class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
+                    <div class="flex items-center gap-4">
+                    <span class="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path
+                                    d="M248 0h80c13.3 0 24 10.7 24 24V64H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64H224V24c0-13.3 10.7-24 24-24zM64 384c0 17.7 14.3 32 32 32H352c17.7 0 32-14.3 32-32V128c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32V384zM208 272c0 44.2 35.8 80 80 80s80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80zm208-64c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24zm0 96c0 13.3 10.7 24 24 24s24-10.7 24-24s-10.7-24-24-24s-24 10.7-24 24z"/>
+                        </svg>
+                    </span>
+                    <div class="min-w-0 sidebar-text">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">AI Training</p>
+                        </div>
+                        <svg id="ai-training-arrow" class="w-4 h-4 transition-transform duration-200 ml-auto"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </button>
+
+                <div id="ai-training-dropdown" class="hidden pl-12 mt-1 space-y-3 transition-all duration-200">
+                    <a href="{{ route('admin.prompt-engineering') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.prompt-engineering') ? 'active' : '' }}">
+                        Prompt
+                    </a>
+                    <a href="{{ route('admin.fine-tuning') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.fine-tuning') ? 'active' : '' }}">
+                        Fine-tuning
+                    </a>
+                    <a href="{{ route('admin.keywords-patterns') }}"
+                        class="block py-2 px-4 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors {{ Route::is('admin.keywords-patterns') ? 'active' : '' }}">
+                        Keywords
+                    </a>
+                </div>
+            </li>
+            <li class="w-full text-left rounded-lg">
                 <button onclick="toggleSystemLogs()"
                     class="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg cursor-pointer">
                     <div class="flex items-center gap-4">
@@ -221,7 +210,7 @@
                         <div class="min-w-0 sidebar-text">
                             <p class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">Log Sistem</p>
                         </div>
-                        <svg id="system-logs-arrow" class="w-4 h-4 transition-transform duration-200"
+                        <svg id="system-logs-arrow" class="w-4 h-4 transition-transform duration-200 ml-auto"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -249,6 +238,7 @@
     let isSystemLogsOpen = false;
     let isUsersOpen = false;
     let isAITrainingOpen = false;
+    let isFinanceOpen = false;
 
     function toggleWebsiteInfo() {
         const dropdown = document.getElementById('website-info-dropdown');
@@ -257,6 +247,21 @@
         isWebsiteInfoOpen = !isWebsiteInfoOpen;
 
         if (isWebsiteInfoOpen) {
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+        } else {
+            dropdown.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    }
+
+    function toggleFinance() {
+        const dropdown = document.getElementById('finance-dropdown');
+        const arrow = document.getElementById('finance-arrow');
+
+        isFinanceOpen = !isFinanceOpen;
+
+        if (isFinanceOpen) {
             dropdown.classList.remove('hidden');
             arrow.classList.add('rotate-180');
         } else {
@@ -330,6 +335,25 @@
             isWebsiteInfoOpen = true;
         }
 
+        // Finance dropdown
+        const financeItems = document.querySelectorAll('#finance-dropdown a');
+        let isAnyFinanceActive = false;
+
+        financeItems.forEach(item => {
+            if (item.classList.contains('active')) {
+                isAnyFinanceActive = true;
+            }
+        });
+
+        if (isAnyFinanceActive) {
+            const dropdown = document.getElementById('finance-dropdown');
+            const arrow = document.getElementById('finance-arrow');
+
+            dropdown.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+            isFinanceOpen = true;
+        }
+
         // System Logs dropdown
         const systemLogsItems = document.querySelectorAll('#system-logs-dropdown a');
         let isAnySystemLogActive = false;
@@ -394,13 +418,20 @@
         const sidebar = document.getElementById('sidebar');
         const logoImage = document.getElementById('logoImage');
         const collapseButton = document.getElementById('collapseButton');
+        const sidebarTexts = document.querySelectorAll('.sidebar-text');
 
         isCollapsed = !isCollapsed;
 
         if (isCollapsed) {
-            sidebar.classList.add('collapsed');
+            sidebar.classList.add('w-[90px]');
+            sidebar.classList.remove('w-auto');
+            logoImage.src = "{{ asset('images/animasi2.png') }}";
+            sidebarTexts.forEach(text => text.classList.add('hidden'));
         } else {
-            sidebar.classList.remove('collapsed');
+            sidebar.classList.remove('w-[90px]');
+            sidebar.classList.add('w-auto');
+            logoImage.src = "{{ asset('images/logo.png') }}";
+            sidebarTexts.forEach(text => text.classList.remove('hidden'));
         }
 
         // Adjust dropdown positions
@@ -409,22 +440,20 @@
 
     function adjustDropdownPositions() {
         const dropdowns = document.querySelectorAll(
-            '.collapsed #users-dropdown, .collapsed #website-info-dropdown, .collapsed #system-logs-dropdown, .collapsed #ai-training-dropdown');
+            '#users-dropdown, #website-info-dropdown, #system-logs-dropdown, #ai-training-dropdown, #finance-dropdown');
+        
         dropdowns.forEach(dropdown => {
             if (isCollapsed) {
-                dropdown.style.left = '60px'; // Sesuaikan dengan lebar sidebar saat collapse
+                dropdown.classList.add('absolute', 'left-[90px]', 'top-0', 'bg-white', 'dark:bg-gray-800', 'rounded-lg', 'shadow-lg', 'z-50', 'pl-3');
+                dropdown.classList.remove('pl-12');
             } else {
-                dropdown.style.left = 'auto';
+                dropdown.classList.remove('absolute', 'left-[90px]', 'top-0', 'bg-white', 'dark:bg-gray-800', 'rounded-lg', 'shadow-lg', 'z-50', 'pl-3');
+                dropdown.classList.add('pl-12');
             }
         });
     }
 
     document.getElementById('collapseButton').addEventListener('click', toggleSidebar);
-    document.getElementById('logoContainer').addEventListener('click', function() {
-        if (isCollapsed) {
-            toggleSidebar();
-        }
-    });
 </script>
 
 <style>
@@ -450,11 +479,11 @@
     }
 
     .sidebar-text p {
-        @apply text-gray-700 dark: text-gray-200;
+        @apply text-gray-700 dark:text-gray-200;
     }
 
     svg path {
-        @apply fill-gray-700 dark: fill-gray-200;
+        @apply fill-gray-700 dark:fill-gray-200;
     }
 
     .active svg path {
@@ -462,65 +491,10 @@
     }
 
     #website-info-arrow {
-        @apply text-gray-700 dark: text-gray-200;
+        @apply text-gray-700 dark:text-gray-200;
     }
 
     #system-logs-arrow {
-        @apply text-gray-700 dark: text-gray-200;
-    }
-
-    .collapsed {
-        width: 60px;
-    }
-
-    .collapsed #logoImage {
-        content: url("{{ asset('images/animasi2.png') }}");
-        height: 24px;
-        margin-right: 0;
-    }
-
-    .collapsed #collapseButton {
-        display: none;
-    }
-
-    .collapsed .sidebar-text {
-        display: none;
-    }
-
-    .collapsed #sidebarContent {
-        padding: 0.5rem;
-    }
-
-    .collapsed li {
-        justify-content: center;
-    }
-
-    .collapsed li a {
-        gap: 0;
-    }
-
-    .collapsed #users-dropdown,
-    .collapsed #website-info-dropdown,
-    .collapsed #system-logs-dropdown,
-    .collapsed #ai-training-dropdown {
-        position: absolute;
-        left: 60px;
-        /* Sesuaikan dengan lebar sidebar saat collapse */
-        top: 0;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        padding: 0.5rem;
-        min-width: 160px;
-        /* Sesuaikan dengan lebar dropdown yang diinginkan */
-    }
-
-    .collapsed #users-dropdown a,
-    .collapsed #website-info-dropdown a,
-    .collapsed #system-logs-dropdown a,
-    .collapsed #ai-training-dropdown a {
-        padding: 0.5rem 1rem;
-        white-space: nowrap;
+        @apply text-gray-700 dark:text-gray-200;
     }
 </style>

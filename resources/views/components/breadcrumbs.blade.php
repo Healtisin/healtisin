@@ -11,10 +11,9 @@ $breadcrumbs = [
 'admin.users' => ['Home', 'Pengguna'],
 'admin.users.create' => ['Home', 'Pengguna', 'Tambah Pengguna'],
 'admin.users.edit' => ['Home', 'Pengguna', 'Edit Pengguna'],
-'admin.transactions' => ['Home', 'Transaksi'],
-'admin.payments' => ['Home', 'Pembayaran'],
-'admin.pricing' => ['Home', 'Pricing'],
-'admin.messages' => ['Home', 'Messages'],
+'admin.transactions' => ['Home', 'Keuangan', 'Transaksi'],
+'admin.pricing' => ['Home', 'Keuangan', 'Pembayaran'],
+'admin.messages' => ['Home', 'Pesan'],
 'admin.news.index' => ['Home', 'Berita'],
 'admin.news.create' => ['Home', 'Berita', 'Tambah Berita'],
 'admin.news.edit' => ['Home', 'Berita', 'Edit Berita'],
@@ -26,10 +25,10 @@ $breadcrumbs = [
 'admin.prompt-engineering' => ['Home', 'AI Training', 'Prompt Engineering'],
 'admin.fine-tuning' => ['Home', 'AI Training', 'Fine-tuning'],
 'admin.keywords-patterns' => ['Home', 'AI Training', 'Keywords dan Patterns'],
-'admin.meta-data.index' => ['Home', 'Website Information', 'Meta Data'],
-'admin.logo.index' => ['Home', 'Website Information', 'Logo'],
-'admin.footer.index' => ['Home', 'Website Information', 'Footer'],
-'admin.information.index' => ['Home', 'Website Information', 'Informasi'],
+'admin.meta-data.index' => ['Home', 'Website Setting', 'Meta Data'],
+'admin.logo.index' => ['Home', 'Website Setting', 'Logo'],
+'admin.footer.index' => ['Home', 'Website Setting', 'Footer'],
+'admin.information.index' => ['Home', 'Website Setting', 'Informasi'],
 ];
 
 // Get breadcrumbs untuk route saat ini
@@ -38,11 +37,12 @@ $currentBreadcrumbs = $breadcrumbs[$currentRoute] ?? ['Home'];
 $breadcrumbRoutes = [
 'Home' => 'admin.dashboard',
 'Pengguna' => 'admin.users',
+'Keuangan' => 'javascript:void(0)',
 'Berita' => 'admin.news.index',
 'Database Log' => 'admin.log-database.index',
 'File Log' => 'admin.log-file.index',
 'AI Training' => 'admin.prompt-engineering',
-'Website Information' => 'javascript:void(0)',
+'Website Setting' => 'javascript:void(0)',
 'Informasi' => 'admin.information.index',
 ];
 
