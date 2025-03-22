@@ -1,6 +1,6 @@
 <aside id="sidebar" class="bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col h-screen fixed md:relative w-80 z-40 transform -translate-x-full md:translate-x-0">
     <!-- Toggle Button -->
-    <button id="sidebarToggle" class="absolute -right-3 top-6 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 z-10 hidden md:block">
+    <button id="sidebarToggle" class="absolute -right-3 top-6 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 z-10 md:block">
         <svg id="toggleIcon" class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
@@ -80,7 +80,7 @@
         <div class="w-full">
             <!-- User Info -->
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden relative group profile-photo-container">
+                <div id="profileIcon" class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden relative group profile-photo-container">
                     @if(Auth::user()->profile_photo)
                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile photo"
                         class="w-full h-full object-cover">
@@ -186,6 +186,66 @@
     width: 2rem;
 }
 
+/* Style untuk new chat button saat sidebar diperkecil */
+#sidebar.minimized .flex-shrink-0.p-4 {
+    padding: 0.75rem;
+}
+
+#sidebar.minimized .w-full.text-left.p-3 {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#sidebar.minimized .flex.items-center.gap-3 {
+    justify-content: center;
+}
+
+#sidebar.minimized .w-8.h-8.bg-white {
+    margin: 0;
+}
+
+/* Style untuk riwayat chat saat sidebar diperkecil */
+#sidebar.minimized .p-4 {
+    padding: 0.75rem;
+}
+
+#sidebar.minimized .relative.group button {
+    padding: 0.75rem 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#sidebar.minimized .relative.group .w-8.h-8 {
+    margin: 0 auto;
+}
+
+#sidebar.minimized .relative.group .absolute {
+    display: none;
+}
+
+/* Style untuk profile section saat sidebar dikecilkan */
+#sidebar.minimized .flex-shrink-0.border-t {
+    padding: 0.75rem 0.5rem;
+}
+
+#sidebar.minimized .profile-photo-container {
+    margin: 0 auto;
+}
+
+#sidebar.minimized .flex-1.min-w-0,
+#sidebar.minimized .flex.items-center.justify-between {
+    display: none;
+}
+
+#sidebar.minimized #profileIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+}
+
 .active .sidebar-text p {
     color: white !important;
 }
@@ -214,7 +274,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSidebar = document.getElementById('closeSidebar');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const toggleIcon = document.getElementById('toggleIcon');
+    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+    const logoImage = document.getElementById('logoImage');
+    const profileIcon = document.getElementById('profileIcon');
     
+    let isExpanded = true;
+
+    // Mobile sidebar toggle
     mobileSidebarToggle.addEventListener('click', function() {
         sidebar.classList.add('open');
         sidebarOverlay.classList.remove('hidden');
@@ -237,6 +305,31 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.remove('overflow-hidden');
         // Tampilkan kembali tombol toggle
         mobileSidebarToggle.classList.remove('hidden');
+    });
+
+    // Desktop sidebar toggle
+    sidebarToggle.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+
+        if (isExpanded) {
+            sidebar.classList.remove('w-[90px]');
+            sidebar.classList.add('w-80');
+            sidebar.classList.remove('minimized');
+            toggleIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            `;
+            logoImage.src = "{{ asset('images/logo.png') }}";
+            sidebarTexts.forEach(text => text.classList.remove('hidden'));
+        } else {
+            sidebar.classList.remove('w-80');
+            sidebar.classList.add('w-[90px]');
+            sidebar.classList.add('minimized');
+            toggleIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            `;
+            logoImage.src = "{{ asset('images/animasi2.png') }}";
+            sidebarTexts.forEach(text => text.classList.add('hidden'));
+        }
     });
 });
 </script>

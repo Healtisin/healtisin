@@ -9,15 +9,15 @@
     $monthlyPrice = $pricingConfig ? $pricingConfig->monthly_price : 99000;
 @endphp
 
-<div class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-    <div class="text-center mb-6 sm:mb-8 md:mb-16">
+<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+    <div class="text-center mb-4 sm:mb-6 md:mb-8">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 dark:text-gray-100">Paket</h2>
-        <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 md:mb-16">
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 md:mb-8">
             Pilih paket yang sesuai dengan kebutuhan Anda
         </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-16 md:mb-32">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-12">
         <!-- Free Plan -->
         <div class="border dark:border-gray-700 rounded-xl p-4 sm:p-6 md:p-8 hover:shadow-lg transition-shadow flex flex-col h-full dark:bg-gray-800">
             <div class="h-32 sm:h-40">

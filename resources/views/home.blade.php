@@ -166,39 +166,6 @@ use App\Helpers\InformationHelper;
             document.getElementById('settingsModal').classList.remove('flex');
         }
 
-        const sidebar = document.getElementById('sidebar');
-        const toggleIcon = document.getElementById('toggleIcon');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        const logoImage = document.getElementById('logoImage');
-        const profileIcon = document.getElementById('profileIcon');
-
-        let isExpanded = true;
-
-        sidebarToggle.addEventListener('click', () => {
-            isExpanded = !isExpanded;
-
-            if (isExpanded) {
-                sidebar.classList.remove('w-[90px]');
-                sidebar.classList.add('w-80');
-                toggleIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                `;
-                logoImage.src = "{{ asset('images/logo.png') }}";
-                sidebarTexts.forEach(text => text.classList.remove('hidden'));
-                profileIcon.style.transform = 'translateX(0)';
-            } else {
-                sidebar.classList.remove('w-80');
-                sidebar.classList.add('w-[90px]');
-                toggleIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                `;
-                logoImage.src = "{{ asset('images/animasi2.png') }}";
-                sidebarTexts.forEach(text => text.classList.add('hidden'));
-                profileIcon.style.transform = 'translateX(-3px)';
-            }
-        });
-
         const loadingMessage = `
             <div id="loadingMessage" class="flex justify-start gap-2 items-start mb-4">
                 <div class="w-10 h-10 bg-[#24b0ba] dark:bg-[#24b0ba]/80 rounded-full flex items-center justify-center flex-shrink-0">

@@ -1,15 +1,15 @@
 @php
 use App\Helpers\InformationHelper;
 @endphp
-<div class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-    <div class="text-center mb-10 md:mb-16">
+<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+    <div class="text-center mb-8 md:mb-10">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 dark:text-gray-100">Kemampuan {{ InformationHelper::getProductName() }}</h2>
         <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             {{ InformationHelper::getProductName() }} hadir dengan berbagai fitur untuk membantu kesehatan Anda
         </p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-8 sm:mb-12 md:mb-16 lg:mb-32">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-6 sm:mb-8 md:mb-10 lg:mb-12">
         <!-- Capability 1 -->
         <div class="text-center">
             <div class="bg-[#f0f2ff] dark:bg-[#24b0ba]/10 p-4 sm:p-6 md:p-8 rounded-lg mb-3 sm:mb-4 flex items-center justify-center">

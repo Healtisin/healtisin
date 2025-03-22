@@ -2,14 +2,14 @@
 use App\Helpers\InformationHelper;
 @endphp
 
-<div class="flex flex-col md:flex-row items-center justify-center mb-16 md:mb-32 px-4 md:px-0">
+<div class="flex flex-col md:flex-row items-center justify-center mb-10 md:mb-16 px-4 md:px-0">
     <!-- Bagian Teks -->
     <div class="w-full md:w-1/2 md:pr-8 text-center md:text-left">
-        <h1 class="text-4xl md:text-6xl font-serif mb-6 md:mb-8 dark:text-gray-100">
+        <h1 class="text-4xl md:text-6xl font-serif mb-4 md:mb-6 dark:text-gray-100">
             Bertemu<br />
             {{ InformationHelper::getProductName() }}
         </h1>
-        <p class="text-lg md:text-xl mb-6 md:mb-8 font-serif text-gray-600 dark:text-gray-400">
+        <p class="text-lg md:text-xl mb-4 md:mb-6 font-serif text-gray-600 dark:text-gray-400">
             {{ InformationHelper::getWebsiteDescription() }}
         </p>
         <div class="flex justify-center md:justify-start gap-4">
@@ -21,7 +21,7 @@ use App\Helpers\InformationHelper;
     </div>
 
     <!-- Bagian Gambar -->
-    <div class="w-full md:w-1/2 flex justify-center items-center mt-8 md:mt-0">
+    <div class="w-full md:w-1/2 flex justify-center items-center mt-6 md:mt-0">
         <img src="{{ asset('images/animasi2.png') }}" alt="Animasi {{ InformationHelper::getProductName() }}"
             class="w-full md:w-4/5 h-auto object-cover rounded-lg dark:opacity-90">
     </div>

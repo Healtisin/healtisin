@@ -15,22 +15,22 @@
     <main class="pt-16 md:pt-24 pb-12 md:pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Hero Section -->
-            <div class="mb-16 md:mb-24">
+            <div class="mb-16 md:mb-16">
                 @include('partials.hero')
             </div>
 
             <!-- Capabilities Section -->
-            <div class="mb-16 md:mb-24">
+            <div class="mb-16 md:mb-16">
                 @include('partials.capabilities')
             </div>
 
             <!-- Pricing Section -->
-            <div class="mb-16 md:mb-24">
+            <div class="mb-16 md:mb-16">
                 @include('partials.pricing')
             </div>
 
             <!-- Why Healtisin Section -->
-            <div class="mb-16 md:mb-24">
+            <div class="mb-16 md:mb-16">
                 @include('partials.benefits')
             </div>
         </div>
