@@ -19,6 +19,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsOfUseController;
+use App\Http\Controllers\TranslationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\InformationController;
 use App\Http\Controllers\Admin\MetaDataController;
@@ -285,3 +286,14 @@ Route::get('/test-log', function () {
     return redirect()->route('admin.logs.index')
         ->with('success', 'Log berhasil dibuat');
 });
+
+// Route API Terjemahan
+Route::prefix('api/translate')->group(function () {
+    Route::post('/id-to-en', [TranslationController::class, 'translateIdToEn'])->name('translate.id-to-en');
+    Route::post('/en-to-id', [TranslationController::class, 'translateEnToId'])->name('translate.en-to-id');
+});
+
+// Halaman Terjemahan
+Route::get('/translation', function () {
+    return view('translation');
+})->name('translation');
