@@ -297,3 +297,8 @@ Route::prefix('api/translate')->group(function () {
 Route::get('/translation', function () {
     return view('translation');
 })->name('translation');
+
+// Pengaturan Terjemahan
+Route::get('/translation/settings', [TranslationController::class, 'settings'])->name('translation.settings');
+Route::post('/translation/preserved-words', [TranslationController::class, 'savePreservedWords'])->name('translation.preserved-words.save');
+Route::post('/translation/corrections', [TranslationController::class, 'saveCorrections'])->name('translation.corrections.save');
